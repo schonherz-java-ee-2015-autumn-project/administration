@@ -14,7 +14,7 @@
 		class="org.springframework.context.support.ClassPathXmlApplicationContext">
 		<constructor-arg>
 			<list>
-				<value>classpath:spring-core.xml</value>
+				<value>classpath:spring-persistence.xml</value>
 			</list>
 		</constructor-arg>
 	</bean>
