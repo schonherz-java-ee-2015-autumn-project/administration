@@ -1,4 +1,4 @@
-package hu.schonherz.administration.service.dto;
+package hu.schonherz.administration.serviceapi.dto;
 
 import java.io.Serializable;
 

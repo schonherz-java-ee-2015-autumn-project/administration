@@ -1,8 +1,8 @@
-package hu.schonherz.administration.service;
+package hu.schonherz.administration.serviceapi;
 
 import java.util.List;
 
-import	hu.schonherz.administration.service.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 public interface UserService {
 
