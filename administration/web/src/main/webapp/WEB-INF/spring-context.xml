@@ -13,5 +13,9 @@
 
 	<context:component-scan base-package="hu.schonherz.administration.web" />
 	<import resource="classpath:spring-persistence.xml" />
+	
+	<jee:local-slsb id="userService" jndi-name="ejb.UserService"
+		business-interface="hu.schonherz.administration.serviceapi.UserService" />
+	
 
 </beans>
