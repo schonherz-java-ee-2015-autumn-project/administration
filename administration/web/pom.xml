@@ -53,7 +53,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>service-api</artifactId>
+			<version>${version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>administration</finalName>
