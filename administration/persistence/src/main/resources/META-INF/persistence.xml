@@ -7,6 +7,9 @@
 		transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<non-jta-data-source>AdministrationJPADB</non-jta-data-source>
+		<class>hu.schonherz.administration.persistence.entities.BaseEntity</class>
+		<class>hu.schonherz.administration.persistence.entities.Role</class>
+		<class>hu.schonherz.administration.persistence.entities.User</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="hibernate.show_sql" value="false" />
