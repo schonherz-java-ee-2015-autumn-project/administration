@@ -3,6 +3,8 @@ package hu.schonherz.administration.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -24,6 +26,7 @@ import hu.schonherz.administration.serviceapi.dto.UserDTO;
 @Stateless(mappedName = "UserService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
+@Local(UserService.class)
 public class UserServiceImpl implements UserService {
 
 	@Autowired

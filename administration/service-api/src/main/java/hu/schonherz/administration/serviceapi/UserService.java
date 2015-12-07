@@ -4,6 +4,7 @@ import java.util.List;
 
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
+
 public interface UserService {
 
 	public UserDTO findUserByName(String name) throws Exception;
