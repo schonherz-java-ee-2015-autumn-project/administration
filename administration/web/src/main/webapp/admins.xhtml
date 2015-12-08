@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form>
+   <p:dataTable var="felhasznalo" value="#{adminLazyBean.users}">
+    <p:column headerText="Id">
+        <h:outputText value="#{felhasznalo.id}" />
+    </p:column>
+ 
+    <p:column headerText="Név">
+        <h:outputText value="#{felhasznalo.name}" />
+    </p:column>
+</p:dataTable>
+</h:form>
+	</ui:define>
+	
+</ui:composition>

@@ -2,19 +2,22 @@ package hu.schonherz.administration.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
+import org.apache.log4j.Logger;
+import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
+import hu.schonherz.administration.persistence.dao.helper.UserSpecification;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.service.converter.UserConverter;
@@ -42,9 +45,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO registrationUser(UserDTO UserDTO) throws Exception {
+	public UserDTO registrationUser(UserDTO userDTO) throws Exception {
 
-		User user = userDao.save(UserConverter.toEntity(UserDTO));
+		User user = userDao.save(UserConverter.toEntity(userDTO));
 		List<Role> roles = user.getRoles();
 		if (roles == null || roles.isEmpty()) {
 			roles = new ArrayList<>();
@@ -72,12 +75,7 @@ public class UserServiceImpl implements UserService {
 		return role;
 	}
 
-	@Override
-	public List<UserDTO> getUserList(int i, int pageSize, String sortField, int dir, String filter,
-			String filterColumnName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public Integer getUserCount() {
@@ -101,6 +99,20 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> getUsers() {
 
 		return UserConverter.toVo(userDao.findAll());
+	}
+
+	@Override
+	public List<UserDTO> getUserList(int first, int pageSize, String sortField, SortOrder sortOrder,
+			Map<String, Object> filters) {
+		String order;
+		switch ( sortOrder){
+		case ASCENDING: order = "asc"; break;
+		case DESCENDING: order = "desc"; break;
+		case UNSORTED: order = "asc"; break;
+		}
+	
+
+		return UserConverter.toVo(userDao.findAll(UserSpecification.nameLike("lengyel")));
 	}
 
 }

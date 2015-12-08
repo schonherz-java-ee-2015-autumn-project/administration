@@ -16,6 +16,9 @@
 	
 	<jee:local-slsb id="userService" jndi-name="ejb.UserService"
 		business-interface="hu.schonherz.administration.serviceapi.UserService" />
+		
+		<jee:local-slsb id="lazyAdminService" jndi-name="ejb.LazyAdminService"
+		business-interface="hu.schonherz.administration.serviceapi.LazyAdminService" />
 	
 
 </beans>

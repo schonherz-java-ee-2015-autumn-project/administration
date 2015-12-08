@@ -38,8 +38,8 @@
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
-	
-	
+
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -52,6 +52,11 @@
 	<ejb-local-ref>
 		<ejb-ref-name>ejb.UserService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.UserService</local>
+	</ejb-local-ref>
+
+	<ejb-local-ref>
+		<ejb-ref-name>ejb.LazyAdminService</ejb-ref-name>
+		<local>hu.schonherz.administration.serviceapi.LazyAdminService</local>
 	</ejb-local-ref>
 
 	<welcome-file-list>

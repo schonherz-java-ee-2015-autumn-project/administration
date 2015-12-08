@@ -1,6 +1,9 @@
 package hu.schonherz.administration.serviceapi;
 
 import java.util.List;
+import java.util.Map;
+
+import org.primefaces.model.SortOrder;
 
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
@@ -11,8 +14,8 @@ public interface UserService {
 
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
-	public List<UserDTO> getUserList(int i, int pageSize, String sortField, int dir, String filter,
-			String filterColumnName);
+	public List<UserDTO> getUserList(int first, int pageSize, String sortField,  SortOrder sortOrder,
+			Map<String, Object> filters);
 
 	public List<UserDTO> getUsers();
 	
