@@ -19,7 +19,10 @@
 
 	<h:body>
 			<ui:insert name="content" />	
-			
+			<sec:authorize ifNotGranted="ROLE_ADMIN">
+					<li><a href="#{request.contextPath}/public/login.xhtml"> <span>#{out.login}</span>
+					</a></li>
+			</sec:authorize>
 	</h:body>
 </f:view>
 </html>
