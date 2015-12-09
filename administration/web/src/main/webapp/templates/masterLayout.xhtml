@@ -64,10 +64,11 @@
 					</a>
 					<a> </a>
 				</sec:authorize>
-
-				<a href="#{request.contextPath}/logout" class="btn btn-danger"
-					title="Logout"> <b>#{out.logout}</b>
-				</a>
+				<sec:authorize access="hasAnyRole('ADMIN')">
+					<a href="#{request.contextPath}/logout" class="btn btn-danger"
+						title="Logout"> <b>#{out.logout}</b>
+					</a>
+				</sec:authorize>
 			</div>
 
 			</nav>
@@ -86,12 +87,14 @@
 									<br />
 								</div>
 							</p:outputPanel></li>
-						<li><a href="#{request.contextPath}/index.xhtml">Adminisztrátorok
-								listázása</a></li>
-						<li><a href="#{request.contextPath}/secured/messages.xhtml">Adminisztrátor
-								felvétele</a></li>
-						<li><a href="#{request.contextPath}/public/qeuetest.xhtml">Adminisztrátorok
-								keresése</a></li>
+						<sec:authorize access="hasAnyRole('ADMIN')">
+							<li><a href="#{request.contextPath}/index.xhtml">Adminisztrátorok
+									listázása</a></li>
+							<li><a href="#{request.contextPath}/secured/messages.xhtml">Adminisztrátor
+									felvétele</a></li>
+							<li><a href="#{request.contextPath}/public/qeuetest.xhtml">Adminisztrátorok
+									keresése</a></li>
+						</sec:authorize>
 					</ul>
 				</div>
 
