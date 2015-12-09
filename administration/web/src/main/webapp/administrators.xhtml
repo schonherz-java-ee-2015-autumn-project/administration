@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/masterLayout.xhtml"
 	xmlns:sec="http://www.springframework.org/security/tags">
-	<ui:define name="pageTitle">asd</ui:define>
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
 	<h:form id="administrationUsersForm">
 		<p:dataTable var="user" value="#{adminLazyBean.lazyDataModel}"

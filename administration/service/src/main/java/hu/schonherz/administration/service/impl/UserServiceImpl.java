@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Integer getUserCount() {
-		return (int) userDao.count();
+	public int getUserCount() {
+		return  (int)userDao.count();
 		
 	}
 
@@ -104,28 +104,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField, CustomSortOrder sortOrder,
 			Map<String, Object> filters) {
-		String name;
-		String username;
-		String phoneNumber;
 		Pageable pagable = createPageRequest(first, pageSize, sortField, sortOrder);
 
-		Specification<User> spec = null;
-
-		if (filters.containsKey("name")) {
-			name = (String) filters.get("name");
-			spec = Specifications.where(UserSpecification.nameLike(name));
-		}
-
-		if (filters.containsKey("phoneNumber")) {
-			phoneNumber = (String) filters.get("phoneNumber");
-			spec = Specifications.where(spec).and(UserSpecification.phoneNumberLike(phoneNumber));
-		}
-
-		if (filters.containsKey("username")) {
-			username = (String) filters.get("username");
-			spec = Specifications.where(spec).and(UserSpecification.usernameLike(username));
-		}
-
+		Specification<User> spec = buildSpecification(filters);
 		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
 	}
 
@@ -143,5 +124,34 @@ public class UserServiceImpl implements UserService {
 
 		}
 
+	}
+
+	@Override
+	public int getUserCount(Map<String, Object> filters) {
+		return (int)userDao.count(buildSpecification(filters));
+		
+	}
+	
+	private Specification<User> buildSpecification(Map<String, Object> filters){
+		Specification<User> spec = null;
+		String name;
+		String username;
+		String phoneNumber;
+	
+		if (filters.containsKey("name")) {
+			name = (String) filters.get("name");
+			spec = Specifications.where(UserSpecification.nameLike(name));
+		}
+
+		if (filters.containsKey("phoneNumber")) {
+			phoneNumber = (String) filters.get("phoneNumber");
+			spec = Specifications.where(spec).and(UserSpecification.phoneNumberLike(phoneNumber));
+		}
+
+		if (filters.containsKey("username")) {
+			username = (String) filters.get("username");
+			spec = Specifications.where(spec).and(UserSpecification.usernameLike(username));
+		}
+		return spec;
 	}
 }

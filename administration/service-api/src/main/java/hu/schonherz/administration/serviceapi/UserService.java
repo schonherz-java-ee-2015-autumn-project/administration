@@ -17,7 +17,9 @@ public interface UserService {
 
 	public List<UserDTO> getUsers();
 	
-	public Integer getUserCount();
+	public int getUserCount();
+	
+	public int getUserCount(Map<String, Object> filters);
 
 	public UserDTO saveUser(UserDTO selectedUser);
 

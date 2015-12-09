@@ -42,16 +42,16 @@ public class LazyAdmin extends LazyDataModel<UserDTO> {
 		else
 			order = CustomSortOrder.ASC;
 		
-		int userCount = userService.getUserCount();
+	
 		int page = first / pageSize;
 		
 		if (userService != null) {
 			List<UserDTO> list = userService.getUserList(page, pageSize, sortField, order, filters);
-			
+			int rowCount =  userService.getUserCount(filters);
 			if (list == null || list.isEmpty()) {
 				return Collections.emptyList();
 			} else {
-				this.setRowCount(userCount);
+				this.setRowCount(rowCount);
 				return list;
 			}
 		} else {
