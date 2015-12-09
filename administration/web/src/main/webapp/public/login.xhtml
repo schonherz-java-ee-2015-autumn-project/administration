@@ -14,7 +14,7 @@
 					<form action="#{request.contextPath}/login" method="post">
 						<div>
 									<h:panelGroup layout="block" 
-										rendered="#{param['error'] == 1}">#{out.error}</h:panelGroup>
+										rendered="#{param['error'] == 1}">#{out.login_authenticaton_error}</h:panelGroup>
 									<div>	
 										<input type="text" name="j_username" />
 									</div>

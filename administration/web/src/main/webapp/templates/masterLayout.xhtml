@@ -88,12 +88,9 @@
 								</div>
 							</p:outputPanel></li>
 						<sec:authorize access="hasAnyRole('ADMIN')">
-							<li><a href="#{request.contextPath}/index.xhtml">Adminisztrátorok
-									listázása</a></li>
-							<li><a href="#{request.contextPath}/secured/messages.xhtml">Adminisztrátor
-									felvétele</a></li>
-							<li><a href="#{request.contextPath}/public/qeuetest.xhtml">Adminisztrátorok
-									keresése</a></li>
+							<li><a href="#{request.contextPath}/secured/available.xhtml">#{out.admin_list}</a></li>
+							<li><a href="#{request.contextPath}/secured/available.xhtml">#{out.add_new_admin}</a></li>
+							<li><a href="#{request.contextPath}/secured/available.xhtml">#{out.search_admin}</a></li>
 						</sec:authorize>
 					</ul>
 				</div>
