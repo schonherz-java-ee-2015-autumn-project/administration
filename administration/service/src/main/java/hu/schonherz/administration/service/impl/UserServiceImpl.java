@@ -11,8 +11,11 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.apache.log4j.Logger;
+import org.hibernate.annotations.Where;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.RoleDao;
@@ -105,14 +108,33 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField, SortOrder sortOrder,
 			Map<String, Object> filters) {
 		String order;
+		String name;
+		String username;
+		String phoneNumber;
 		switch ( sortOrder){
 		case ASCENDING: order = "asc"; break;
 		case DESCENDING: order = "desc"; break;
 		case UNSORTED: order = "asc"; break;
 		}
-	
+		
+		Specification<User> spec = null;
+		
+		if(filters.containsKey("name")){
+			name = (String) filters.get("name");
+			spec = Specifications.where(UserSpecification.nameLike(name));
+		}
 
-		return UserConverter.toVo(userDao.findAll(UserSpecification.nameLike("lengyel")));
+		if(filters.containsKey("phoneNumber")){
+			phoneNumber = (String) filters.get("phoneNumber");
+			spec =Specifications.where(spec).and(UserSpecification.phoneNumberLike(phoneNumber));
+		}
+
+		if(filters.containsKey("username")){
+			username = (String) filters.get("username");
+			spec =Specifications.where(spec).and(UserSpecification.usernameLike(username));
+		}
+		
+		return UserConverter.toVo(userDao.findAll(spec));
 	}
 
 }
