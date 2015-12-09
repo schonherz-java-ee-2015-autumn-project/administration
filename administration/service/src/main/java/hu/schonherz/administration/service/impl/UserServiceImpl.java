@@ -10,10 +10,11 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
-import org.apache.log4j.Logger;
-import org.hibernate.annotations.Where;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
@@ -26,8 +27,6 @@ import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
-
-
 
 @Stateless(mappedName = "UserService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -78,12 +77,10 @@ public class UserServiceImpl implements UserService {
 		return role;
 	}
 
-	
-
 	@Override
 	public Integer getUserCount() {
-		// TODO Auto-generated method stub
-		return null;
+		return (int) userDao.count();
+		
 	}
 
 	@Override
@@ -107,34 +104,44 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField, SortOrder sortOrder,
 			Map<String, Object> filters) {
-		String order;
 		String name;
 		String username;
 		String phoneNumber;
-		switch ( sortOrder){
-		case ASCENDING: order = "asc"; break;
-		case DESCENDING: order = "desc"; break;
-		case UNSORTED: order = "asc"; break;
-		}
-		
+		Pageable pagable = createPageRequest(first, pageSize, sortField, sortOrder);
+
 		Specification<User> spec = null;
-		
-		if(filters.containsKey("name")){
+
+		if (filters.containsKey("name")) {
 			name = (String) filters.get("name");
 			spec = Specifications.where(UserSpecification.nameLike(name));
 		}
 
-		if(filters.containsKey("phoneNumber")){
+		if (filters.containsKey("phoneNumber")) {
 			phoneNumber = (String) filters.get("phoneNumber");
-			spec =Specifications.where(spec).and(UserSpecification.phoneNumberLike(phoneNumber));
+			spec = Specifications.where(spec).and(UserSpecification.phoneNumberLike(phoneNumber));
 		}
 
-		if(filters.containsKey("username")){
+		if (filters.containsKey("username")) {
 			username = (String) filters.get("username");
-			spec =Specifications.where(spec).and(UserSpecification.usernameLike(username));
+			spec = Specifications.where(spec).and(UserSpecification.usernameLike(username));
 		}
-		
-		return UserConverter.toVo(userDao.findAll(spec));
+
+		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
 	}
 
+	private Pageable createPageRequest(int first, int pageSize, String sortField, SortOrder order) {
+		if(order!=null && sortField !=null){
+			Sort sort = null;
+			if (order.equals(order.DESCENDING)) {
+				sort = new Sort(Sort.Direction.DESC, sortField);
+			} else {
+				sort = new Sort(Sort.Direction.ASC, sortField);
+			}
+			return new PageRequest(first, pageSize, sort);
+		}else{
+			return new PageRequest(first, pageSize);
+
+		}
+
+	}
 }

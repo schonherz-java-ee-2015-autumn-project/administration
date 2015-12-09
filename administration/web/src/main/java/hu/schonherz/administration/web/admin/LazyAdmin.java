@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.inject.Named;
 
+import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -35,15 +36,16 @@ public class LazyAdmin extends LazyDataModel<UserDTO> {
 	public List<UserDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder,
 			Map<String, Object> filters) {
 		
-		
+		int userCount = userService.getUserCount();
+		int page = first / pageSize;
 		
 		if (userService != null) {
-			List<UserDTO> list = userService.getUserList(first, pageSize, sortField, sortOrder, filters);
+			List<UserDTO> list = userService.getUserList(page, pageSize, sortField, sortOrder, filters);
 			
 			if (list == null || list.isEmpty()) {
 				return Collections.emptyList();
 			} else {
-				this.setRowCount(list.size());
+				this.setRowCount(userCount);
 				return list;
 			}
 		} else {
