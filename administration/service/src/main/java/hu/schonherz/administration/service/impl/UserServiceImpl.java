@@ -10,7 +10,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
-import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +25,7 @@ import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.UserService;
+import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 @Stateless(mappedName = "UserService")
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDTO> getUserList(int first, int pageSize, String sortField, SortOrder sortOrder,
+	public List<UserDTO> getUserList(int first, int pageSize, String sortField, CustomSortOrder sortOrder,
 			Map<String, Object> filters) {
 		String name;
 		String username;
@@ -129,10 +129,10 @@ public class UserServiceImpl implements UserService {
 		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
 	}
 
-	private Pageable createPageRequest(int first, int pageSize, String sortField, SortOrder order) {
+	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
 		if(order!=null && sortField !=null){
 			Sort sort = null;
-			if (order.equals(order.DESCENDING)) {
+			if (order.equals(order.DESC)) {
 				sort = new Sort(Sort.Direction.DESC, sortField);
 			} else {
 				sort = new Sort(Sort.Direction.ASC, sortField);
