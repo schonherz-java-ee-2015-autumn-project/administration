@@ -54,10 +54,6 @@
 		<local>hu.schonherz.administration.serviceapi.UserService</local>
 	</ejb-local-ref>
 
-	<ejb-local-ref>
-		<ejb-ref-name>ejb.LazyAdminService</ejb-ref-name>
-		<local>hu.schonherz.administration.serviceapi.LazyAdminService</local>
-	</ejb-local-ref>
 
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
