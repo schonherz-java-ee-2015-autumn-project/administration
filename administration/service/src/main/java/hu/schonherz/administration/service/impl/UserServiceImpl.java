@@ -27,6 +27,7 @@ import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.dto.UserRole;
 
 @Stateless(mappedName = "UserService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -79,15 +80,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int getUserCount() {
-		return  (int)userDao.count();
-		
+		return  (int)userDao.count();	
 	}
 
 	@Override
 	public UserDTO saveUser(UserDTO selectedUser) {
 		return selectedUser;
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -103,10 +101,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField, CustomSortOrder sortOrder,
-			Map<String, Object> filters) {
+			Map<String, Object> filters, UserRole role) {
 		Pageable pagable = createPageRequest(first, pageSize, sortField, sortOrder);
 
 		Specification<User> spec = buildSpecification(filters);
+		Specification<User> roleSpec = buildRoleSpecification(role);
+		spec = Specifications.where(spec).and(roleSpec);
 		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
 	}
 
@@ -124,6 +124,23 @@ public class UserServiceImpl implements UserService {
 
 		}
 
+	}
+	
+	private Specification<User> buildRoleSpecification(UserRole role){
+		Specification<User> spec = null;
+		Role roleEntity;
+		switch(role){
+		case ADMIN:
+			roleEntity = roleDao.findByName("ROLE_ADMIN");
+			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
+		case COURIER:
+			roleEntity = roleDao.findByName("ROLE_COURIER");
+			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
+		case RESTAURANT: 
+			roleEntity = roleDao.findByName("ROLE_RESTAURANT");
+			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
+		}
+		return spec;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.dto.UserRole;
 
 public interface UserService {
 
@@ -13,7 +14,7 @@ public interface UserService {
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField,  CustomSortOrder sortOrder,
-			Map<String, Object> filters);
+			Map<String, Object> filters, UserRole role);
 
 	public List<UserDTO> getUsers();
 	

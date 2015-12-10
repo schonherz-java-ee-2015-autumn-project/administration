@@ -13,6 +13,7 @@ import org.primefaces.model.SortOrder;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.dto.UserRole;
 
 @Named
 @EJB(name = "ejb.UserService", beanInterface = UserService.class)
@@ -46,7 +47,7 @@ public class LazyAdmin extends LazyDataModel<UserDTO> {
 		int page = first / pageSize;
 		
 		if (userService != null) {
-			List<UserDTO> list = userService.getUserList(page, pageSize, sortField, order, filters);
+			List<UserDTO> list = userService.getUserList(page, pageSize, sortField, order, filters, UserRole.ADMIN);
 			int rowCount =  userService.getUserCount(filters);
 			if (list == null || list.isEmpty()) {
 				return Collections.emptyList();
