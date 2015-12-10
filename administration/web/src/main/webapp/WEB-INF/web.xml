@@ -53,7 +53,9 @@
 		<ejb-ref-name>ejb.UserService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.UserService</local>
 	</ejb-local-ref>
-
+	<session-config>
+    	<session-timeout>10</session-timeout>
+	</session-config>
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
