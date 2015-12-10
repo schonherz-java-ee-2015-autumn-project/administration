@@ -2,17 +2,17 @@ package hu.schonherz.administration.beans;
 
 import java.io.Serializable;
 
-import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 @ManagedBean
-@ViewScoped
+@RequestScoped
 public class RegistrationBean implements Serializable {
 
 	/**
@@ -28,14 +28,16 @@ public class RegistrationBean implements Serializable {
 	String phone;
 	String password;
 	String passconf;
-
+	FacesMessage msg;
+	FacesContext current;
+	
 	public void registration() {
-		FacesContext current = FacesContext.getCurrentInstance();
+		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 
-		if (!passconf.equals(password)) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
-			current.addMessage(null, msg);
+		if (!isValid()) {
+			//msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
+			//current.addMessage(null, msg);
 		} else {
 			user.setName(name);
 			user.setUsername(username);
@@ -51,6 +53,74 @@ public class RegistrationBean implements Serializable {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sikeres regisztráció!", "Sikeres regisztráció!");
 			current.addMessage(null, msg);
 
+		}
+	}
+
+	public boolean isValid(){
+		return isNameValid() &&
+				isUserNameValid() &&
+				isPhoneValid() &&
+				isPassValid() &&  
+			    arePasswordsEqual();
+		
+	}
+	
+	private boolean isNameValid() {
+		if(name.length()>=3 && name.length()<=150 && name.matches("[' 'a-zA-Z/-]*"))
+			return true;
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen név", "Érvénytelen név");
+			current.addMessage(null, msg);
+			return false;
+		}
+	}
+	
+	private boolean isUserNameValid() {
+		if( username.length()>=6 && 
+			   username.length()<=16 && 
+			   username.matches("[0-9a-zA-Z/_]*"))
+			return true;
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen felhasználónév", "Érvénytelen felhasználónév");
+			current.addMessage(null, msg);
+			return false;
+		}
+	}
+
+	private boolean isPhoneValid() {
+		if( phone.length()>=7 &&
+			   phone.length()<=11 &&
+			   phone.matches("[0-9]+"))
+			return true;
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen telefonszám", "Érvénytelen telefonszám");
+			current.addMessage(null, msg);
+			return false;
+		}
+		
+	}
+
+	private boolean isPassValid() {
+		if( password.length()>=8 &&
+			   password.length()<=12 &&
+			   password.matches(".*[0-9]+.*") &&
+			   password.matches(".*[a-z]+.*") &&
+			   password.matches(".*[A-Z]+.*"))
+			return true;
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen jelszó", "Érvénytelen jelszó");
+			current.addMessage(null, msg);
+			return false;
+		}
+	}
+	
+	private boolean arePasswordsEqual() {
+		if (password.equals(passconf))
+			return true;
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
+			current.addMessage(null, msg);
+			return false;
 		}
 	}
 
