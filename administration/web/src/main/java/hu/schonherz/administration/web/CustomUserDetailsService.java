@@ -41,7 +41,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 			return buildUserForAuthentication(user, authorities);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new UsernameNotFoundException(e.getMessage());
 		}
 
