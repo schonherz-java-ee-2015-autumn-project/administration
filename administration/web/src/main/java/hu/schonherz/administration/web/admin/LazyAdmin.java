@@ -48,7 +48,7 @@ public class LazyAdmin extends LazyDataModel<UserDTO> {
 		
 		if (userService != null) {
 			List<UserDTO> list = userService.getUserList(page, pageSize, sortField, order, filters, UserRole.ADMIN);
-			int rowCount =  userService.getUserCount(filters);
+			int rowCount =  userService.getUserCount(filters, UserRole.ADMIN);
 			if (list == null || list.isEmpty()) {
 				return Collections.emptyList();
 			} else {

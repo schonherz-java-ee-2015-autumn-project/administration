@@ -144,8 +144,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int getUserCount(Map<String, Object> filters) {
-		return (int)userDao.count(buildSpecification(filters));
+	public int getUserCount(Map<String, Object> filters, UserRole role) {
+		return (int)userDao.count(Specifications.where(buildSpecification(filters)).and(buildRoleSpecification(role)));
 		
 	}
 	

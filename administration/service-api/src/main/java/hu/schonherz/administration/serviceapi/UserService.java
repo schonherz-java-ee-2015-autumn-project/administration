@@ -20,7 +20,7 @@ public interface UserService {
 	
 	public int getUserCount();
 	
-	public int getUserCount(Map<String, Object> filters);
+	public int getUserCount(Map<String, Object> filters, UserRole role);
 
 	public UserDTO saveUser(UserDTO selectedUser);
 
