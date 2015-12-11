@@ -2,17 +2,21 @@ package hu.schonherz.administration.beans;
 
 import java.io.Serializable;
 
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
-@ManagedBean
+
 @RequestScoped
+@ManagedBean
+@EJB(name = "ejb.UserService", beanInterface = UserService.class)
 public class RegistrationBean implements Serializable {
 
 	/**
@@ -20,7 +24,10 @@ public class RegistrationBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@ManagedProperty(value = "#{UserService}")
+	
+	
+
+	@EJB
 	UserService userService;
 
 	String name;
