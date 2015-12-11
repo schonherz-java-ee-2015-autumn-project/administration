@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception {
-
+		
 		User user = userDao.save(UserConverter.toEntity(UserDTO));
 		List<Role> roles = user.getRoles();
 		if (roles == null || roles.isEmpty()) {

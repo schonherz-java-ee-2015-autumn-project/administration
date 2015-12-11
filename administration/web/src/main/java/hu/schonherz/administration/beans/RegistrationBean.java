@@ -32,13 +32,16 @@ public class RegistrationBean implements Serializable {
 	FacesContext current;
 	
 	public void registration() {
+		System.err.println("fut");
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 
 		if (!isValid()) {
+			System.err.println("nem valid");
 			//msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
 			//current.addMessage(null, msg);
 		} else {
+			System.err.println("valid");
 			user.setName(name);
 			user.setUsername(username);
 			user.setPhoneNumber(phone);
@@ -46,6 +49,8 @@ public class RegistrationBean implements Serializable {
 			try {
 				userService.registrationUser(user);
 			} catch (Exception e) {
+				
+				System.err.println(e);
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hiba a regisztráció közben!", "Hiba a regisztráció közben.");
 				current.addMessage(null, msg);
 				e.printStackTrace();
