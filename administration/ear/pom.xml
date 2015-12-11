@@ -32,6 +32,10 @@
 			<version>1.0.0</version>
 			<type>ejb</type>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			</dependency>
 	</dependencies>
 
 	<build>

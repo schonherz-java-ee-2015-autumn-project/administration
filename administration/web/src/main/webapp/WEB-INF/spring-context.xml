@@ -16,6 +16,7 @@
 	
 	<jee:local-slsb id="userService" jndi-name="ejb.UserService"
 		business-interface="hu.schonherz.administration.serviceapi.UserService" />
-	
+		
+		
 
 </beans>

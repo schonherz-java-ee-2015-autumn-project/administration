@@ -33,15 +33,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 		UserDTO user;
 		try {
 			user = userService.findUserByName(username);
-
-			if (user == null) {
-				throw new UsernameNotFoundException(username);
+			for(RoleDTO e :  user.getRoles()){
+				if(e.getName().equals("ROLE_ADMIN")){
+					List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
+					return buildUserForAuthentication(user, authorities);
+				}
 			}
-			List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
-
-			return buildUserForAuthentication(user, authorities);
+			throw new UsernameNotFoundException(username);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new UsernameNotFoundException(e.getMessage());
 		}
 
