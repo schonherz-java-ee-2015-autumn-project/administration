@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
@@ -39,25 +39,26 @@ public class RegistrationBean implements Serializable {
 	FacesContext current;
 	
 	public void registration() {
-		System.err.println("fut");
+		
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 		if (!isValid()) {
-			System.err.println("nem valid");
+			
 			//msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
 			//current.addMessage(null, msg);
 		} else {
-			System.err.println("valid");
+			
 			user.setName(name);
 			user.setUsername(username);
 			user.setPhoneNumber(phone);
-			user.setPassword(password);
+			user.setPassword(bCryptPasswordEncoder.encode(password));
 			try {
 				userService.registrationUser(user);
 			} catch (Exception e) {
 				
-				System.err.println(e);
+				
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hiba a regisztráció közben!", "Hiba a regisztráció közben.");
 				current.addMessage(null, msg);
 				e.printStackTrace();
@@ -78,7 +79,7 @@ public class RegistrationBean implements Serializable {
 	}
 	
 	private boolean isNameValid() {
-		if(name.length()>=3 && name.length()<=150 && name.matches("[' 'a-zA-Z/-]*"))
+		if(name.length()>=3 && name.length()<=150 && name.matches("[' 'a-zéáA-ZÉÁ/-]*"))
 			return true;
 		else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen név", "Érvénytelen név");
