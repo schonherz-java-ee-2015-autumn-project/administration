@@ -13,4 +13,5 @@ public class User_ {
     public static volatile SingularAttribute<User, String> phoneNumber;
     public static volatile SingularAttribute<User, String> password;
     public static volatile ListAttribute<User, Role> roles;
+    public static volatile SingularAttribute<User, Boolean> remove;
 }
