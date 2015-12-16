@@ -14,17 +14,29 @@
 			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
 	
-			<p:column headerText="Name" sortBy="#{user.name}"
+			<p:column headerText="#{out.name}" sortBy="#{user.name}"
 				filterBy="#{user.name}">
 				<h:outputText value="#{user.name}" />
 			</p:column>
-			<p:column headerText="Username" sortBy="#{user.username}"
+			<p:column headerText="#{out.username}" sortBy="#{user.username}"
 				filterBy="#{user.username}">
 				<h:outputText value="#{user.username}" />
 			</p:column>
-			<p:column headerText="Phonenumber" sortBy="#{user.phoneNumber}"
+			<p:column headerText="#{out.phonenumber}" sortBy="#{user.phoneNumber}"
 				filterBy="#{user.phoneNumber}">
 				<h:outputText value="#{user.phoneNumber}" />
+			</p:column>
+			<p:column headerText="#{out.remove_admin}">
+				<p:growl id="message" showDetail="true" />
+				<p:commandButton value="#{out.remove_admin}">
+					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
+	    			<f:param name="userID" value="#{user.id}" />
+					<p:ajax update="administrationUsersForm" listener="#{UserBean.removeUser}"/>
+				</p:commandButton>
+				 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+       				 <p:commandButton value="#{out.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+       				 <p:commandButton value="#{out.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>	
 			</p:column>
 		</p:dataTable>
 	</h:form>

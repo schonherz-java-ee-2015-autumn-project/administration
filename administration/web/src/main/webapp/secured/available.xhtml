@@ -7,7 +7,11 @@
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">	
-		<h:outputText value="#{out.username} :"/>
-		<h:outputText value="#{userSessionBean.userDTO.name}"></h:outputText>
+		<h:form id="display">
+			<h:outputLabel value="#{out.username}:"/>
+			<h:outputText value="#{userSessionBean.userDTO.name}"></h:outputText>
+			<br/>
+			<h:outputText value="#{userSessionBean.userDTO.remove}"></h:outputText>
+		</h:form>
 	</ui:define>
 </ui:composition>
