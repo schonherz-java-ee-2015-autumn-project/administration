@@ -46,6 +46,13 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.findByUsername(name);
 		return UserConverter.toVo(user);
 	}
+	
+	@Override
+	public void removeUser(long id) throws Exception {
+		User user = userDao.findById(id);
+		user.setRemove(true);
+		userDao.save(user);
+	}
 
 	@Override
 	public UserDTO registrationUser(UserDTO userDTO) throws Exception {
@@ -89,7 +96,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDTO findById(Long id) {
+	public UserDTO findById(long id) {
 		return UserConverter.toVo(userDao.findOne(id));
 	}
 
