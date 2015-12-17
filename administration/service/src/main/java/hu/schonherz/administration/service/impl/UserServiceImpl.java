@@ -113,8 +113,14 @@ public class UserServiceImpl implements UserService {
 
 		Specification<User> spec = buildSpecification(filters);
 		Specification<User> roleSpec = buildRoleSpecification(role);
-		spec = Specifications.where(spec).and(roleSpec);
+		Specification<User> isDelete = buildRemoveSpecification();
+		spec = Specifications.where(spec).and(roleSpec).and(isDelete);
 		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
+	}
+
+	private Specification<User> buildRemoveSpecification() {
+		Specification<User> spec = Specifications.where(UserSpecification.isDelete());
+		return spec;
 	}
 
 	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
@@ -152,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int getUserCount(Map<String, Object> filters, UserRole role) {
-		return (int)userDao.count(Specifications.where(buildSpecification(filters)).and(buildRoleSpecification(role)));
+		return (int)userDao.count(Specifications.where(buildSpecification(filters)).and(buildRoleSpecification(role)).and(buildRemoveSpecification()));
 		
 	}
 	

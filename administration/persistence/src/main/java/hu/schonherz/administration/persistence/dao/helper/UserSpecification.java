@@ -39,6 +39,17 @@ public class UserSpecification {
 		};
 
 	}
+	public static Specification<User> isDelete() {
+		return new Specification<User>() {
+
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.isFalse(root.get(User_.remove));
+			}
+
+		};
+
+	}
 
 	public static Specification<User> usernameLike(String username) {
 		return new Specification<User>() {
