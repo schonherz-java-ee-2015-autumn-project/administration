@@ -79,7 +79,7 @@ public class RegistrationBean implements Serializable {
 	}
 	
 	private boolean isNameValid() {
-		if(name.length()>=3 && name.length()<=150 && name.matches("[' 'a-zéáA-ZÉÁ/-]*"))
+		if(name.length()>=3 && name.length()<=150 && name.matches("[' 'a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/-]*"))
 			return true;
 		else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen név", "Érvénytelen név");
@@ -89,12 +89,26 @@ public class RegistrationBean implements Serializable {
 	}
 	
 	private boolean isUserNameValid() {
+		
+		UserDTO user=null;
+		try {
+			user = userService.findUserByName(username);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+		}
+		if(user==null)
 		if( username.length()>=6 && 
 			   username.length()<=16 && 
-			   username.matches("[0-9a-zA-Z/_]*"))
+			   username.matches("[0-9a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/_]*"))
 			return true;
 		else{
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Érvénytelen felhasználónév", "Érvénytelen felhasználónév");
+			current.addMessage(null, msg);
+			return false;
+		}
+		else{
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A Felhasználónév foglalt", "A Felhasználónév foglalt");
 			current.addMessage(null, msg);
 			return false;
 		}

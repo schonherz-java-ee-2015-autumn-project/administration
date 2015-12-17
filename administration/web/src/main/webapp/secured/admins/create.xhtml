@@ -18,6 +18,7 @@
 					<p:ajax update="nameMsg" event="keyup"/>
 				</p:inputText>
 				<p:message for="name" id="nameMsg"/>
+				
 				<br/>
 				<p:outputLabel for="username" value="#{out.username}" />
 				<p:inputText id="username" value="#{registrationBean.username}" required="true"
@@ -38,7 +39,7 @@
 				<p:message for="phone" id="phoneMsg" />
 				<br/>
 				<p:outputLabel for="password" value="#{out.password}" />
-				<p:password id="password" value="#{registrationBean.password}" required="true" match="passwordconf"
+				<p:password id="password" value="#{registrationBean.password}" required="true"
 					label="password">
 					<f:validateLength minimum="8" maximum="12" />
 					<f:validateRegex pattern=".*[0-9]+.*" />
@@ -49,9 +50,12 @@
 				<p:message for="password" id="passMsg" />
 				<br/>
 				<p:outputLabel for="passwordconf" value="#{out.password}" />
-				<p:password id="passwordconf" value="#{registrationBean.passconf}" required="true"
+				<p:password id="passwordconf" value="#{registrationBean.passconf}" required="true" match="password"
 					label="passwordconf">
 					<f:validateLength minimum="8" maximum="12" />
+					<f:validateRegex pattern=".*[0-9]+.*" />
+					<f:validateRegex pattern=".*[a-z]+.*" />
+					<f:validateRegex pattern=".*[A-Z]+.*" />
 					<p:ajax update="passconfMsg" event="keyup" />
 				</p:password>
 				<p:message for="passwordconf" id="passconfMsg" />
