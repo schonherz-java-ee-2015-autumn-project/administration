@@ -26,7 +26,10 @@ public class RemoveUserBean implements Serializable {
 	private long id;
 	
 	public void removeUser() {
-		addMessage("Törlés", "OK");
+
+		String msg = new MessageProvider().getValue("remove");
+		String msg1 = new MessageProvider().getValue("remove_accept");
+		addMessage(msg, msg1);
 		try {
 			userService.removeUser(id);
 		} catch (Exception e) {
