@@ -58,12 +58,21 @@
 			</div>
 
 			<div class="header-right">
+				
+				<sec:authorize ifNotGranted="ROLE_ADMIN">
+					<a href="#{request.contextPath}/secured/admins/create.xhtml"
+						class="btn btn-info" title="REGISTRATION"> <b>#{out.registration}</b>
+					</a>
+					<a> </a>
+				</sec:authorize>
+				
 				<sec:authorize ifNotGranted="ROLE_ADMIN">
 					<a href="#{request.contextPath}/public/login.xhtml"
 						class="btn btn-info" title="LOGIN"> <b>#{out.login}</b>
 					</a>
 					<a> </a>
 				</sec:authorize>
+				
 				<sec:authorize access="hasAnyRole('ADMIN')">
 					<a href="#{request.contextPath}/logout" class="btn btn-danger"
 						title="Logout"> <b>#{out.logout}</b>
