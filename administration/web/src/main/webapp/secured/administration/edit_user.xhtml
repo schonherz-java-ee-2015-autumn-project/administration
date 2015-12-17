@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form>
+
+			<p:panel id="panel" header="User details">
+
+				<p:messages id="msgs" />
+
+				<h:panelGrid columns="3" cellpadding="5">
+				
+					<p:outputLabel for="name" value="Name:" />
+					<p:inputText id="name" value="#{usermodify.name}"
+						label="name">
+						<f:validateLength minimum="2" />
+					</p:inputText>
+					<p:message for="name"/>
+					
+
+					<p:outputLabel for="userName" value="User name:" />
+					<p:inputText id="userName" value="#{usermodify.userName}"
+						label="userName">
+						<f:validateLength minimum="2" />
+					</p:inputText>
+					<p:message for="userName"/>
+					
+					
+					<p:outputLabel for="phoneNumber" value="Phone number:" />
+					<p:inputText id="phoneNumber" value="#{usermodify.phoneNumber}"
+						label="phoneNumber" >
+						<f:validateLength minimum="2" />					
+					</p:inputText>
+					<p:message for="phoneNumber"/>
+					
+				</h:panelGrid>
+
+				<p:commandButton value="Save" icon="ui-icon-check" />
+
+
+			</p:panel>
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

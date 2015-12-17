@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+	<h:form id="administrationUsersForm">
+		<p:dataTable var="user" value="#{adminLazyBean.lazyDataModel}"
+			paginator="true" rows="10" rowsPerPageTemplate="5,10,50"
+			id="carTable" lazy="true"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+	
+			<p:column headerText="Name" sortBy="#{user.name}"
+				filterBy="#{user.name}">
+				<h:outputText value="#{user.name}" />
+			</p:column>
+			<p:column headerText="Username" sortBy="#{user.username}"
+				filterBy="#{user.username}">
+				<h:outputText value="#{user.username}" />
+			</p:column>
+			<p:column headerText="Phonenumber" sortBy="#{user.phoneNumber}"
+				filterBy="#{user.phoneNumber}">
+				<h:outputText value="#{user.phoneNumber}" />
+			</p:column>
+			<p:column >
+				<li><a href="#{request.contextPath}/secured/administration/edit_user.xhtml">#{out.edit_users}</a></li>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>
