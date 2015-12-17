@@ -8,7 +8,7 @@
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
 		<h:form>
-			<p:panel id="panel" header="#{out.newUser}">
+			<p:panel id="panel" header="#{out.add_new_admin}">
 
 				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.name}" />
@@ -59,7 +59,7 @@
 						<f:validateRegex pattern=".*[a-z]+.*" />
 						<f:validateRegex pattern=".*[A-Z]+.*" />
 						<p:ajax update="passconfMsg" event="keyup" />
-						<p:ajax update="passconfMsg" event= />
+						
 					</p:password>
 					<p:message for="passwordconf" id="passconfMsg" />
 
