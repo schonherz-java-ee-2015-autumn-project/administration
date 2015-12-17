@@ -1,9 +1,11 @@
 package hu.schonherz.administration.serviceapi;
 
 import java.util.List;
+import java.util.Map;
 
+import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
-
+import hu.schonherz.administration.serviceapi.dto.UserRole;
 
 public interface UserService {
 
@@ -11,12 +13,14 @@ public interface UserService {
 
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
-	public List<UserDTO> getUserList(int i, int pageSize, String sortField, int dir, String filter,
-			String filterColumnName);
+	public List<UserDTO> getUserList(int first, int pageSize, String sortField,  CustomSortOrder sortOrder,
+			Map<String, Object> filters, UserRole role);
 
 	public List<UserDTO> getUsers();
 	
-	public Integer getUserCount();
+	public int getUserCount();
+	
+	public int getUserCount(Map<String, Object> filters, UserRole role);
 
 	public UserDTO saveUser(UserDTO selectedUser);
 

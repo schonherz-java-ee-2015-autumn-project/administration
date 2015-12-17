@@ -38,8 +38,8 @@
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
 	</listener>
-	
-	
+
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -54,6 +54,9 @@
 		<local>hu.schonherz.administration.serviceapi.UserService</local>
 	</ejb-local-ref>
 
+	<session-config>
+    	<session-timeout>10</session-timeout>
+	</session-config>
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
 	</welcome-file-list>
