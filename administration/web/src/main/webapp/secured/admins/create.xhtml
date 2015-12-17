@@ -49,7 +49,7 @@
 				</p:password>
 				<p:message for="password" id="passMsg" />
 				<br/>
-				<p:outputLabel for="passwordconf" value="#{out.password}" />
+				<p:outputLabel for="passwordconf" value="#{out.passconf}" />
 				<p:password id="passwordconf" value="#{registrationBean.passconf}" required="true" match="password"
 					label="passwordconf">
 					<f:validateLength minimum="8" maximum="12" />
