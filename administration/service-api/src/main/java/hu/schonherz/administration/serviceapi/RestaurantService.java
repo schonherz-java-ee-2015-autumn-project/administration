@@ -3,6 +3,7 @@ package hu.schonherz.administration.serviceapi;
 import java.util.List;
 import java.util.Map;
 
+import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 
 public interface RestaurantService {
@@ -17,7 +18,8 @@ public interface RestaurantService {
 
 	public List<RestaurantDTO> getRestaurants();
 	
-	public List<RestaurantDTO> getRestaurants(Map<String, Object> filters);
+	
+	public List<RestaurantDTO> getRestaurants(int first, int pageSize, String sortField,  CustomSortOrder sortOrder, Map<String, Object> filters);
 
 	public int getRestaurantCount();
 

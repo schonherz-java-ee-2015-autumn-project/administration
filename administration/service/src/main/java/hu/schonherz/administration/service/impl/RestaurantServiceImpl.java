@@ -10,6 +10,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
@@ -19,6 +22,7 @@ import hu.schonherz.administration.persistence.dao.helper.RestaurantSpecificatio
 import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.serviceapi.RestaurantService;
+import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 
 
@@ -61,11 +65,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 		return RestaurantConverter.toDTO(restaurants);
 	}
 
-	@Override
-	public List<RestaurantDTO> getRestaurants(Map<String, Object> filters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public int getRestaurantCount() {
@@ -102,5 +101,29 @@ public class RestaurantServiceImpl implements RestaurantService{
 		}
 		
 		return spec;
+	}
+
+	@Override
+	public List<RestaurantDTO> getRestaurants(int first, int pageSize, String sortField, CustomSortOrder sortOrder,
+			Map<String, Object> filters) {
+		Pageable pagable = createPageRequest(first, pageSize, sortField, sortOrder);
+		Specification<Restaurant> spec = buildSpecification(filters);
+		return RestaurantConverter.toDTO(restaurantDao.findAll(spec,pagable).getContent());
+	}
+
+	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
+		if(order!=null && sortField !=null){
+			Sort sort = null;
+			if (order.equals(order.DESC)) {
+				sort = new Sort(Sort.Direction.DESC, sortField);
+			} else {
+				sort = new Sort(Sort.Direction.ASC, sortField);
+			}
+			return new PageRequest(first, pageSize, sort);
+		}else{
+			return new PageRequest(first, pageSize);
+
+		}
+
 	}
 }
