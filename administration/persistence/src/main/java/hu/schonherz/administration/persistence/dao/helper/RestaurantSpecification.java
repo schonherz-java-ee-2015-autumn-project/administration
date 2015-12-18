@@ -10,7 +10,19 @@ import org.springframework.data.jpa.domain.Specification;
 import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.persistence.entities.Restaurant_;
 
-public class RestauratnSpecification {
+public class RestaurantSpecification {
+	
+	public static Specification<Restaurant> isDeleted() {
+		return new Specification<Restaurant>() {
+
+			@Override
+			public Predicate toPredicate(Root<Restaurant> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.isTrue(root.get(Restaurant_.isDeleted));
+			}
+
+		};
+
+	}
 	
 	public static Specification<Restaurant> addressLike(String name) {
 		return new Specification<Restaurant>() {
