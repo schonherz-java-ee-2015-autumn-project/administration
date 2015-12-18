@@ -80,7 +80,6 @@ public class RestaurantServiceImpl implements RestaurantService {
 		String name;
 		String address;
 		String phoneNumber;
-		String price;
 
 		if (filters.containsKey("name")) {
 			name = (String) filters.get("name");
@@ -97,6 +96,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 			spec = Specifications.where(spec).and(RestaurantSpecification.addressLike(address));
 		}
 
+		if (filters.containsKey("price")) {
+			String priceString = (String) filters.get("price");
+			Integer price = 0;
+			try{
+			price = Integer.parseInt(priceString);
+			}catch(NumberFormatException e){
+			}
+			spec = Specifications.where(spec).and(RestaurantSpecification.priceBetween(price));
+		}
+		
 		return spec;
 	}
 
