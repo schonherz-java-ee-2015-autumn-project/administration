@@ -10,5 +10,6 @@ public class Restaurant_ {
     public static volatile SingularAttribute<Restaurant, String> address;
     public static volatile SingularAttribute<Restaurant, String> phoneNumber;
     public static volatile SingularAttribute<Restaurant, Integer> price;
+    public static volatile SingularAttribute<Restaurant, Boolean> isDeleted;
 
 }

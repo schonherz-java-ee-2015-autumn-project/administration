@@ -21,6 +21,10 @@ public class Restaurant  extends BaseEntity implements Serializable{
 	
 	private Integer price;
 	
+	@Column(name = "is_deleted", nullable = false)
+	private Boolean isDeleted;
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -44,6 +48,12 @@ public class Restaurant  extends BaseEntity implements Serializable{
 	}
 	public void setPrice(Integer price) {
 		this.price = price;
+	}
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	
