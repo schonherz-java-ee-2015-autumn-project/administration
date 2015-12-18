@@ -3,10 +3,9 @@ package hu.schonherz.administration.persistence.entities;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 
-import org.springframework.stereotype.Repository;
-
-@Repository
+@Entity
 public class Restaurant  extends BaseEntity implements Serializable{
 	
 	private static final long serialVersionUID = 7483949968557475123L;
