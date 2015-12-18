@@ -25,16 +25,15 @@ import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 
-
 @Stateless(mappedName = "RestaurantService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 @Local(RestaurantService.class)
-public class RestaurantServiceImpl implements RestaurantService{
-	
+public class RestaurantServiceImpl implements RestaurantService {
+
 	@Autowired
 	RestaurantDao restaurantDao;
-	
+
 	@Override
 	public RestaurantDTO findRestaurantByName(String name) {
 		Restaurant restaurant = restaurantDao.findByName(name);
@@ -65,7 +64,6 @@ public class RestaurantServiceImpl implements RestaurantService{
 		return RestaurantConverter.toDTO(restaurants);
 	}
 
-
 	@Override
 	public int getRestaurantCount() {
 		return (int) restaurantDao.count();
@@ -73,18 +71,17 @@ public class RestaurantServiceImpl implements RestaurantService{
 
 	@Override
 	public int getRestaurantCount(Map<String, Object> filters) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) restaurantDao
+				.count(Specifications.where(buildSpecification(filters)).and(RestaurantSpecification.notDeleted()));
 	}
-	
-	
-	private Specification<Restaurant> buildSpecification(Map<String, Object> filters){
+
+	private Specification<Restaurant> buildSpecification(Map<String, Object> filters) {
 		Specification<Restaurant> spec = null;
 		String name;
 		String address;
 		String phoneNumber;
 		String price;
-	
+
 		if (filters.containsKey("name")) {
 			name = (String) filters.get("name");
 			spec = Specifications.where(RestaurantSpecification.nameLike(name));
@@ -99,7 +96,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 			address = (String) filters.get("address");
 			spec = Specifications.where(spec).and(RestaurantSpecification.addressLike(address));
 		}
-		
+
 		return spec;
 	}
 
@@ -107,12 +104,13 @@ public class RestaurantServiceImpl implements RestaurantService{
 	public List<RestaurantDTO> getRestaurants(int first, int pageSize, String sortField, CustomSortOrder sortOrder,
 			Map<String, Object> filters) {
 		Pageable pagable = createPageRequest(first, pageSize, sortField, sortOrder);
-		Specification<Restaurant> spec = buildSpecification(filters);
-		return RestaurantConverter.toDTO(restaurantDao.findAll(spec,pagable).getContent());
+		Specification<Restaurant> spec = Specifications.where(buildSpecification(filters))
+				.and(RestaurantSpecification.notDeleted());
+		return RestaurantConverter.toDTO(restaurantDao.findAll(spec, pagable).getContent());
 	}
 
 	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
-		if(order!=null && sortField !=null){
+		if (order != null && sortField != null) {
 			Sort sort = null;
 			if (order.equals(order.DESC)) {
 				sort = new Sort(Sort.Direction.DESC, sortField);
@@ -120,7 +118,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 				sort = new Sort(Sort.Direction.ASC, sortField);
 			}
 			return new PageRequest(first, pageSize, sort);
-		}else{
+		} else {
 			return new PageRequest(first, pageSize);
 
 		}

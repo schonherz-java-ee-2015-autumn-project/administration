@@ -23,6 +23,17 @@ public class RestaurantSpecification {
 		};
 
 	}
+	public static Specification<Restaurant> notDeleted() {
+		return new Specification<Restaurant>() {
+
+			@Override
+			public Predicate toPredicate(Root<Restaurant> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.isFalse(root.get(Restaurant_.isDeleted));
+			}
+
+		};
+
+	}
 	
 	public static Specification<Restaurant> addressLike(String name) {
 		return new Specification<Restaurant>() {
