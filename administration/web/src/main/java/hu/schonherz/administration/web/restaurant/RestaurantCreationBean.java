@@ -1,9 +1,14 @@
 package hu.schonherz.administration.web.restaurant;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@ManagedBean(name ="RestaurantBean")
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+
+@Named("RestaurantCreationBean")
 @ViewScoped
 public class RestaurantCreationBean {
 	
@@ -39,4 +44,6 @@ public class RestaurantCreationBean {
 	public void save(){
 		
 	}
+	
+	
 }
