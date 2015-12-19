@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="restourantForm">
+			<p:panel id="panel" header="#{out.new_restaurant }">
+				<!-- 				<p:messages autoUpdate="true" /> -->
+
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:outputLabel for="name" value="#{out.restaurantName }" />
+					<p:inputText id="name" value="#{RestaurantCreationBean.name}"
+						required="false" label="#{out.restaurantName }">
+						<f:validator validatorId="nameValidator" />
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
+
+
+					<p:outputLabel for="address" value="#{out.restaurantAddress }" />
+					<p:inputText id="address" value="#{RestaurantCreationBean.address}"
+						required="false" label="#{out.restaurantAddress }">
+						<f:validator validatorId="addressValidator" />
+						<p:ajax update="addressMsg" event="keyup" />
+					</p:inputText>
+
+					<p:message for="address" id="addressMsg" />
+
+					<p:outputLabel for="phoneNumber"
+						value="#{out.restaurantPhoneNumber }" />
+					<p:inputText id="phoneNumber"
+						value="#{RestaurantCreationBean.phoneNumber}" required="false"
+						label="#{out.restaurantPhoneNumber }">
+						<f:validator validatorId="phoneNumberValidator" />
+						<p:ajax update="phoneNumberMsg" event="keyup" />
+
+					</p:inputText>
+					<p:message for="phoneNumber" id="phoneNumberMsg" />
+
+
+					<p:outputLabel for="price" value="#{out.restaurantPrice }" />
+					<p:inputMask id="price" value="#{RestaurantCreationBean.price}"
+						required="false" label="#{out.restaurantPrice }" mask="9?9"
+						maxlength="2" placeHolder=" ">
+						<f:validator validatorId="priceValidator" />
+						<p:ajax update="priceMsg" event="keyup" />
+					</p:inputMask>
+					<p:message for="price" id="priceMsg" />
+				</h:panelGrid>
+
+				<p:commandButton value="Save" update="panel"
+					actionListener="#{RestaurantCreationBean.save}"
+					icon="ui-icon-check" />
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
