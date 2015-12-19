@@ -26,10 +26,23 @@
 					filterBy="#{user.phoneNumber}">
 					<h:outputText value="#{user.phoneNumber}" />
 				</p:column>
-				<p:commandButton value="#{out.edit_users}">
-					<f:param name="userID" value="#{user.id}" />
-					<p:ajax update="administrationUsersForm" listener="#{AdminModifyBean.setData}"/>
-				</p:commandButton>
+				<p:column>
+					<p:button value="#{out.edit_users}">
+						<a
+							href="#{request.contextPath}/secured/administration/edit_user.xhtml"
+							class="btn btn-info" title="#{out.create}"> <b>#{out.edit_users}</b>
+						</a>
+						<f:param name="userID" value="#{user.id}" />
+						<f:param name="name" value="#{user.name}" />
+						<f:param name="userName" value="#{user.username}" />
+						<f:param name="phoneNumber" value="#{user.phoneNumber}" />
+
+
+
+
+					</p:button>
+
+				</p:column>
 			</p:dataTable>
 		</h:form>
 

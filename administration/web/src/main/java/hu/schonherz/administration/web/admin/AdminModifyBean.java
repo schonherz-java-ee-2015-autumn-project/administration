@@ -18,6 +18,14 @@ public class AdminModifyBean {
 	@ManagedProperty(value = "#{param.userID}")
 	private long id;
 	
+	@ManagedProperty(value = "#{param.name}")
+	private String name;
+	
+	@ManagedProperty(value = "#{param.userName}")
+	private String userName;
+	
+	@ManagedProperty(value = "#{param.phoneNumber}")
+	private String phoneNumber;
 	
 	
 	
@@ -34,9 +42,7 @@ public class AdminModifyBean {
 		return id;
 	}
 	
-	private String name;
-	private String userName;
-	private String phoneNumber;
+	
 	
 	
 	public String getName() {

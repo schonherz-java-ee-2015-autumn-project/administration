@@ -15,27 +15,28 @@
 
 				<h:panelGrid columns="3" cellpadding="5">
 				
+				
 					<p:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" value="#{AdminModifyBean.name}"
+					<p:outputText id="name" value="#{AdminModifyBean.name}"
 						label="name">
 						<f:validateLength minimum="2" />
-					</p:inputText>
+					</p:outputText>
 					<p:message for="name"/>
 					
 
 					<p:outputLabel for="userName" value="User name:" />
-					<p:inputText id="userName" value="#{AdminModifyBean.userName}"
+					<p:outputText id="userName" value="#{AdminModifyBean.userName}"
 						label="userName">
 						<f:validateLength minimum="2" />
-					</p:inputText>
+					</p:outputText>
 					<p:message for="userName"/>
 					
 					
 					<p:outputLabel for="phoneNumber" value="Phone number:" />
-					<p:inputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"
+					<p:outputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"
 						label="phoneNumber" >
 						<f:validateLength minimum="2" />					
-					</p:inputText>
+					</p:outputText>
 					<p:message for="phoneNumber"/>
 					
 				</h:panelGrid>
