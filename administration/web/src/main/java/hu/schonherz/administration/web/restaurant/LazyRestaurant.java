@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.inject.Named;
 
-import org.apache.log4j.Logger;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
