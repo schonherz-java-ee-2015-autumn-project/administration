@@ -25,5 +25,7 @@ public interface UserService {
 	public UserDTO saveUser(UserDTO selectedUser);
 
 	public UserDTO findById(Long id);
+	
+	public void setUserData(long id) throws Exception;
 
 }

@@ -16,7 +16,7 @@
 				<h:panelGrid columns="3" cellpadding="5">
 				
 					<p:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" value="#{usermodify.name}"
+					<p:inputText id="name" value="#{AdminModifyBean.name}"
 						label="name">
 						<f:validateLength minimum="2" />
 					</p:inputText>
@@ -24,7 +24,7 @@
 					
 
 					<p:outputLabel for="userName" value="User name:" />
-					<p:inputText id="userName" value="#{usermodify.userName}"
+					<p:inputText id="userName" value="#{AdminModifyBean.userName}"
 						label="userName">
 						<f:validateLength minimum="2" />
 					</p:inputText>
@@ -32,7 +32,7 @@
 					
 					
 					<p:outputLabel for="phoneNumber" value="Phone number:" />
-					<p:inputText id="phoneNumber" value="#{usermodify.phoneNumber}"
+					<p:inputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"
 						label="phoneNumber" >
 						<f:validateLength minimum="2" />					
 					</p:inputText>

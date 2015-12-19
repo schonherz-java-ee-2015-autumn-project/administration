@@ -87,6 +87,8 @@ public class UserServiceImpl implements UserService {
 	public UserDTO saveUser(UserDTO selectedUser) {
 		return selectedUser;
 	}
+	
+	
 
 	@Override
 	public UserDTO findById(Long id) {
@@ -171,4 +173,14 @@ public class UserServiceImpl implements UserService {
 		}
 		return spec;
 	}
+	
+	@Override
+	public void setUserData(long id) throws Exception {
+		
+		User user = userDao.findById(id);
+
+		
+	}
+
+	
 }
