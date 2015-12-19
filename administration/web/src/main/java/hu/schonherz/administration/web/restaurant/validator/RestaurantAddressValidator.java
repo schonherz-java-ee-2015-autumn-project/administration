@@ -16,22 +16,16 @@ public class RestaurantAddressValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 		String input = (String) value;
 		String err = "";
-		try {
-			if (input.length() < 10)
-				err += MessageProvider.getValue("restaurant_address_min_length");
-		} catch (Exception e) {
-			err += e.toString();
-		}
+
+		if (input.length() < 10)
+			err += MessageProvider.getValue("restaurant_address_min_length");
+
 		if (input.length() > 500)
 			err += MessageProvider.getValue("restaurant_address_max_length");
 
 		if (!err.isEmpty()) {
 			FacesMessage message = new FacesMessage(err);
 			message.setSeverity(FacesMessage.SEVERITY_WARN);
-			throw new ValidatorException(message);
-		} else {
-			FacesMessage message = new FacesMessage(MessageProvider.getValue("valid_input"));
-			message.setSeverity(FacesMessage.SEVERITY_INFO);
 			throw new ValidatorException(message);
 		}
 	}

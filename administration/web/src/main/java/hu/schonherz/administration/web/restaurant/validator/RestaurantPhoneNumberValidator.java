@@ -15,30 +15,27 @@ import hu.schonherz.administration.web.localization.MessageProvider;
 @FacesValidator("phoneNumberValidator")
 public class RestaurantPhoneNumberValidator implements Validator {
 
-    @Override
-    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-    		String input = (String) value;
-    		String err = "";
-    		input = input.replace(" ", "");
-    		if(input.length()<7)
-    			err += MessageProvider.getValue("restaurant_phone_number_min_length");
-    		if(input.length()>11)
-    			err += "Phone number cannot contain more than 11 digist.";
-    		
-    		 Pattern p = Pattern.compile("[0-9]+",Pattern.UNICODE_CHARACTER_CLASS);
-    		 Matcher m = p.matcher(input);
-    		 if(!m.matches())
-    			 err += MessageProvider.getValue("restaurant_phone_number_only_digits");
-   
-        if (!err.isEmpty()) {
-        	FacesMessage message = new FacesMessage(err);
+	@Override
+	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+		String input = (String) value;
+		String err = "";
+		input = input.replace(" ", "");
+		if (input.length() < 7)
+			err += MessageProvider.getValue("restaurant_phone_number_min_length");
+		if (input.length() > 11)
+			err += "Phone number cannot contain more than 11 digist.";
+
+		if (!input.isEmpty()) {
+			Pattern p = Pattern.compile("[0-9]+", Pattern.UNICODE_CHARACTER_CLASS);
+			Matcher m = p.matcher(input);
+			if (!m.matches())
+				err += MessageProvider.getValue("restaurant_phone_number_only_digits");
+		}
+		if (!err.isEmpty()) {
+			FacesMessage message = new FacesMessage(err);
 			message.setSeverity(FacesMessage.SEVERITY_WARN);
 			throw new ValidatorException(message);
-		} else {
-			FacesMessage message = new FacesMessage(MessageProvider.getValue("valid_input"));
-			message.setSeverity(FacesMessage.SEVERITY_INFO);
-			throw new ValidatorException(message);
 		}
-    }
+	}
 
 }
