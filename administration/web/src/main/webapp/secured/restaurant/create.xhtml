@@ -8,11 +8,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-		<h:form id="restourantForm">
-			<p:panel id="panel" header="#{out.new_restaurant }">
-				<!-- 				<p:messages autoUpdate="true" /> -->
+		<h:form id="restaurantForm">
 
-				<h:panelGrid columns="3" cellpadding="5">
+			<p:panel id="panel" header="#{out.new_restaurant }">
+				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 					<p:outputLabel for="name" value="#{out.restaurantName }" />
 					<p:inputText id="name" value="#{RestaurantCreationBean.name}"
 						required="false" label="#{out.restaurantName }">
@@ -33,9 +32,11 @@
 
 					<p:outputLabel for="phoneNumber"
 						value="#{out.restaurantPhoneNumber }" />
-					<p:inputMask id="phoneNumber" value="#{RestaurantCreationBean.phoneNumber}"
-						required="false" label="#{out.restaurantPrice }" mask="9999999?9999"
-						maxlength="11" slotChar=" ">	<f:validator validatorId="phoneNumberValidator" />
+					<p:inputMask id="phoneNumber"
+						value="#{RestaurantCreationBean.phoneNumber}" required="false"
+						label="#{out.restaurantPrice }" mask="9999999?9999" maxlength="11"
+						slotChar=" ">
+						<f:validator validatorId="phoneNumberValidator" />
 						<p:ajax update="phoneNumberMsg" event="keyup" />
 
 					</p:inputMask>
@@ -51,11 +52,14 @@
 					</p:inputMask>
 					<p:message for="price" id="priceMsg" />
 				</h:panelGrid>
-
-				<p:commandButton value="Save" update="panel"
-					actionListener="#{RestaurantCreationBean.save}"
-					icon="ui-icon-check" />
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{out.save_button}" update="panel"
+						actionListener="#{RestaurantCreationBean.save}"
+						icon="ui-icon-check" id="save_status" />
+					<p:message for="save_status" />
+				</h:panelGrid>
 			</p:panel>
+
 		</h:form>
 	</ui:define>
 
