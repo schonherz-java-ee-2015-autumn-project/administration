@@ -10,6 +10,8 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+import hu.schonherz.administration.web.localization.MessageProvider;
+
 @FacesValidator("nameValidator")
 public class RestourantNameValidator implements Validator {
 
@@ -18,18 +20,24 @@ public class RestourantNameValidator implements Validator {
     		String input = (String) value;
     		String err = "";
     		if(input.length()<3)
-    			err += "Name must be at least 3 characters long.";
+    			err += MessageProvider.getValue("restaurant_name_min_length");
     		if(input.length()>150)
-    			err += "Name must be less than 150 characters long.";
+    			err += MessageProvider.getValue("restaurant_name_max_length");
     		
     		 Pattern p = Pattern.compile("[\\w [0-9]-]+",Pattern.UNICODE_CHARACTER_CLASS);
     		 Matcher m = p.matcher(input);
     		 if(!m.matches())
-    			 err += "Name can onlye contain letters number spaces and '-'.";
+    			 err += MessageProvider.getValue("restaurant_name_constraint");
    
         if (!err.isEmpty()) {
-            throw new ValidatorException(new FacesMessage(err));
-        }
+        	FacesMessage message = new FacesMessage(err);
+			message.setSeverity(FacesMessage.SEVERITY_WARN);
+			throw new ValidatorException(message);
+		} else {
+			FacesMessage message = new FacesMessage(MessageProvider.getValue("valid_input"));
+			message.setSeverity(FacesMessage.SEVERITY_INFO);
+			throw new ValidatorException(message);
+		}
     }
 
 }
