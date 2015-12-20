@@ -9,8 +9,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
-
 import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
