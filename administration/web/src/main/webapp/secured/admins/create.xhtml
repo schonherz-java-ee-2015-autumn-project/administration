@@ -7,8 +7,8 @@
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-		<h:form>
-			<p:panel id="panel" header="#{out.add_new_admin}">
+		<h:form id="adminregform">
+			<p:panel id="adminregpanel" header="#{out.add_new_admin}">
 
 				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.name}" />
@@ -65,7 +65,7 @@
 
 				</p:panelGrid>
 				<p:commandButton style="width:35%;margin-left:37%;"
-					value="#{out.save}" update="panel"
+					value="#{out.save}" update="adminregpanel" resetValues="true"
 					actionListener="#{registrationBean.registration}" />
 
 			</p:panel>

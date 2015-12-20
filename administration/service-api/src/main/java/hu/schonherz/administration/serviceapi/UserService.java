@@ -13,6 +13,8 @@ public interface UserService {
 
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
+	public UserDTO registrationAdmin(UserDTO UserDTO) throws Exception;
+	
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField,  CustomSortOrder sortOrder,
 			Map<String, Object> filters, UserRole role);
 

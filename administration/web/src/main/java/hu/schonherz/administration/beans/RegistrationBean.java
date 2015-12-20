@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +25,7 @@ public class RegistrationBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	
+
 	
 
 	@EJB
@@ -39,11 +40,10 @@ public class RegistrationBean implements Serializable {
 	FacesContext current;
 	
 	public void registration() {
-		
+		UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
 		if (!isValid()) {
 			
 			//msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "A két jelszónak meg kell egyeznie!", "A két jelszónak meg kell egyeznie!");
@@ -55,7 +55,7 @@ public class RegistrationBean implements Serializable {
 			user.setPhoneNumber(phone);
 			user.setPassword(bCryptPasswordEncoder.encode(password));
 			try {
-				userService.registrationUser(user);
+				userService.registrationAdmin(user);
 			} catch (Exception e) {
 				
 				
@@ -65,7 +65,7 @@ public class RegistrationBean implements Serializable {
 			}
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sikeres regisztráció!", "Sikeres regisztráció!");
 			current.addMessage(null, msg);
-
+			name=username=phone=null;
 		}
 	}
 

@@ -69,11 +69,43 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	@Override
+	public UserDTO registrationAdmin(UserDTO userDTO) throws Exception {
+
+		User user = userDao.save(UserConverter.toEntity(userDTO));
+
+		List<Role> roles = user.getRoles();
+		if (roles == null || roles.isEmpty()) {
+			roles = new ArrayList<>();
+		}
+
+		Role role = getAdminRole();
+
+		roles.add(role);
+
+		user.setRoles(roles);
+
+		user = userDao.save(user);
+
+		return UserConverter.toVo(user);
+
+	}
+	
 	private Role getUserRole() {
 		Role role = roleDao.findByName("ROLE_USER");
 		if (role == null) {
 			role = new Role();
 			role.setName("ROLE_USER");
+			role = roleDao.save(role);
+		}
+		return role;
+	}
+	
+	private Role getAdminRole() {
+		Role role = roleDao.findByName("ROLE_ADMIN");
+		if (role == null) {
+			role = new Role();
+			role.setName("ROLE_ADMIN");
 			role = roleDao.save(role);
 		}
 		return role;
