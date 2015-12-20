@@ -9,6 +9,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
+
 import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
@@ -68,10 +70,12 @@ public class RestaurantCreationBean {
 			restaurant.setIsDeleted(false);
 			try {
 				restaurantService.save(restaurant);
+				reset();
 				FacesContext context = FacesContext.getCurrentInstance();
 				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_save"));
 				message.setSeverity(FacesMessage.SEVERITY_INFO);
 				context.addMessage("restaurantForm:save_status", message);
+
 			} catch (Exception e) {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage("restaurantForm:save_status",
@@ -121,5 +125,12 @@ public class RestaurantCreationBean {
 
 	public void setRestaurantService(RestaurantService restaurantService) {
 		this.restaurantService = restaurantService;
+	}
+
+	private void reset() {
+		this.name = null;
+		this.address = null;
+		this.phoneNumber = null;
+		this.price = null;
 	}
 }
