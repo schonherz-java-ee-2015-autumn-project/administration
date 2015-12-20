@@ -1,14 +1,12 @@
 package hu.schonherz.administration.web.admin;
 
-import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.inject.Named;
 
 import hu.schonherz.administration.serviceapi.UserService;
 
-@ManagedBean
-@Named("AdminModifyBean")
+@ManagedBean(name = "AdminModifyBean")
 public class AdminModifyBean {
 	
 	@EJB

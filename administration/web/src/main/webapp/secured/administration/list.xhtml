@@ -26,22 +26,15 @@
 					filterBy="#{user.phoneNumber}">
 					<h:outputText value="#{user.phoneNumber}" />
 				</p:column>
+				
 				<p:column>
-					<p:button value="#{out.edit_users}">
-						<a
-							href="#{request.contextPath}/secured/administration/edit_user.xhtml"
-							class="btn btn-info" title="#{out.create}"> <b>#{out.edit_users}</b>
-						</a>
-						<f:param name="userID" value="#{user.id}" />
-						<f:param name="name" value="#{user.name}" />
-						<f:param name="userName" value="#{user.username}" />
-						<f:param name="phoneNumber" value="#{user.phoneNumber}" />
-
-
-
-
-					</p:button>
-
+						<h:outputLink class="btn btn-info" value="../administration/edit_user.xhtml" >
+							<h:outputText value="Edit" />
+							<f:param name="userID" value="#{user.id}" />
+							<f:param name="name" value="#{user.name}" />
+							<f:param name="userName" value="#{user.username}" />
+							<f:param name="phoneNumber" value="#{user.phoneNumber}" />	
+						</h:outputLink>
 				</p:column>
 			</p:dataTable>
 		</h:form>

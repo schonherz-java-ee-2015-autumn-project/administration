@@ -15,38 +15,27 @@
 
 				<h:panelGrid columns="3" cellpadding="5">
 				
-				
-					<p:outputLabel for="name" value="Name:" />
-					<h:outputText id="name" value="#{AdminModifyBean.name}"
-						label="name">
-						
-					</h:outputText>
+					<h:outputLabel for="name" value="Name:" />
+					<p:inputText id="name" value="#{AdminModifyBean.name}"/>
 					<p:message for="name"/>
 					
-
-					<p:outputLabel for="userName" value="User name:" />
-					<h:outputText id="userName" value="#{AdminModifyBean.userName}"
-						label="userName">
-						
-					</h:outputText>
+					<h:outputLabel for="userName" value="userName:" />
+					<p:inputText id="userName" value="#{AdminModifyBean.userName}"/>
 					<p:message for="userName"/>
-					
-					
-					<p:outputLabel for="phoneNumber" value="Phone number:" />
-					<h:outputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"
-						label="phoneNumber" >
-											
-					</h:outputText>
+			
+					<h:outputLabel for="phoneNumber" value="phoneNumber:" />
+					<p:inputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"/>
 					<p:message for="phoneNumber"/>
-					
+
 				</h:panelGrid>
 
-				<p:commandButton value="Save" icon="ui-icon-check" />
+				<p:commandButton value="Save" icon="ui-icon-check" actionListener="#{AdminModifyBean.setUserData}" />
 
-
+				
 			</p:panel>
 
 		</h:form>
+
 
 
 
