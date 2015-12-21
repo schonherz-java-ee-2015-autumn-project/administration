@@ -6,7 +6,7 @@ public class RestaurantDTO implements Serializable{
 
 	private static final long serialVersionUID = -8625606961519943129L;
 	
-	private Long id;
+	private long id;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -43,11 +43,18 @@ public class RestaurantDTO implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 	@Override
@@ -59,18 +66,9 @@ public class RestaurantDTO implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		RestaurantDTO other = (RestaurantDTO) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (id != other.id)
 			return false;
 		return true;
-	}
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
 	}
 	
 	

@@ -13,7 +13,7 @@
 			<p:panel id="panel" header="#{out.new_restaurant }">
 				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 					<p:outputLabel for="name" value="#{out.restaurantName }" />
-					<p:inputText id="name" value="#{RestaurantCreationBean.name}"
+					<p:inputText id="name" value="#{RestaurantCreateBean.name}"
 						required="false" label="#{out.restaurantName }">
 						<f:validator validatorId="nameValidator" />
 						<p:ajax update="nameMsg" event="keyup" />
@@ -22,7 +22,7 @@
 
 
 					<p:outputLabel for="address" value="#{out.restaurantAddress }" />
-					<p:inputText id="address" value="#{RestaurantCreationBean.address}"
+					<p:inputText id="address" value="#{RestaurantCreateBean.address}"
 						required="false" label="#{out.restaurantAddress }">
 						<f:validator validatorId="addressValidator" />
 						<p:ajax update="addressMsg" event="keyup" />
@@ -33,7 +33,7 @@
 					<p:outputLabel for="phoneNumber"
 						value="#{out.restaurantPhoneNumber }" />
 					<p:inputMask id="phoneNumber"
-						value="#{RestaurantCreationBean.phoneNumber}" required="false"
+						value="#{RestaurantCreateBean.phoneNumber}" required="false"
 						label="#{out.restaurantPrice }" mask="9999999?9999" maxlength="11"
 						slotChar=" ">
 						<f:validator validatorId="phoneNumberValidator" />
@@ -44,7 +44,7 @@
 
 
 					<p:outputLabel for="price" value="#{out.restaurantPrice }" />
-					<p:inputMask id="price" value="#{RestaurantCreationBean.price}"
+					<p:inputMask id="price" value="#{RestaurantCreateBean.price}"
 						required="false" label="#{out.restaurantPrice }" mask="9?9"
 						maxlength="2" slotChar=" ">
 						<f:validator validatorId="priceValidator" />
@@ -54,7 +54,7 @@
 				</h:panelGrid>
 				<h:panelGrid columns="2">
 					<p:commandButton value="#{out.save_button}" update="panel"
-						actionListener="#{RestaurantCreationBean.save}"
+						actionListener="#{RestaurantCreateBean.save}"
 						icon="ui-icon-check" id="save_status" />
 					<p:message for="save_status" />
 				</h:panelGrid>
