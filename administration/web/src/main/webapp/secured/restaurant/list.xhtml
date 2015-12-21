@@ -15,12 +15,13 @@
 			<p:dataTable var="restaurant"
 				value="#{restaurantLazyBean.lazyDataModel}" paginator="true"
 				rows="10" rowsPerPageTemplate="5,10,50" id="carTable" lazy="true"
-				selectionMode="single" selection="#{RestaurantEditBean.selected}"
+				selectionMode="single" selection="#{restaurantEditBean.selected}"
 				rowKey="#{restaurant.id}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 				<p:ajax event="rowSelect"
-					listener="#{RestaurantEditBean.onRowSelect()}"/>
-
+					listener="#{restaurantEditBean.onRowSelect}"
+					update=":restaurantForm:carDetail"
+					oncomplete="PF('carDialog').show()" />
 				<p:column headerText="ID">
 					<h:outputText value="#{restaurant.id}" />
 				</p:column>
@@ -44,10 +45,63 @@
 				</p:column>
 			</p:dataTable>
 
+			<p:dialog header="#{out.edit}" widgetVar="carDialog" modal="true"
+				showEffect="fade" hideEffect="fade" resizable="false">
+				<p:panel id="carDetail" style="text-align:center;">
+					<p:panelGrid columns="3"
+						rendered="#{not empty restaurantEditBean.selected}">
+
+						<p:outputLabel for="name" value="#{out.restaurantName }" />
+						<p:inputText id="name" value="#{restaurantEditBean.selected.name}"
+							required="false" label="#{out.restaurantName }">
+							<f:validator validatorId="nameValidator" />
+							<p:ajax update="nameMsg" event="keyup" />
+						</p:inputText>
+						<p:message for="name" id="nameMsg" />
+
+
+						<p:outputLabel for="address" value="#{out.restaurantAddress }" />
+						<p:inputText id="address"
+							value="#{restaurantEditBean.selected.address}" required="false"
+							label="#{out.restaurantAddress }">
+							<f:validator validatorId="addressValidator" />
+							<p:ajax update="addressMsg" event="keyup" />
+						</p:inputText>
+
+						<p:message for="address" id="addressMsg" />
+
+						<p:outputLabel for="phoneNumber"
+							value="#{out.restaurantPhoneNumber }" />
+						<p:inputMask id="phoneNumber"
+							value="#{restaurantEditBean.selected.phoneNumber}"
+							required="false" label="#{out.restaurantPrice }"
+							mask="9999999?9999" maxlength="11" slotChar=" ">
+							<f:validator validatorId="phoneNumberValidator" />
+							<p:ajax update="phoneNumberMsg" event="keyup" />
+
+						</p:inputMask>
+						<p:message for="phoneNumber" id="phoneNumberMsg" />
+
+
+						<p:outputLabel for="price" value="#{out.restaurantPrice }" />
+						<p:inputMask id="price"
+							value="#{restaurantEditBean.selected.price}" required="false"
+							label="#{out.restaurantPrice }" mask="9?9" maxlength="2"
+							slotChar=" ">
+							<f:validator validatorId="priceValidator" />
+							<p:ajax update="priceMsg" event="keyup" />
+						</p:inputMask>
+						<p:message for="price" id="priceMsg" />
+
+
+						<p:commandButton value="#{out.save_button}" update="carDetail"
+							actionListener="#{restaurantEditBean.modify}"
+							icon="ui-icon-check" id="save_status" />
+						<p:message for="save_status" />
+					</p:panelGrid>
+				</p:panel>
+			</p:dialog>
 		</h:form>
-
-
-
 	</ui:define>
 
 </ui:composition>

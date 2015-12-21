@@ -23,9 +23,9 @@ public class LazyRestaurant extends LazyDataModel<RestaurantDTO> {
 
 	@Override
 	public RestaurantDTO getRowData(String rowKey) {
-		return restaurantService.findById(Long.getLong(rowKey));
-
-	}
+		Long id = Long.parseLong(rowKey);
+		return restaurantService.findById(id);
+		}
 
 	@Override
 	public Object getRowKey(RestaurantDTO restaurantDTO) {

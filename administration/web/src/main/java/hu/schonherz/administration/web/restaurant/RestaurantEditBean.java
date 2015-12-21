@@ -13,7 +13,7 @@ import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
 import hu.schonherz.administration.web.restaurant.validator.RestaurantValidator;
 
-@Named("RestaurantEditBean")
+@Named("restaurantEditBean")
 @ViewScoped
 @EJB(name = "ejb.RestaurantService", beanInterface = RestaurantService.class)
 public class RestaurantEditBean {
@@ -30,18 +30,20 @@ public class RestaurantEditBean {
 				FacesContext context = FacesContext.getCurrentInstance();
 				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_save"));
 				message.setSeverity(FacesMessage.SEVERITY_INFO);
-				context.addMessage("restaurantForm:modify_status", message);
+				context.addMessage("restaurantForm:save_status", message);
 
 			} catch (Exception e) {
 				FacesContext context = FacesContext.getCurrentInstance();
-				context.addMessage("restaurantForm:modify_status",
+				context.addMessage("restaurantForm:save_status",
 						new FacesMessage(MessageProvider.getValue("save_failed")));
 			}
 		}
 	}
 
 	public void onRowSelect(SelectEvent event) {
-		//selected = ((RestaurantDTO) event.getObject());
+		if(!selected.equals(((RestaurantDTO)event.getObject()))){
+			selected = (RestaurantDTO)event.getObject();
+		}
 	}
 
 	public RestaurantService getRestaurantService() {

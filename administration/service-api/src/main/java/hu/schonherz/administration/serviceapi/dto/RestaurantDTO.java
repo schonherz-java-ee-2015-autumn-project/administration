@@ -6,7 +6,7 @@ public class RestaurantDTO implements Serializable{
 
 	private static final long serialVersionUID = -8625606961519943129L;
 	
-	private long id;
+	private Long id;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -54,7 +54,7 @@ public class RestaurantDTO implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	@Override
@@ -66,10 +66,14 @@ public class RestaurantDTO implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		RestaurantDTO other = (RestaurantDTO) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
+	
 	
 	
 
