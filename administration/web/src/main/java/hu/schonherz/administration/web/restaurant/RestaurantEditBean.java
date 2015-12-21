@@ -6,8 +6,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.primefaces.event.SelectEvent;
-
 import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
@@ -21,6 +19,7 @@ public class RestaurantEditBean {
 	@EJB
 	private RestaurantService restaurantService;
 	private RestaurantDTO selected;
+	private long id;
 
 	public void modify() {
 		if (RestaurantValidator.isValidRestaurant(selected)) {
@@ -28,22 +27,21 @@ public class RestaurantEditBean {
 			try {
 				restaurantService.save(selected);
 				FacesContext context = FacesContext.getCurrentInstance();
-				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_save"));
+				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_edit"));
 				message.setSeverity(FacesMessage.SEVERITY_INFO);
 				context.addMessage("restaurantForm:save_status", message);
 
 			} catch (Exception e) {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage("restaurantForm:save_status",
-						new FacesMessage(MessageProvider.getValue("save_failed")));
+						new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
 		}
 	}
 
-	public void onRowSelect(SelectEvent event) {
-		if(!selected.equals(((RestaurantDTO)event.getObject()))){
-			selected = (RestaurantDTO)event.getObject();
-		}
+	public void init() {
+		selected = restaurantService.findById(id);
+
 	}
 
 	public RestaurantService getRestaurantService() {
@@ -60,5 +58,13 @@ public class RestaurantEditBean {
 
 	public void setSelected(RestaurantDTO selected) {
 		this.selected = selected;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 }

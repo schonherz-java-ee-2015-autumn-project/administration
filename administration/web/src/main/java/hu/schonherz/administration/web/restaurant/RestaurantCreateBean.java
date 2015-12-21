@@ -22,6 +22,7 @@ public class RestaurantCreateBean {
 	private String address;
 	private String phoneNumber;
 	private Integer price;
+	private RestaurantDTO selected;
 
 	public String getName() {
 		return name;
@@ -94,6 +95,14 @@ public class RestaurantCreateBean {
 		this.address = null;
 		this.phoneNumber = null;
 		this.price = null;
+	}
+
+	public RestaurantDTO getSelected() {
+		return selected;
+	}
+
+	public void setSelected(RestaurantDTO selected) {
+		this.selected = selected;
 	}
 
 }
