@@ -22,8 +22,7 @@ public class RestaurantEditBean {
 	private long id;
 
 	public void modify() {
-		if (RestaurantValidator.isValidRestaurant(selected)) {
-			selected.setIsDeleted(false);
+		if (RestaurantValidator.isValidRestaurant(selected) && !selected.getIsDeleted()) {
 			try {
 				restaurantService.save(selected);
 				FacesContext context = FacesContext.getCurrentInstance();
@@ -35,6 +34,28 @@ public class RestaurantEditBean {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage("restaurantForm:save_status",
 						new FacesMessage(MessageProvider.getValue("edit_failed")));
+			}
+		}else{
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("restaurantForm:save_status",
+					new FacesMessage(MessageProvider.getValue("edit_failed")));
+		}
+	}
+	
+	public void delete() {
+		if (RestaurantValidator.isValidRestaurant(selected) && !selected.getIsDeleted()) {
+			selected.setIsDeleted(true);
+			try {
+				restaurantService.save(selected);
+				FacesContext context = FacesContext.getCurrentInstance();
+				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_deletion"));
+				message.setSeverity(FacesMessage.SEVERITY_INFO);
+				context.addMessage("restaurantForm:save_status", message);
+
+			} catch (Exception e) {
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage("restaurantForm:save_status",
+						new FacesMessage(MessageProvider.getValue("deletion_failed")));
 			}
 		}
 	}

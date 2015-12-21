@@ -15,7 +15,7 @@
 				<f:event type="preRenderView" listener="#{restaurantEditBean.init}" />
 			</f:metadata>
 
-			<p:panel id="panel" header="#{out.edit }">
+			<p:panel id="panel" header="#{out.edit }" >
 				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 					<p:outputLabel for="name" value="#{out.restaurantName }" />
 					<p:inputText id="name" value="#{restaurantEditBean.selected.name}"
@@ -63,6 +63,19 @@
 						actionListener="#{restaurantEditBean.modify}" icon="ui-icon-check"
 						id="save_status" />
 					<p:message for="save_status" />
+
+					<p:commandButton value="#{out.delete}"
+						actionListener="#{restaurantEditBean.delete}">
+						<p:confirm header="#{out.confirmation}"
+							message="#{out.confirmation_question}" icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="#{out.yes}" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="#{out.no}" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
 				</h:panelGrid>
 			</p:panel>
 
