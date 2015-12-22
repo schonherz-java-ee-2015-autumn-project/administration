@@ -8,8 +8,8 @@
 		
 		<security:csrf disabled="true" />
 		<security:headers disabled="true" />
-<!-- 		<security:intercept-url pattern="/secured/**" -->
-<!-- 			access="hasRole('ADMIN')" /> -->
+	 		<security:intercept-url pattern="/secured/**" 	
+	 			access="hasRole('ADMIN')" /> 	
 		<security:form-login login-page="/public/login.xhtml" 
 			login-processing-url="/login" default-target-url="/secured/available.xhtml"
 			authentication-failure-url="/public/login.xhtml?error=1"
