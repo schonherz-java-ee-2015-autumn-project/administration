@@ -12,37 +12,45 @@
 				<f:viewParam name="selected" value="#{adminEditBean.id}" />
 				<f:event type="preRenderView" listener="#{adminEditBean.init}" />
 			</f:metadata>
-			
-			<p:panel id="panel" header="User details">
 
-				<p:messages id="msgs" />
+			<p:panel id="panel" header="#{out.edit_users}">
+				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 
-				<h:panelGrid columns="3" cellpadding="5">
-				
-					<h:outputLabel for="name" value="Name:" />
-					<p:inputText id="name" value="#{AdminModifyBean.name}"/>
-					<p:message for="name"/>
-					
-					<h:outputLabel for="userName" value="userName:" />
-					<p:inputText id="userName" value="#{AdminModifyBean.userName}"/>
-					<p:message for="userName"/>
-			
-					<h:outputLabel for="phoneNumber" value="phoneNumber:" />
-					<p:inputText id="phoneNumber" value="#{AdminModifyBean.phoneNumber}"/>
-					<p:message for="phoneNumber"/>
+					<h:outputLabel for="name" value="#{out.username}" />
+					<p:inputText id="name" value="#{adminEditBean.selected.name}"
+						required="false" label="#{out.username}">
+						<f:validator validatorId="nameValidator" />
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
 
+					<h:outputLabel for="userName" value="#{out.username}" />
+					<p:inputText id="userName"
+						value="#{adminEditBean.selected.username}" required="false"
+						label="#{out.username}">
+						<f:validator validatorId="nameValidator" />
+						<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="userName" id="usernameMsg" />
+
+					<h:outputLabel for="phoneNumber" value="#{out.adminPhoneNumber}" />
+					<p:inputMask id="phoneNumber"
+						value="#{adminEditBean.selected.phoneNumber}" required="false"
+						label="#{out.adminPhoneNumber}" mask="9999999?9999" maxlength="11"
+						slotChar=" ">
+						<f:validator validatorId="phoneNumberValidator" />
+						<p:ajax update="phoneNumberMsg" event="keyup" />
+					</p:inputMask>
+					<p:message for="phoneNumber" id="phoneNumberMsg" />
 				</h:panelGrid>
-
-				<p:commandButton value="Save" icon="ui-icon-check" actionListener="#{AdminModifyBean.setUserData}" />
-
 				
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{out.save_button}" update="panel"
+						actionListener="#{adminEditBean.modify}" icon="ui-icon-check"
+						id="save_status" />
+					<p:message for="save_status" />
+				</h:panelGrid>
 			</p:panel>
-
 		</h:form>
-
-
-
-
 	</ui:define>
-
 </ui:composition>
