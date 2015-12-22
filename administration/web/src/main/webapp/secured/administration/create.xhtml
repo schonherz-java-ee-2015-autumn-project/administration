@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="adminregform">
+			<p:panel id="adminregpanel" header="#{out.add_new_admin}">
+
+				<p:panelGrid columns="3">
+					<p:outputLabel for="name" value="#{out.name}" />
+					<p:inputText id="name" value="#{registrationBean.name}"
+						required="true" label="name">
+						<f:validateLength minimum="3" maximum="150" validatorMessage="#{out.nameLengthError}"/>
+						<f:validateRegex pattern="[' 'a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/-]*" validatorMessage="#{out.nameRegexError}"/>
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
+
+
+					<p:outputLabel for="username" value="#{out.username}" />
+					<p:inputText id="username" value="#{registrationBean.username}"
+						required="true" label="username">
+						<f:validateLength minimum="6" maximum="16" validatorMessage="#{out.usernameLengthError}"/>
+						<f:validateRegex pattern="[0-9a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/_]*" validatorMessage="#{out.usernameRegexError}"/>
+						<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="username" id="usernameMsg" />
+
+					<p:outputLabel for="phone" value="#{out.tel}" />
+					<p:inputText id="phone" value="#{registrationBean.phone}"
+						required="true" label="phone">
+						<f:validateLength minimum="7" maximum="11" validatorMessage="#{out.phoneLengthError}"/>
+						<f:validateRegex pattern="[0-9]*" validatorMessage="#{out.phoneRegexError}"/>
+						<p:ajax update="phoneMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="phone" id="phoneMsg" />
+
+					<p:outputLabel for="password" value="#{out.password}" />
+					<p:password id="password" value="#{registrationBean.password}"
+						required="true" label="password">
+						<f:validateLength minimum="8" maximum="12" validatorMessage="#{out.passwordLengthError}"/>
+						<f:validateRegex pattern=".*[0-9]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validateRegex pattern=".*[a-z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validateRegex pattern=".*[A-Z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<p:ajax update="passMsg" event="keyup" />
+					</p:password>
+					<p:message for="password" id="passMsg" />
+
+					<p:outputLabel for="passwordconf" match="password"
+						value="#{out.passconf}" />
+					<p:password id="passwordconf" value="#{registrationBean.passconf}"
+						required="true" label="passwordconf">
+						<f:validateLength minimum="8" maximum="12" validatorMessage="#{out.passwordlengthError}"/>
+						<f:validateRegex pattern=".*[0-9]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validateRegex pattern=".*[a-z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validateRegex pattern=".*[A-Z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<p:ajax update="passconfMsg" event="keyup" />
+						
+					</p:password>
+					<p:message for="passwordconf" id="passconfMsg" />
+
+				</p:panelGrid>
+				<p:commandButton style="width:35%;margin-left:37%;"
+					value="#{out.save}" update="adminregpanel" resetValues="true"
+					actionListener="#{registrationBean.registration}" />
+
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
