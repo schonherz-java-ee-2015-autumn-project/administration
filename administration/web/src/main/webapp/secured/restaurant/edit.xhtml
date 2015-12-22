@@ -65,11 +65,13 @@
 					<p:message for="save_status" />
 
 					<p:commandButton value="#{out.delete}"
-						actionListener="#{restaurantEditBean.delete}">
+						actionListener="#{restaurantEditBean.delete}"
+						update="panel"
+						id="deletion_status">
 						<p:confirm header="#{out.confirmation}"
 							message="#{out.confirmation_question}" icon="ui-icon-alert" />
 					</p:commandButton>
-
+					<p:message for="deletion_status" />
 					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
 						<p:commandButton value="#{out.yes}" type="button"
 							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
