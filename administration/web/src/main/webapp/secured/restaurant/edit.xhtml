@@ -10,20 +10,25 @@
 	<ui:define name="content">
 		<h:form id="restaurantForm">
 
-			<p:panel id="panel" header="#{out.new_restaurant }">
+			<f:metadata>
+				<f:viewParam name="selected" value="#{restaurantEditBean.id}" />
+				<f:event type="preRenderView" listener="#{restaurantEditBean.init}" />
+			</f:metadata>
+
+			<p:panel id="panel" header="#{out.edit }" >
 				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 					<p:outputLabel for="name" value="#{out.restaurantName }" />
-					<p:inputText id="name" value="#{RestaurantCreateBean.name}"
+					<p:inputText id="name" value="#{restaurantEditBean.selected.name}"
 						required="false" label="#{out.restaurantName }">
 						<f:validator validatorId="nameValidator" />
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
 
-
 					<p:outputLabel for="address" value="#{out.restaurantAddress }" />
-					<p:inputText id="address" value="#{RestaurantCreateBean.address}"
-						required="false" label="#{out.restaurantAddress }">
+					<p:inputText id="address"
+						value="#{restaurantEditBean.selected.address}" required="false"
+						label="#{out.restaurantAddress }">
 						<f:validator validatorId="addressValidator" />
 						<p:ajax update="addressMsg" event="keyup" />
 					</p:inputText>
@@ -33,9 +38,9 @@
 					<p:outputLabel for="phoneNumber"
 						value="#{out.restaurantPhoneNumber }" />
 					<p:inputMask id="phoneNumber"
-						value="#{RestaurantCreateBean.phoneNumber}" required="false"
-						label="#{out.restaurantPrice }" mask="9999999?9999" maxlength="11"
-						slotChar=" ">
+						value="#{restaurantEditBean.selected.phoneNumber}"
+						required="false" label="#{out.restaurantPrice }"
+						mask="9999999?9999" maxlength="11" slotChar=" ">
 						<f:validator validatorId="phoneNumberValidator" />
 						<p:ajax update="phoneNumberMsg" event="keyup" />
 
@@ -44,9 +49,10 @@
 
 
 					<p:outputLabel for="price" value="#{out.restaurantPrice }" />
-					<p:inputMask id="price" value="#{RestaurantCreateBean.price}"
-						required="false" label="#{out.restaurantPrice }" mask="9?9"
-						maxlength="2" slotChar=" ">
+					<p:inputMask id="price"
+						value="#{restaurantEditBean.selected.price}" required="false"
+						label="#{out.restaurantPrice }" mask="9?9" maxlength="2"
+						slotChar=" ">
 						<f:validator validatorId="priceValidator" />
 						<p:ajax update="priceMsg" event="keyup" />
 					</p:inputMask>
@@ -54,9 +60,22 @@
 				</h:panelGrid>
 				<h:panelGrid columns="2">
 					<p:commandButton value="#{out.save_button}" update="panel"
-						actionListener="#{RestaurantCreateBean.save}"
-						icon="ui-icon-check" id="save_status" />
+						actionListener="#{restaurantEditBean.modify}" icon="ui-icon-check"
+						id="save_status" />
 					<p:message for="save_status" />
+
+					<p:commandButton value="#{out.delete}"
+						actionListener="#{restaurantEditBean.delete}">
+						<p:confirm header="#{out.confirmation}"
+							message="#{out.confirmation_question}" icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						<p:commandButton value="#{out.yes}" type="button"
+							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						<p:commandButton value="#{out.no}" type="button"
+							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+					</p:confirmDialog>
 				</h:panelGrid>
 			</p:panel>
 

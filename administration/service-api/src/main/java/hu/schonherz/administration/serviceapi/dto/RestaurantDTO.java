@@ -43,6 +43,13 @@ public class RestaurantDTO implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -66,12 +73,7 @@ public class RestaurantDTO implements Serializable{
 			return false;
 		return true;
 	}
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+	
 	
 	
 

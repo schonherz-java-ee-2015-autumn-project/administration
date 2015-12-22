@@ -11,13 +11,15 @@
 		<a href="#{request.contextPath}/secured/restaurant/create.xhtml"
 			class="btn btn-info" title="#{out.create}"> <b>#{out.create}</b>
 		</a>
-		<h:form id="restaurantUsersForm">
+
+		<h:form id="restaurantForm">
 			<p:dataTable var="restaurant"
 				value="#{restaurantLazyBean.lazyDataModel}" paginator="true"
 				rows="10" rowsPerPageTemplate="5,10,50" id="carTable" lazy="true"
+				selectionMode="single" selection="#{restaurantLazyBean.selected}"
+				rowKey="#{restaurant.id}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-
-
+				<p:ajax event="rowSelect" listener="#{restaurantLazyBean.redirect}" />
 				<p:column headerText="#{out.restaurantName}"
 					sortBy="#{restaurant.name}" filterBy="#{restaurant.name}">
 					<h:outputText value="#{restaurant.name}" />
@@ -37,10 +39,8 @@
 					<h:outputText value="#{restaurant.price}" />
 				</p:column>
 			</p:dataTable>
+
 		</h:form>
-
-
-
 	</ui:define>
 
 </ui:composition>

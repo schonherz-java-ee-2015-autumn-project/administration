@@ -1,8 +1,5 @@
 package hu.schonherz.administration.web.restaurant;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -12,19 +9,20 @@ import javax.inject.Named;
 import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
+import hu.schonherz.administration.web.restaurant.validator.RestaurantValidator;
 
-@Named("RestaurantCreationBean")
+@Named("RestaurantCreateBean")
 @ViewScoped
 @EJB(name = "ejb.RestaurantService", beanInterface = RestaurantService.class)
-public class RestaurantCreationBean {
+public class RestaurantCreateBean {
 
 	@EJB
 	private RestaurantService restaurantService;
-
 	private String name;
 	private String address;
 	private String phoneNumber;
 	private Integer price;
+	private RestaurantDTO selected;
 
 	public String getName() {
 		return name;
@@ -59,13 +57,13 @@ public class RestaurantCreationBean {
 	}
 
 	public void save() {
-		if (isValidAddress() && isValidName() && isValidPhoneNumber() && isValidPrice()) {
 			RestaurantDTO restaurant = new RestaurantDTO();
 			restaurant.setName(name);
 			restaurant.setAddress(address);
 			restaurant.setPhoneNumber(phoneNumber);
 			restaurant.setPrice(price);
 			restaurant.setIsDeleted(false);
+			if (RestaurantValidator.isValidRestaurant(restaurant)) {
 			try {
 				restaurantService.save(restaurant);
 				reset();
@@ -82,40 +80,7 @@ public class RestaurantCreationBean {
 		}
 	}
 
-	private boolean isValidName() {
-		if (name.length() < 3 && name.length() > 150)
-			return false;
 
-		if (!name.isEmpty()) {
-			Pattern p = Pattern.compile("[\\w [0-9]-]+", Pattern.UNICODE_CHARACTER_CLASS);
-			Matcher m = p.matcher(name);
-			if (!m.matches())
-				return false;
-		}
-		return true;
-	}
-
-	private boolean isValidAddress() {
-		if (address.length() < 10 && address.length() > 500)
-			return false;
-		else
-			return true;
-	}
-
-	private boolean isValidPhoneNumber() {
-		if (phoneNumber.length() < 7 && phoneNumber.length() > 11)
-			return false;
-		else
-			return true;
-	}
-
-	private boolean isValidPrice() {
-		if (price > 0 && price < 99) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	public RestaurantService getRestaurantService() {
 		return restaurantService;
@@ -131,4 +96,13 @@ public class RestaurantCreationBean {
 		this.phoneNumber = null;
 		this.price = null;
 	}
+
+	public RestaurantDTO getSelected() {
+		return selected;
+	}
+
+	public void setSelected(RestaurantDTO selected) {
+		this.selected = selected;
+	}
+
 }
