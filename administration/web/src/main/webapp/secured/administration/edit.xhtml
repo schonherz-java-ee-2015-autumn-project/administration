@@ -7,8 +7,12 @@
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-		<h:form>
-
+		<h:form id="adminForm">
+			<f:metadata>
+				<f:viewParam name="selected" value="#{adminEditBean.id}" />
+				<f:event type="preRenderView" listener="#{adminEditBean.init}" />
+			</f:metadata>
+			
 			<p:panel id="panel" header="User details">
 
 				<p:messages id="msgs" />
