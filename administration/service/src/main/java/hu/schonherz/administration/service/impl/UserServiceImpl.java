@@ -21,11 +21,14 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.UserSpecification;
+import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
+import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
+import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
 
@@ -43,8 +46,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO findUserByName(String name) throws Exception {
-		User user = userDao.findByUsername(name);
-		return UserConverter.toVo(user);
+		return UserConverter.toVo(userDao.findByUsername(name));
 	}
 
 	@Override
@@ -83,12 +85,6 @@ public class UserServiceImpl implements UserService {
 		return  (int)userDao.count();	
 	}
 
-	@Override
-	public UserDTO saveUser(UserDTO selectedUser) {
-		return selectedUser;
-	}
-	
-	
 
 	@Override
 	public UserDTO findById(Long id) {
@@ -175,12 +171,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void setUserData(long id) throws Exception {
-		
-		User user = userDao.findById(id);
-
-		
+	public void saveUser(UserDTO userDTO) {
+		userDao.save(UserConverter.toEntity(userDTO));
 	}
-
 	
 }

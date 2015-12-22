@@ -22,10 +22,8 @@ public interface UserService {
 	
 	public int getUserCount(Map<String, Object> filters, UserRole role);
 
-	public UserDTO saveUser(UserDTO selectedUser);
+	public void saveUser(UserDTO selectedUser);
 
 	public UserDTO findById(Long id);
-	
-	public void setUserData(long id) throws Exception;
 
 }
