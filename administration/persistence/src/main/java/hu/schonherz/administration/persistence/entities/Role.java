@@ -10,7 +10,7 @@ public class Role extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 20)
 	private String name;
 
 	public String getName() {
