@@ -2,7 +2,6 @@ package hu.schonherz.administration.web.admin;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -10,6 +9,7 @@ import javax.inject.Named;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
+import hu.schonherz.administration.web.admin.validator.AdminValidator;
 
 @Named("adminEditBean")
 @ViewScoped
@@ -22,6 +22,7 @@ public class AdminModifyBean {
 	private long id;
 	
 	public void modify() {
+		if (AdminValidator.isValidAdmin(selected)) {
 			try {
 				userService.saveUser(selected);
 				FacesContext context = FacesContext.getCurrentInstance();
@@ -34,6 +35,11 @@ public class AdminModifyBean {
 				context.addMessage("adminForm:save_status",
 						new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
+		}else{
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("AdminForm:save_status",
+					new FacesMessage(MessageProvider.getValue("edit_failed")));
+		}
 	}
 	public void init() {
 		selected = userService.findById(id);

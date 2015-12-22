@@ -19,7 +19,7 @@
 					<h:outputLabel for="name" value="#{out.username}" />
 					<p:inputText id="name" value="#{adminEditBean.selected.name}"
 						required="false" label="#{out.username}">
-						<f:validator validatorId="nameValidator" />
+						<f:validator validatorId="adminNameValidator" />
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
@@ -28,7 +28,7 @@
 					<p:inputText id="userName"
 						value="#{adminEditBean.selected.username}" required="false"
 						label="#{out.username}">
-						<f:validator validatorId="nameValidator" />
+						<f:validator validatorId="adminNameValidator" />
 						<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="userName" id="usernameMsg" />
@@ -38,10 +38,14 @@
 						value="#{adminEditBean.selected.phoneNumber}" required="false"
 						label="#{out.adminPhoneNumber}" mask="9999999?9999" maxlength="11"
 						slotChar=" ">
-						<f:validator validatorId="phoneNumberValidator" />
+						<f:validator validatorId="adminPhoneNumberValidator" />
 						<p:ajax update="phoneNumberMsg" event="keyup" />
 					</p:inputMask>
 					<p:message for="phoneNumber" id="phoneNumberMsg" />
+					
+
+					
+					
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2">
