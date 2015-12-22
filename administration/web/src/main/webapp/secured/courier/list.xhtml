@@ -18,18 +18,18 @@
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 				
 				
-				<p:column headerText="Name"
-					sortBy="#{user.name}" filterBy="#{user.name}">
-					<h:outputText value="#{user.name}" />
+				<p:column headerText="#{out.courier_name}"
+					sortBy="#{courier.name}" filterBy="#{courier.name}">
+					<h:outputText value="#{courier.name}" />
 				</p:column>
-				<p:column headerText="Username"
-					sortBy="#{user.username}" filterBy="#{user.username}">
-					<h:outputText value="#{user.username}" />
+				<p:column headerText="#{out.courier_username }"
+					sortBy="#{courier.username}" filterBy="#{courier.username}">
+					<h:outputText value="#{courier.username}" />
 				</p:column>
-				<p:column headerText="Phonenumber"
-					sortBy="#{user.phoneNumber}"
-					filterBy="#{user.phoneNumber}">
-					<h:outputText value="#{user.phoneNumber}" />
+				<p:column headerText="#{out.courier_phone_number }"
+					sortBy="#{courier.phoneNumber}"
+					filterBy="#{courier.phoneNumber}">
+					<h:outputText value="#{courier.phoneNumber}" />
 				</p:column>
 
 			</p:dataTable>
