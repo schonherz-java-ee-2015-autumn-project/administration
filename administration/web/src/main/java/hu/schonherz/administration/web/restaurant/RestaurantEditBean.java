@@ -50,11 +50,11 @@ public class RestaurantEditBean {
 				FacesContext context = FacesContext.getCurrentInstance();
 				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_deletion"));
 				message.setSeverity(FacesMessage.SEVERITY_INFO);
-				context.addMessage("restaurantForm:save_status", message);
+				context.addMessage("restaurantForm:deletion_status", message);
 
 			} catch (Exception e) {
 				FacesContext context = FacesContext.getCurrentInstance();
-				context.addMessage("restaurantForm:save_status",
+				context.addMessage("restaurantForm:deletion_status",
 						new FacesMessage(MessageProvider.getValue("deletion_failed")));
 			}
 		}
