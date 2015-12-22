@@ -20,9 +20,6 @@
 				rowKey="#{restaurant.id}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 				<p:ajax event="rowSelect" listener="#{restaurantLazyBean.redirect}" />
-				<p:column headerText="ID">
-					<h:outputText value="#{restaurant.id}" />
-				</p:column>
 				<p:column headerText="#{out.restaurantName}"
 					sortBy="#{restaurant.name}" filterBy="#{restaurant.name}">
 					<h:outputText value="#{restaurant.name}" />
