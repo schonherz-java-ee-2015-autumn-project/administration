@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<a href="#{request.contextPath}/secured/restaurant/create.xhtml"
+			class="btn btn-info" title="#{out.create}"> <b>#{out.create}</b>
+		</a>
+
+		<h:form id="restaurantForm">
+			<p:dataTable var="restaurant"
+				value="#{restaurantLazyBean.lazyDataModel}" paginator="true"
+				rows="10" rowsPerPageTemplate="5,10,50" id="carTable" lazy="true"
+				selectionMode="single" selection="#{restaurantLazyBean.selected}"
+				rowKey="#{restaurant.id}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+				<p:ajax event="rowSelect" listener="#{restaurantLazyBean.redirect}" />
+				<p:column headerText="#{out.restaurantName}"
+					sortBy="#{restaurant.name}" filterBy="#{restaurant.name}">
+					<h:outputText value="#{restaurant.name}" />
+				</p:column>
+				<p:column headerText="#{out.restaurantAddress}"
+					sortBy="#{restaurant.address}" filterBy="#{restaurant.address}">
+					<h:outputText value="#{restaurant.address}" />
+				</p:column>
+				<p:column headerText="#{out.restaurantPhoneNumber}"
+					sortBy="#{restaurant.phoneNumber}"
+					filterBy="#{restaurant.phoneNumber}">
+					<h:outputText value="#{restaurant.phoneNumber}" />
+				</p:column>
+
+				<p:column headerText="#{out.restaurantPrice}"
+					sortBy="#{restaurant.price}">
+					<h:outputText value="#{restaurant.price}" />
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

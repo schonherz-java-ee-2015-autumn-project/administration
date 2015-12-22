@@ -24,8 +24,7 @@ public class LazyAdmin extends LazyDataModel<UserDTO> {
 
 	@Override
 	public UserDTO getRowData(String rowKey) {
-		return userService.findById(Long.getLong(rowKey));
-
+		return userService.findById(Long.parseLong(rowKey));
 	}
 
 	@Override

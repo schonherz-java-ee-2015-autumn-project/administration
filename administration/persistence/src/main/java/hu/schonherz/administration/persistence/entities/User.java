@@ -30,6 +30,18 @@ public class User extends BaseEntity implements Serializable {
 
 	@ManyToMany
 	private List<Role> roles;
+	
+	@Column(nullable=false)
+	private boolean remove;
+	
+	
+	public boolean isRemove() {
+		return remove;
+	}
+
+	public void setRemove(boolean remove) {
+		this.remove = remove;
+	}
 
 	public String getUsername() {
 		return username;

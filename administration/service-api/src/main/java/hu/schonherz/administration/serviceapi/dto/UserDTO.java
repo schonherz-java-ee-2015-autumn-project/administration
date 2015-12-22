@@ -12,7 +12,16 @@ public class UserDTO implements Serializable {
 	private String username;
 	private String password;
 	private List<RoleDTO> roles;
+	private boolean remove;
+	
 
+	public boolean isRemove() {
+		return remove;
+	}
+
+	public void setRemove(boolean remove) {
+		this.remove = remove;
+	}
 
 	public Long getId() {
 		return id;
