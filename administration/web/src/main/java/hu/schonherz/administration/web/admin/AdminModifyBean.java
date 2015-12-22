@@ -6,6 +6,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
@@ -20,10 +22,15 @@ public class AdminModifyBean {
 	private UserService userService;
 	private UserDTO selected;
 	private long id;
+	private String password = ""; 
+	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
 	
 	public void modify() {
 		if (AdminValidator.isValidAdmin(selected)) {
 			try {
+				if(!password.isEmpty()){
+					selected.setPassword(BCrypt.encode(password));
+				}
 				userService.saveUser(selected);
 				FacesContext context = FacesContext.getCurrentInstance();
 				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_edit"));
@@ -41,6 +48,15 @@ public class AdminModifyBean {
 					new FacesMessage(MessageProvider.getValue("edit_failed")));
 		}
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public void init() {
 		selected = userService.findById(id);
 	}

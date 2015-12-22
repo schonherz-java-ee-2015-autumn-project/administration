@@ -43,19 +43,27 @@
 					</p:inputMask>
 					<p:message for="phoneNumber" id="phoneNumberMsg" />
 					
-
-					
+					<h:form rendered="#{adminEditBean.selected.id eq userSessionBean.userDTO.id}" > 
+						<h:outputLabel for="passw" value="#{out.adminPassword}" />
+					</h:form>
+					<h:form rendered="#{adminEditBean.selected.id eq userSessionBean.userDTO.id}" > 
+						<p:inputText id="passw" value="#{adminEditBean.password}"
+							required="false" label="#{out.username}">
+							<f:validator validatorId="adminNameValidator" />
+							<p:ajax update="passMsg" event="keyup" />
+						</p:inputText>
+						<p:message for="passw" id="passMsg" />	
+					</h:form>
 					
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2">
-					<p:commandButton value="#{out.save_button}" update="panel"
+					<p:commandButton value="#{out.save_button}" update="adminForm"
 						actionListener="#{adminEditBean.modify}" icon="ui-icon-check"
 						id="save_status" />
-					<p:message for="save_status" />
 				</h:panelGrid>
 				
-				<p:growl id="message" showDetail="true" />
+				<p:growl id="passMsg" showDetail="true" />
 				<p:commandButton value="#{out.remove_admin}">
 					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
 	    			<f:param name="userID" value="#{adminEditBean.selected.id}" />
