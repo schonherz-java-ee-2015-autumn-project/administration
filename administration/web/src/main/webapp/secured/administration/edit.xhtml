@@ -54,6 +54,18 @@
 						id="save_status" />
 					<p:message for="save_status" />
 				</h:panelGrid>
+				
+				<p:growl id="message" showDetail="true" />
+				<p:commandButton value="#{out.remove_admin}">
+					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
+	    			<f:param name="userID" value="#{adminEditBean.selected.id}" />
+					<p:ajax update="adminForm" listener="#{UserBean.removeUser}"/>
+				</p:commandButton>
+				 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+       				 <p:commandButton value="#{out.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+       				 <p:commandButton value="#{out.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>	
+		
 			</p:panel>
 		</h:form>
 	</ui:define>

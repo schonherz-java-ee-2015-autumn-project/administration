@@ -33,8 +33,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		UserDTO user;
 		try {
 			user = userService.findUserByName(username);
+			
 			for(RoleDTO e :  user.getRoles()){
-				if(e.getName().equals("ROLE_ADMIN")){
+				if(e.getName().equals("ROLE_ADMIN") && !user.isRemove() ){
+					user.setRemove(true);
 					List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
 					return buildUserForAuthentication(user, authorities);
 				}

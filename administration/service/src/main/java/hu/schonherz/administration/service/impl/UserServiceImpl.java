@@ -48,6 +48,13 @@ public class UserServiceImpl implements UserService {
 	public UserDTO findUserByName(String name) throws Exception {
 		return UserConverter.toVo(userDao.findByUsername(name));
 	}
+	
+	@Override
+	public void removeUser(long id) throws Exception {
+		User user = userDao.findById(id);
+		user.setRemove(true);
+		userDao.save(user);
+	}
 
 	@Override
 	public UserDTO registrationUser(UserDTO userDTO) throws Exception {
@@ -87,7 +94,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
-	public UserDTO findById(Long id) {
+	public UserDTO findById(long id) {
 		return UserConverter.toVo(userDao.findOne(id));
 	}
 
@@ -104,8 +111,14 @@ public class UserServiceImpl implements UserService {
 
 		Specification<User> spec = buildSpecification(filters);
 		Specification<User> roleSpec = buildRoleSpecification(role);
-		spec = Specifications.where(spec).and(roleSpec);
+		Specification<User> isDelete = buildRemoveSpecification();
+		spec = Specifications.where(spec).and(roleSpec).and(isDelete);
 		return UserConverter.toVo(userDao.findAll(spec, pagable).getContent());
+	}
+
+	private Specification<User> buildRemoveSpecification() {
+		Specification<User> spec = Specifications.where(UserSpecification.isDelete());
+		return spec;
 	}
 
 	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
@@ -143,7 +156,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int getUserCount(Map<String, Object> filters, UserRole role) {
-		return (int)userDao.count(Specifications.where(buildSpecification(filters)).and(buildRoleSpecification(role)));
+		return (int)userDao.count(Specifications.where(buildSpecification(filters)).and(buildRoleSpecification(role)).and(buildRemoveSpecification()));
 		
 	}
 	

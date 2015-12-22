@@ -10,6 +10,8 @@ import hu.schonherz.administration.serviceapi.dto.UserRole;
 public interface UserService {
 
 	public UserDTO findUserByName(String name) throws Exception;
+	
+	public void removeUser(long id) throws Exception;
 
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
@@ -24,6 +26,6 @@ public interface UserService {
 
 	public void saveUser(UserDTO selectedUser);
 
-	public UserDTO findById(Long id);
+	public UserDTO findById(long id);
 
 }
