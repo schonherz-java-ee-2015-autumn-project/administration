@@ -45,7 +45,7 @@ public class UserNameValidator implements Validator {
 			try {
 				UserDTO user = userService.findUserByName(input);
 				if(user!=null){
-					err+=MessageProvider.getValue("username_taken");
+					err+=MessageProvider.getValue("takenNameError");
 				}
 			} catch (Exception e) {
 			}

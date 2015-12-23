@@ -13,7 +13,7 @@
 				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{registrationBean.name}"
-						required="true" label="name">
+						 label="name">
 						<f:validator validatorId="NameValidator"/>
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
@@ -21,7 +21,7 @@
 
 					<p:outputLabel for="username" value="#{out.username}" />
 					<p:inputText id="username" value="#{registrationBean.username}" 
-						required="false" label="#{out.username }" 
+						 label="#{out.username }" 
 						validator="#{usernameValidator.validate}">
 						<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
@@ -29,7 +29,7 @@
 
 					<p:outputLabel for="phone" value="#{out.tel}" />
 					<p:inputText id="phone" value="#{registrationBean.phone}"
-						required="true" label="phone">
+						 label="phone">
 						<f:validator validatorId="PhoneNumberValidator"/>
 						<p:ajax update="phoneMsg" event="keyup" />
 					</p:inputText>
@@ -37,7 +37,7 @@
 
 					<p:outputLabel for="password" value="#{out.password}" />
 					<p:password id="password" value="#{registrationBean.password}"
-						required="true" label="password">
+						label="password">
 						<f:validator validatorId="PasswordValidator"/>
 						<p:ajax update="passMsg" event="keyup" />
 					</p:password>
@@ -46,7 +46,7 @@
 					<p:outputLabel for="passwordconf"
 						value="#{out.passconf}" />
 					<p:password id="passwordconf" value="#{registrationBean.passconf}"
-						required="true" label="passwordconf">
+						label="passwordconf">
 						<f:validator validatorId="PasswordValidator"/>
 						<f:validator validatorId="passMatchValidator"/>
 						<p:ajax update="passconfMsg" event="keyup" />
