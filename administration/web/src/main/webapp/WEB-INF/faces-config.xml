@@ -12,9 +12,6 @@
             <default-locale>hu</default-locale>
 	        <supported-locale>en</supported-locale>
         </locale-config>
-        <locale-config>
-        	<default-locale>en</default-locale>
-        </locale-config>
         
         <resource-bundle>
             <base-name>
