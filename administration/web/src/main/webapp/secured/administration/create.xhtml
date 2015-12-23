@@ -23,7 +23,7 @@
 					<p:outputLabel for="username" value="#{out.username}" />
 					<p:inputText id="username" value="#{registrationBean.username}"
 						required="true" label="username">
-						<f:validator validatorId="adminUsernameValidator"/>
+						<f:validator validatorId="usernameValidator"/>
 						<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="username" id="usernameMsg" />

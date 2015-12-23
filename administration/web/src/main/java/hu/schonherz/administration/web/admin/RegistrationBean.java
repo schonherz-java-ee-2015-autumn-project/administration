@@ -1,21 +1,22 @@
-package hu.schonherz.administration.beans;
+package hu.schonherz.administration.web.admin;
 
 import java.io.Serializable;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.web.admin.validator.AdminValidator;
+import hu.schonherz.administration.web.localization.MessageProvider;
 
-@RequestScoped
-@ManagedBean
+@ViewScoped
+@Named("registrationBean")
 @EJB(name = "ejb.UserService", beanInterface = UserService.class)
 public class RegistrationBean implements Serializable {
 
@@ -52,11 +53,11 @@ public class RegistrationBean implements Serializable {
 				userService.registrationAdmin(user);
 			} catch (Exception e) {
 
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hiba a regisztráció közben!", "Hiba a regisztráció közben.");
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", MessageProvider.getValue("regfailure"));
 				current.addMessage(null, msg);
 				e.printStackTrace();
 			}
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sikeres regisztráció!", "Sikeres regisztráció!");
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", MessageProvider.getValue("regsucces"));
 			current.addMessage(null, msg);
 			name = username = phone = null;
 		}
