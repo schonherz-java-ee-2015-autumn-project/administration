@@ -12,8 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
-import hu.schonherz.administration.validator.UserValidator;
 import hu.schonherz.administration.web.localization.MessageProvider;
+import hu.schonherz.administration.web.validator.UserValidator;
 
 @ViewScoped
 @Named("registrationBean")

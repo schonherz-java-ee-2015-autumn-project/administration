@@ -1,4 +1,4 @@
-package hu.schonherz.administration.validator;
+package hu.schonherz.administration.web.validator;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
