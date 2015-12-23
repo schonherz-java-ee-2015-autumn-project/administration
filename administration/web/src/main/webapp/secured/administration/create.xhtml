@@ -14,8 +14,7 @@
 					<p:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{registrationBean.name}"
 						required="true" label="name">
-						<f:validateLength minimum="3" maximum="150" validatorMessage="#{out.nameLengthError}"/>
-						<f:validateRegex pattern="[' 'a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/-]*" validatorMessage="#{out.nameRegexError}"/>
+						<f:validator validatorId="adminNameValidator"/>
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
@@ -24,8 +23,7 @@
 					<p:outputLabel for="username" value="#{out.username}" />
 					<p:inputText id="username" value="#{registrationBean.username}"
 						required="true" label="username">
-						<f:validateLength minimum="6" maximum="16" validatorMessage="#{out.usernameLengthError}"/>
-						<f:validateRegex pattern="[0-9a-zöüóőúéáűíA-ZÖÜÓŐÚÉÁŰÍ/_]*" validatorMessage="#{out.usernameRegexError}"/>
+						<f:validator validatorId="adminUsernameValidator"/>
 						<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="username" id="usernameMsg" />
@@ -33,8 +31,7 @@
 					<p:outputLabel for="phone" value="#{out.tel}" />
 					<p:inputText id="phone" value="#{registrationBean.phone}"
 						required="true" label="phone">
-						<f:validateLength minimum="7" maximum="11" validatorMessage="#{out.phoneLengthError}"/>
-						<f:validateRegex pattern="[0-9]*" validatorMessage="#{out.phoneRegexError}"/>
+						<f:validator validatorId="adminPhoneNumberValidator"/>
 						<p:ajax update="phoneMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="phone" id="phoneMsg" />
@@ -42,10 +39,7 @@
 					<p:outputLabel for="password" value="#{out.password}" />
 					<p:password id="password" value="#{registrationBean.password}"
 						required="true" label="password">
-						<f:validateLength minimum="8" maximum="12" validatorMessage="#{out.passwordLengthError}"/>
-						<f:validateRegex pattern=".*[0-9]+.*" validatorMessage="#{out.passwordRegexError}"/>
-						<f:validateRegex pattern=".*[a-z]+.*" validatorMessage="#{out.passwordRegexError}"/>
-						<f:validateRegex pattern=".*[A-Z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validator validatorId="adminPasswordValidator"/>
 						<p:ajax update="passMsg" event="keyup" />
 					</p:password>
 					<p:message for="password" id="passMsg" />
@@ -54,10 +48,7 @@
 						value="#{out.passconf}" />
 					<p:password id="passwordconf" value="#{registrationBean.passconf}"
 						required="true" label="passwordconf">
-						<f:validateLength minimum="8" maximum="12" validatorMessage="#{out.passwordlengthError}"/>
-						<f:validateRegex pattern=".*[0-9]+.*" validatorMessage="#{out.passwordRegexError}"/>
-						<f:validateRegex pattern=".*[a-z]+.*" validatorMessage="#{out.passwordRegexError}"/>
-						<f:validateRegex pattern=".*[A-Z]+.*" validatorMessage="#{out.passwordRegexError}"/>
+						<f:validator validatorId="adminPasswordValidator"/>
 						<p:ajax update="passconfMsg" event="keyup" />
 						
 					</p:password>
