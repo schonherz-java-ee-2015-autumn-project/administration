@@ -10,8 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.validator.UserValidator;
 import hu.schonherz.administration.web.localization.MessageProvider;
-import hu.schonherz.administration.web.admin.validator.AdminValidator;
 
 @Named("adminEditBean")
 @ViewScoped
@@ -26,7 +26,7 @@ public class AdminModifyBean {
 	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
 	
 	public void modify() {
-		if (AdminValidator.isValidAdmin(selected)) {
+		if (UserValidator.isValidUser(selected)) {
 			try {
 				if(!password.isEmpty()){
 					selected.setPassword(BCrypt.encode(password));

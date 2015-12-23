@@ -1,4 +1,4 @@
-package hu.schonherz.administration.web.admin.validator;
+package hu.schonherz.administration.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,9 +31,9 @@ public class UserNameValidator implements Validator {
 		String input = (String) value;
 		String err = "";
 		if (input.length() < 6)
-			err += MessageProvider.getValue("username_min_length");
+			err += MessageProvider.getValue("usernameLengthError");
 		if (input.length() > 16)
-			err += MessageProvider.getValue("username_name_max_length");
+			err += MessageProvider.getValue("usernameLengthError");
 		if (!input.isEmpty()) {
 			Pattern p = Pattern.compile("[\\w[0-9]_]+", Pattern.UNICODE_CHARACTER_CLASS);
 			Matcher m = p.matcher(input);

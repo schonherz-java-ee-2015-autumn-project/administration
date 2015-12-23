@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
-import hu.schonherz.administration.web.admin.validator.AdminValidator;
+import hu.schonherz.administration.validator.UserValidator;
 import hu.schonherz.administration.web.localization.MessageProvider;
 
 @ViewScoped
@@ -46,10 +46,11 @@ public class RegistrationBean implements Serializable {
 		user.setName(name);
 		user.setUsername(username);
 		user.setPhoneNumber(phone);
-		user.setPassword(bCryptPasswordEncoder.encode(password));
+		user.setPassword(password);
 		user.setRemove(false);
-		if (AdminValidator.isValidAdmin(user) && password.equals(passconf)) {
+		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
 			try {
+				user.setPassword(bCryptPasswordEncoder.encode(password));
 				userService.registrationAdmin(user);
 			} catch (Exception e) {
 

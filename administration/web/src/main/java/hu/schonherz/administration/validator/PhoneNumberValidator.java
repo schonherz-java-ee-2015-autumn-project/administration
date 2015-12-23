@@ -1,4 +1,4 @@
-package hu.schonherz.administration.web.admin.validator;
+package hu.schonherz.administration.validator;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -9,8 +9,8 @@ import javax.faces.validator.ValidatorException;
 
 import hu.schonherz.administration.web.localization.MessageProvider;
 
-@FacesValidator("adminPhoneNumberValidator")
-public class AdminPhoneNumberValidator implements Validator {
+@FacesValidator("PhoneNumberValidator")
+public class PhoneNumberValidator implements Validator {
 	
 	@Override
 	public void validate(FacesContext arg0, UIComponent arg1, Object arg2) throws ValidatorException {

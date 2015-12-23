@@ -1,15 +1,15 @@
-package hu.schonherz.administration.web.admin.validator;
+package hu.schonherz.administration.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
-public class AdminValidator {
+public class UserValidator {
 
-	public static boolean isValidAdmin(UserDTO admin){
-		if (isValidUsername(admin.getUsername()) && isValidName(admin.getName())
-				&& isValidPhoneNumber(admin.getPhoneNumber()) && isValidPassword(admin.getPassword())) {
+	public static boolean isValidUser(UserDTO user){
+		if (isValidUsername(user.getUsername()) && isValidName(user.getName())
+				&& isValidPhoneNumber(user.getPhoneNumber()) && isValidPassword(user.getPassword())) {
 			return true;
 		}
 		return false;
