@@ -58,7 +58,7 @@
 				<p:commandButton style="width:35%;margin-left:37%;"
 					value="#{out.save}" update="userregpanel" resetValues="true"
 					actionListener="#{registrationBean.registration}" />
-
+				<p:growl id="regMsg" showDetail="true" />
 			</p:panel>
 		</h:form>
 	</ui:define>
