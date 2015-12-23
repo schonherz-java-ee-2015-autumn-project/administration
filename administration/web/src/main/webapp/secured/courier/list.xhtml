@@ -8,18 +8,21 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-		
+
+		<a href="#{request.contextPath}/secured/courier/create.xhtml"
+			class="btn btn-info" title="#{out.create}"> <b>#{out.create}</b>
+		</a>
+
 
 		<h:form id="courierForm">
-			<p:dataTable var="courier"
-				value="#{courierLazyBean.lazyDataModel}" paginator="true"
-				rows="10" rowsPerPageTemplate="5,10,50" id="carTable" lazy="true"
-				
+			<p:dataTable var="courier" value="#{courierLazyBean.lazyDataModel}"
+				paginator="true" rows="10" rowsPerPageTemplate="5,10,50"
+				id="carTable" lazy="true"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-				
-				
-				<p:column headerText="#{out.courier_name}"
-					sortBy="#{courier.name}" filterBy="#{courier.name}">
+
+
+				<p:column headerText="#{out.courier_name}" sortBy="#{courier.name}"
+					filterBy="#{courier.name}">
 					<h:outputText value="#{courier.name}" />
 				</p:column>
 				<p:column headerText="#{out.courier_username }"
@@ -27,8 +30,7 @@
 					<h:outputText value="#{courier.username}" />
 				</p:column>
 				<p:column headerText="#{out.courier_phone_number }"
-					sortBy="#{courier.phoneNumber}"
-					filterBy="#{courier.phoneNumber}">
+					sortBy="#{courier.phoneNumber}" filterBy="#{courier.phoneNumber}">
 					<h:outputText value="#{courier.phoneNumber}" />
 				</p:column>
 
