@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="courierForm">
+			<f:metadata>
+				<f:viewParam name="selected" value="#{courierEditBean.id}" />
+				<f:event type="preRenderView" listener="#{courierEditBean.init}" />
+			</f:metadata>
+
+			<p:panel id="panel" header="#{out.edit_users}">
+				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
+
+					<h:outputLabel for="name" value="#{out.name}" />
+					<p:inputText id="name" value="#{courierEditBean.selected.name}"
+						required="false" label="#{out.username}">
+						<f:validator validatorId="NameValidator"/>
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
+
+					<h:outputLabel for="userName" value="#{out.username}" />
+					<p:inputText id="userName"
+						value="#{courierEditBean.selected.username}" required="false"
+						label="#{out.username}" validator="#{usernameValidator.validate}">		
+					<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="userName" id="usernameMsg" />
+
+					<h:outputLabel for="phoneNumber" value="#{out.courier_phone_number}" />
+					<p:inputText id="phoneNumber"
+						value="#{courierEditBean.selected.phoneNumber}"
+						label="#{out.courier_phone_number}">
+						<f:validator validatorId="PhoneNumberValidator"/>
+						<p:ajax update="phoneNumberMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="phoneNumber" id="phoneNumberMsg" />	
+					
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+					<p:commandButton value="#{out.save_button}" update="courierForm"
+						actionListener="#{courierEditBean.modify}"
+						id="save_courier_status" />
+				</h:panelGrid>
+				
+				<p:growl id="passMsg" showDetail="true" />
+				<p:commandButton value="#{out.remove}">
+					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
+	    			<f:param name="userID" value="#{courierEditBean.selected.id}" />
+					<p:ajax update="courierForm" listener="#{UserBean.removeUser}"/>
+				</p:commandButton>
+				 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+       				 <p:commandButton value="#{out.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+       				 <p:commandButton value="#{out.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>	
+		
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
