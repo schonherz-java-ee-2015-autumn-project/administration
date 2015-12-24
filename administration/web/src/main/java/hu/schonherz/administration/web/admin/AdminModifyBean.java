@@ -24,10 +24,9 @@ public class AdminModifyBean {
 	private long id;
 	private String password = ""; 
 	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
-	FacesContext context = FacesContext.getCurrentInstance();
 	
 	public void modify() {
-
+		FacesContext context = FacesContext.getCurrentInstance();
 		if (UserValidator.isValidEditUser(selected)) {
 			try {
 				if(!password.isEmpty()){
