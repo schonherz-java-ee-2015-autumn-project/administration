@@ -16,7 +16,7 @@ import hu.schonherz.administration.web.validator.UserValidator;
 @Named("restaurantUserEditBean")
 @ViewScoped
 @EJB(name = "ejb.UserService", beanInterface = UserService.class)
-public class AdminModifyBean {
+public class RestaurantUserModifyBean {
 	
 	@EJB
 	private UserService userService;

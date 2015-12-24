@@ -8,56 +8,74 @@
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
 		<h:form id="userregform">
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{restaurantUserRegistrationBean.init}" />
+			</f:metadata>
 			<p:panel id="userregpanel" header="#{out.add_new_admin}">
 
 				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.name}" />
-					<p:inputText id="name" value="#{registrationBean.name}"
-						 label="name">
-						<f:validator validatorId="NameValidator"/>
+					<p:inputText id="name"
+						value="#{restaurantUserRegistrationBean.name}" label="name">
+						<f:validator validatorId="NameValidator" />
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
 
 					<p:outputLabel for="username" value="#{out.username}" />
-					<p:inputText id="username" value="#{registrationBean.username}" 
-						 label="#{out.username }" 
-						validator="#{usernameValidator.validate}">
+					<p:inputText id="username"
+						value="#{restaurantUserRegistrationBean.username}"
+						label="#{out.username }" validator="#{usernameValidator.validate}">
 						<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="username" id="usernameMsg" />
 
 					<p:outputLabel for="phone" value="#{out.tel}" />
-					<p:inputText id="phone" value="#{registrationBean.phone}"
-						 label="phone">
-						<f:validator validatorId="PhoneNumberValidator"/>
+					<p:inputText id="phone"
+						value="#{restaurantUserRegistrationBean.phone}" label="phone">
+						<f:validator validatorId="PhoneNumberValidator" />
 						<p:ajax update="phoneMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="phone" id="phoneMsg" />
 
 					<p:outputLabel for="password" value="#{out.password}" />
-					<p:password id="password" value="#{registrationBean.password}"
+					<p:password id="password"
+						value="#{restaurantUserRegistrationBean.password}"
 						label="password">
-						<f:validator validatorId="PasswordValidator"/>
+						<f:validator validatorId="PasswordValidator" />
 						<p:ajax update="passMsg" event="keyup" />
 					</p:password>
 					<p:message for="password" id="passMsg" />
 
-					<p:outputLabel for="passwordconf"
-						value="#{out.passconf}" />
-					<p:password id="passwordconf" value="#{registrationBean.passconf}"
+					<p:outputLabel for="passwordconf" value="#{out.passconf}" />
+					<p:password id="passwordconf"
+						value="#{restaurantUserRegistrationBean.passconf}"
 						label="passwordconf">
-						<f:validator validatorId="PasswordValidator"/>
-						<f:validator validatorId="passMatchValidator"/>
+						<f:validator validatorId="PasswordValidator" />
+						<f:validator validatorId="passMatchValidator" />
 						<p:ajax update="passconfMsg" event="keyup" />
-						
+
 					</p:password>
 					<p:message for="passwordconf" id="passconfMsg" />
+
+					<p:selectOneMenu id="advanced" value="#{restaurantUserRegistrationBean.selected}"
+						converter="#{restaurantConverter}" panelStyle="width:180px" effect="fade"
+						var="restaurant" style="width:160px" filter="true"
+						filterMatchMode="startsWith">
+						
+						<f:selectItems value="#{restaurantUserRegistrationBean.restaurants}" var="rest"
+							itemLabel="#{rest.name}" itemValue="#{rest}" />
+
+						<p:column>
+							<h:outputText value="#{restaurant.name}" />
+						</p:column>
+					</p:selectOneMenu>
 
 				</p:panelGrid>
 				<p:commandButton style="width:35%;margin-left:37%;"
 					value="#{out.save}" update="userregpanel" resetValues="true"
-					actionListener="#{registrationBean.registration}" />
+					actionListener="#{restaurantUserRegistrationBean.registration}" />
 				<p:growl id="regMsg" showDetail="true" />
 			</p:panel>
 		</h:form>

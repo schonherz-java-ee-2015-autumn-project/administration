@@ -1,6 +1,7 @@
 package hu.schonherz.administration.web.restaurant.employee;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -10,29 +11,36 @@ import javax.inject.Named;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.UserService;
+import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
 import hu.schonherz.administration.web.validator.UserValidator;
 
 @ViewScoped
 @Named("restaurantUserRegistrationBean")
-@EJB(name = "ejb.UserService", beanInterface = UserService.class)
-public class RegistrationBean implements Serializable {
+
+public class RestaurantUserRegistrationBean implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@EJB
+	@EJB(lookup="ejb.UserService" , beanInterface = UserService.class)
 	UserService userService;
-
+	
+	@EJB(lookup="ejb.RestaurantService", beanInterface = RestaurantService.class)
+	RestaurantService restaurantService;
+	
 	String name;
 	String username;
 	String phone;
 	String password;
 	String passconf;
+	RestaurantDTO  selectedRestaurant;
+	List<RestaurantDTO> restaurants;
 	FacesMessage msg;
 	FacesContext current;
 
@@ -52,6 +60,8 @@ public class RegistrationBean implements Serializable {
 			try {
 				user.setPassword(bCryptPasswordEncoder.encode(password));
 				userService.registrationAdmin(user);
+				selectedRestaurant.getEmployees().add(user);
+				restaurantService.save(selectedRestaurant);
 			} catch (Exception e) {
 
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", MessageProvider.getValue("regfailure"));
@@ -62,6 +72,11 @@ public class RegistrationBean implements Serializable {
 			current.addMessage(null, msg);
 			name = username = phone = null;
 		}
+	}
+	
+	public void init(){
+		restaurants = restaurantService.getRestaurants();
+		System.out.println("leFUT");
 	}
 
 	public UserService getUserService() {
@@ -110,6 +125,30 @@ public class RegistrationBean implements Serializable {
 
 	public void setPassconf(String passconf) {
 		this.passconf = passconf;
+	}
+
+	public RestaurantService getRestaurantService() {
+		return restaurantService;
+	}
+
+	public void setRestaurantService(RestaurantService restaurantService) {
+		this.restaurantService = restaurantService;
+	}
+
+	public RestaurantDTO getSelectedRestaurant() {
+		return selectedRestaurant;
+	}
+
+	public void setSelectedRestaurant(RestaurantDTO selectedRestaurant) {
+		this.selectedRestaurant = selectedRestaurant;
+	}
+
+	public List<RestaurantDTO> getRestaurants() {
+		return restaurants;
+	}
+
+	public void setRestaurants(List<RestaurantDTO> restaurants) {
+		this.restaurants = restaurants;
 	}
 
 }
