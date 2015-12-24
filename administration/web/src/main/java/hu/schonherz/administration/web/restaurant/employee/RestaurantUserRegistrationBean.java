@@ -1,6 +1,7 @@
 package hu.schonherz.administration.web.restaurant.employee;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -43,9 +44,10 @@ public class RestaurantUserRegistrationBean implements Serializable {
 	List<RestaurantDTO> restaurants;
 	FacesMessage msg;
 	FacesContext current;
-
+	UserDTO usere;
 	
 	public void registration() {
+		
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -56,23 +58,25 @@ public class RestaurantUserRegistrationBean implements Serializable {
 		user.setPassword(password);
 		user.setRemove(false);
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
-			//try {
+			
 				user.setPassword(bCryptPasswordEncoder.encode(password));
 				try {
-					userService.registrationAdmin(user);
+					usere = userService.registrationAdmin(user);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 				}
-				selectedRestaurant.getEmployees().add(user);
-				restaurantService.save(selectedRestaurant);
+				
+				List<UserDTO> userslist = new LinkedList<>();
+				userslist.add(usere);
+				selectedRestaurant.setEmployees(userslist);
+				try {
+					restaurantService.save(selectedRestaurant);
+				} catch (Exception e) {
+								
+				}
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", MessageProvider.getValue("regsucces"));
 				current.addMessage("userregform:save_status", msg);
 				name = username = phone = null;
-			//} catch (Exception e) {
-			//	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", MessageProvider.getValue("regfailure") +  e.toString());
-			//	current.addMessage("userregform:save_status", msg);
-		//	}
 		
 		}
 	}
