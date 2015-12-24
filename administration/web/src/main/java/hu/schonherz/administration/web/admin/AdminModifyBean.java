@@ -24,26 +24,30 @@ public class AdminModifyBean {
 	private long id;
 	private String password = ""; 
 	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
+	FacesContext context = FacesContext.getCurrentInstance();
 	
 	public void modify() {
-		if (UserValidator.isValidUser(selected)) {
+
+		if (UserValidator.isValidEditUser(selected)) {
 			try {
 				if(!password.isEmpty()){
-					selected.setPassword(BCrypt.encode(password));
+					selected.setPassword(password);
+					if(UserValidator.isValidUser(selected)){
+						selected.setPassword(BCrypt.encode(password));
+					}else{
+						context.addMessage("AdminForm:save_status",
+								new FacesMessage(MessageProvider.getValue("edit_failed")));
+					}
 				}
 				userService.saveUser(selected);
-				FacesContext context = FacesContext.getCurrentInstance();
-				FacesMessage message = new FacesMessage(MessageProvider.getValue("successful_edit"));
-				message.setSeverity(FacesMessage.SEVERITY_INFO);
-				context.addMessage("adminForm:save_status", message);
+				password = "";
+				context.addMessage("adminForm:save_status", new FacesMessage(MessageProvider.getValue("successful_edit")));
 
 			} catch (Exception e) {
-				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage("adminForm:save_status",
 						new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
 		}else{
-			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage("AdminForm:save_status",
 					new FacesMessage(MessageProvider.getValue("edit_failed")));
 		}

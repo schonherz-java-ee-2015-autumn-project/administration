@@ -19,7 +19,7 @@
 					<h:outputLabel for="name" value="#{out.username}" />
 					<p:inputText id="name" value="#{adminEditBean.selected.name}"
 						required="false" label="#{out.username}">
-						<f:validator validatorId="adminNameValidator" />
+						<f:validator validatorId="NameValidator"/>
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
@@ -27,20 +27,19 @@
 					<h:outputLabel for="userName" value="#{out.username}" />
 					<p:inputText id="userName"
 						value="#{adminEditBean.selected.username}" required="false"
-						label="#{out.username}">
-						<f:validator validatorId="adminNameValidator" />
-						<p:ajax update="usernameMsg" event="keyup" />
+						label="#{out.username}">		
+						<f:validator validatorId="userNameEditValidator"/>
+					<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="userName" id="usernameMsg" />
 
 					<h:outputLabel for="phoneNumber" value="#{out.adminPhoneNumber}" />
-					<p:inputMask id="phoneNumber"
-						value="#{adminEditBean.selected.phoneNumber}" required="false"
-						label="#{out.adminPhoneNumber}" mask="9999999?9999" maxlength="11"
-						slotChar=" ">
-						<f:validator validatorId="adminPhoneNumberValidator" />
+					<p:inputText id="phoneNumber"
+						value="#{adminEditBean.selected.phoneNumber}"
+						label="#{out.adminPhoneNumber}">
+						<f:validator validatorId="PhoneNumberValidator"/>
 						<p:ajax update="phoneNumberMsg" event="keyup" />
-					</p:inputMask>
+					</p:inputText>
 					<p:message for="phoneNumber" id="phoneNumberMsg" />
 					
 					<h:form rendered="#{adminEditBean.selected.id eq userSessionBean.userDTO.id}" > 
@@ -49,17 +48,17 @@
 					<h:form rendered="#{adminEditBean.selected.id eq userSessionBean.userDTO.id}" > 
 						<p:inputText id="passw" value="#{adminEditBean.password}"
 							required="false" label="#{out.username}">
-							<f:validator validatorId="adminNameValidator" />
-							<p:ajax update="passMsg" event="keyup" />
+								<f:validator validatorId="PasswordValidator"/>
+								<p:ajax update="passMsg" event="keyup" />
 						</p:inputText>
 						<p:message for="passw" id="passMsg" />	
 					</h:form>
 					
 				</h:panelGrid>
 				
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="1">
 					<p:commandButton value="#{out.save_button}" update="adminForm"
-						actionListener="#{adminEditBean.modify}" icon="ui-icon-check"
+						actionListener="#{adminEditBean.modify}"
 						id="save_status" />
 				</h:panelGrid>
 				
