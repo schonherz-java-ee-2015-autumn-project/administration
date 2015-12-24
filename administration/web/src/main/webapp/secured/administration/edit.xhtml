@@ -27,8 +27,8 @@
 					<h:outputLabel for="userName" value="#{out.username}" />
 					<p:inputText id="userName"
 						value="#{adminEditBean.selected.username}" required="false"
-						label="#{out.username}">		
-						<f:validator validatorId="userNameEditValidator"/>
+						label="#{out.username}"	
+						validator="#{userNameEditValidator.validate}">	
 					<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="userName" id="usernameMsg" />
@@ -53,6 +53,8 @@
 						</p:inputText>
 						<p:message for="passw" id="passMsg" />	
 					</h:form>
+						<h:inputHidden  id="selectId" 
+						value="#{adminEditBean.selected.id}" />
 					
 				</h:panelGrid>
 				
