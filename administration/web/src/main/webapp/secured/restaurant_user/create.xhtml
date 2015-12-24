@@ -59,7 +59,7 @@
 					</p:password>
 					<p:message for="passwordconf" id="passconfMsg" />
 
-					<p:selectOneMenu id="advanced" value="#{restaurantUserRegistrationBean.selected}"
+					<p:selectOneMenu id="advanced" value="#{restaurantUserRegistrationBean.selectedRestaurant}"
 						converter="#{restaurantConverter}" panelStyle="width:180px" effect="fade"
 						var="restaurant" style="width:160px" filter="true"
 						filterMatchMode="startsWith">
@@ -75,8 +75,9 @@
 				</p:panelGrid>
 				<p:commandButton style="width:35%;margin-left:37%;"
 					value="#{out.save}" update="userregpanel" resetValues="true"
-					actionListener="#{restaurantUserRegistrationBean.registration}" />
-				<p:growl id="regMsg" showDetail="true" />
+					actionListener="#{restaurantUserRegistrationBean.registration}" 
+					id="save_status"/>
+				<p:message for="save_status" />
 			</p:panel>
 		</h:form>
 	</ui:define>
