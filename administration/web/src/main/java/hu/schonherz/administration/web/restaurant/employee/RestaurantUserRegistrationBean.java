@@ -44,9 +44,8 @@ public class RestaurantUserRegistrationBean implements Serializable {
 	FacesMessage msg;
 	FacesContext current;
 
+	
 	public void registration() {
-		
-		//UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -57,26 +56,29 @@ public class RestaurantUserRegistrationBean implements Serializable {
 		user.setPassword(password);
 		user.setRemove(false);
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
-			try {
+			//try {
 				user.setPassword(bCryptPasswordEncoder.encode(password));
-				userService.registrationAdmin(user);
+				try {
+					userService.registrationAdmin(user);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				selectedRestaurant.getEmployees().add(user);
 				restaurantService.save(selectedRestaurant);
-			} catch (Exception e) {
-
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", MessageProvider.getValue("regfailure"));
-				current.addMessage(null, msg);
-				e.printStackTrace();
-			}
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", MessageProvider.getValue("regsucces"));
-			current.addMessage(null, msg);
-			name = username = phone = null;
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", MessageProvider.getValue("regsucces"));
+				current.addMessage("userregform:save_status", msg);
+				name = username = phone = null;
+			//} catch (Exception e) {
+			//	FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", MessageProvider.getValue("regfailure") +  e.toString());
+			//	current.addMessage("userregform:save_status", msg);
+		//	}
+		
 		}
 	}
 	
 	public void init(){
 		restaurants = restaurantService.getRestaurants();
-		System.out.println("leFUT");
 	}
 
 	public UserService getUserService() {
