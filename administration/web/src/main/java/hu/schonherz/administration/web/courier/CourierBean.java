@@ -21,12 +21,13 @@ public class CourierBean {
 	@Inject
 	private LazyCourier lazyDataModel;
 	
-private UserDTO selected;
+	private UserDTO selected;
 	
 	public void redirect(SelectEvent event) {
 		if(!selected.equals(((UserDTO)event.getObject()))){
 			selected = (UserDTO)event.getObject();
 		}
+		
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 	    try {
 			ec.redirect(ec.getRequestContextPath() + "/secured/courier/edit.xhtml?selected="+selected.getId());
