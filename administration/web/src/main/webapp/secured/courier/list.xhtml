@@ -14,10 +14,11 @@
 			<p:dataTable var="courier"
 				value="#{courierLazyBean.lazyDataModel}" paginator="true"
 				rows="10" rowsPerPageTemplate="5,10,50" id="carTable" lazy="true"
-				
+				selectionMode="single" selection="#{courierLazyBean.selected}"
+				rowKey="#{courier.id}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 				
-				
+				<p:ajax event="rowSelect" listener="#{courierLazyBean.redirect}" />
 				<p:column headerText="#{out.courier_name}"
 					sortBy="#{courier.name}" filterBy="#{courier.name}">
 					<h:outputText value="#{courier.name}" />
