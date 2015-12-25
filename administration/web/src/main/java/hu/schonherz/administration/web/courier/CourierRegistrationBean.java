@@ -37,7 +37,8 @@ public class CourierRegistrationBean implements Serializable {
 	public void registration() {
 		
 		
-		
+		System.out.println("eeeeeeeeeeeeeeeeee");
+
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
