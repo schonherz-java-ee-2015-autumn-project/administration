@@ -1,68 +1,66 @@
 package hu.schonherz.administration.web.restaurant.employee;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
+import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.UserService;
+import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.web.localization.MessageProvider;
 import hu.schonherz.administration.web.validator.UserValidator;
 
 @Named("restaurantUserEditBean")
 @ViewScoped
-@EJB(name = "ejb.UserService", beanInterface = UserService.class)
 public class RestaurantUserModifyBean {
-	
-	@EJB
+
+	@EJB(lookup = "ejb.UserService", beanInterface = UserService.class)
 	private UserService userService;
+
+	@EJB(lookup = "ejb.RestaurantService", beanInterface = RestaurantService.class)
+	private RestaurantService restaurantService;
 	private UserDTO selected;
 	private long id;
-	private String password = ""; 
-	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
-	
+	private RestaurantDTO selectedRestaurant;
+	private List<RestaurantDTO> restaurants;
+	private RestaurantDTO oldRestaurant;
+
 	public void modify() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		if (UserValidator.isValidEditUser(selected)) {
 			try {
-				if(!password.isEmpty()){
-					selected.setPassword(password);
-					if(UserValidator.isValidUser(selected)){
-						selected.setPassword(BCrypt.encode(password));
-					}else{
-						context.addMessage("AdminForm:save_status",
-								new FacesMessage(MessageProvider.getValue("edit_failed")));
-					}
-				}
 				userService.saveUser(selected);
-				password = "";
-				context.addMessage("adminForm:save_status", new FacesMessage(MessageProvider.getValue("successful_edit")));
+				if(!selected.equals(oldRestaurant)){
+					oldRestaurant.getEmployees().remove(selected);
+					restaurantService.save(oldRestaurant);
+					selectedRestaurant.getEmployees().add(selected);
+					restaurantService.save(selectedRestaurant);
+				}
+				context.addMessage("adminForm:edit_status",
+						new FacesMessage(MessageProvider.getValue("successful_edit")));
 
 			} catch (Exception e) {
-				context.addMessage("adminForm:save_status",
+				context.addMessage("adminForm:edit_status",
 						new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
-		}else{
-			context.addMessage("AdminForm:save_status",
+		} else {
+			context.addMessage("adminForm:edit_status",
 					new FacesMessage(MessageProvider.getValue("edit_failed")));
 		}
-	}
-	
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public void init() {
 		selected = userService.findById(id);
+		restaurants = restaurantService.getOnlyActiveRestaurants();
+		oldRestaurant = restaurantService.findRestaurantByUser(selected);
+		selectedRestaurant = oldRestaurant;
 	}
+
 	public UserService getUserService() {
 		return userService;
 	}
@@ -86,6 +84,37 @@ public class RestaurantUserModifyBean {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	
+
+	public RestaurantDTO getSelectedRestaurant() {
+		return selectedRestaurant;
+	}
+
+	public void setSelectedRestaurant(RestaurantDTO selectedRestaurant) {
+		this.selectedRestaurant = selectedRestaurant;
+	}
+
+	public List<RestaurantDTO> getRestaurants() {
+		return restaurants;
+	}
+
+	public void setRestaurants(List<RestaurantDTO> restaurants) {
+		this.restaurants = restaurants;
+	}
+
+	public RestaurantService getRestaurantService() {
+		return restaurantService;
+	}
+
+	public void setRestaurantService(RestaurantService restaurantService) {
+		this.restaurantService = restaurantService;
+	}
+
+	public RestaurantDTO getOldRestaurant() {
+		return oldRestaurant;
+	}
+
+	public void setOldRestaurant(RestaurantDTO oldRestaurant) {
+		this.oldRestaurant = oldRestaurant;
+	}
+
 }
