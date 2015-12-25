@@ -1,9 +1,11 @@
 package hu.schonherz.administration.persistence.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Restaurant  extends BaseEntity implements Serializable{
@@ -23,6 +25,9 @@ public class Restaurant  extends BaseEntity implements Serializable{
 	
 	@Column(name = "is_deleted", nullable = false)
 	private Boolean isDeleted;
+	
+	@OneToMany
+	private List<User> employees;
 	
 	
 	public String getName() {
@@ -54,6 +59,12 @@ public class Restaurant  extends BaseEntity implements Serializable{
 	}
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	public List<User> getEmployees() {
+		return employees;
+	}
+	public void setEmployees(List<User> employees) {
+		this.employees = employees;
 	}
 	
 	

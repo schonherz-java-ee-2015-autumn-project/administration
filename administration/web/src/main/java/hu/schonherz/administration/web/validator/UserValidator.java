@@ -3,15 +3,10 @@ package hu.schonherz.administration.web.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.ejb.EJB;
-
-import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 public class UserValidator {
 
-	@EJB
-	UserService userService;
 	
 	public static boolean isValidUser(UserDTO user){
 		if (isValidUsername(user.getUsername()) && isValidName(user.getName())
@@ -20,7 +15,13 @@ public class UserValidator {
 		}
 		return false;
 	}
-
+	public static boolean isValidEditUser(UserDTO user){
+		if (isValidUsername(user.getUsername()) && isValidName(user.getName())
+				&& isValidPhoneNumber(user.getPhoneNumber())) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	private static boolean isValidName(String name) {
