@@ -81,6 +81,10 @@ public class RestaurantDTO implements Serializable{
 	public void setEmployees(List<UserDTO> employees) {
 		this.employees = employees;
 	}
+	@Override
+	public String toString() {
+		return  name;
+	}
 	
 	
 	

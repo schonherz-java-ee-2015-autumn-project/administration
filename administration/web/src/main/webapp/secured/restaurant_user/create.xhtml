@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="userregform">
+			<f:metadata>
+				<f:event type="preRenderView"
+					listener="#{restaurantUserRegistrationBean.init}" />
+			</f:metadata>
+			<p:panel id="userregpanel" header="#{out.add_new_restaurant_user}">
+
+				<p:panelGrid columns="3">
+					<p:outputLabel for="name" value="#{out.name}" />
+					<p:inputText id="name"
+						value="#{restaurantUserRegistrationBean.name}" label="name">
+						<f:validator validatorId="NameValidator" />
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
+
+					<p:outputLabel for="username" value="#{out.username}" />
+					<p:inputText id="username"
+						value="#{restaurantUserRegistrationBean.username}"
+						label="#{out.username }" validator="#{usernameValidator.validate}">
+						<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="username" id="usernameMsg" />
+
+					<p:outputLabel for="phone" value="#{out.tel}" />
+					<p:inputText id="phone"
+						value="#{restaurantUserRegistrationBean.phone}" label="phone">
+						<f:validator validatorId="PhoneNumberValidator" />
+						<p:ajax update="phoneMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="phone" id="phoneMsg" />
+
+					<p:outputLabel for="password" value="#{out.password}" />
+					<p:password id="password"
+						value="#{restaurantUserRegistrationBean.password}"
+						label="password">
+						<f:validator validatorId="PasswordValidator" />
+						<p:ajax update="passMsg" event="keyup" />
+					</p:password>
+					<p:message for="password" id="passMsg" />
+
+					<p:outputLabel for="passwordconf" value="#{out.passconf}" />
+					<p:password id="passwordconf"
+						value="#{restaurantUserRegistrationBean.passconf}"
+						label="passwordconf">
+						<f:validator validatorId="PasswordValidator" />
+						<f:validator validatorId="passMatchValidator" />
+						<p:ajax update="passconfMsg" event="keyup" />
+
+					</p:password>
+					<p:message for="passwordconf" id="passconfMsg" />
+					
+					<p:outputLabel for="restaurant_list" value="#{out.restaurants}" />
+					<p:selectOneMenu id="restaurant_list"
+						value="#{restaurantUserRegistrationBean.selectedRestaurant}"
+						converter="#{restaurantConverter}" panelStyle="width:180px"
+						effect="fade" var="restaurant" style="width:160px" filter="true"
+						filterMatchMode="startsWith">
+
+						<f:selectItems
+							value="#{restaurantUserRegistrationBean.restaurants}" var="rest"
+							itemLabel="#{rest.name}" itemValue="#{rest}" />
+
+						<p:column>
+							<h:outputText value="#{restaurant.name}" />
+						</p:column>
+					</p:selectOneMenu>
+					<p:message for="restaurant_list" id="restaurant_listMsg" />
+					<p:commandButton value="#{out.save}" update="userregpanel"
+					resetValues="true"
+					actionListener="#{restaurantUserRegistrationBean.registration}"
+					id="save_status" />
+					<p:message for="save_status" />
+				</p:panelGrid>
+				
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

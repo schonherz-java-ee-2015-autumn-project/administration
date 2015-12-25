@@ -18,6 +18,7 @@ public interface RestaurantService {
 
 	public List<RestaurantDTO> getRestaurants();
 	
+	public List<RestaurantDTO> getOnlyActiveRestaurants();
 	
 	public List<RestaurantDTO> getRestaurants(int first, int pageSize, String sortField,  CustomSortOrder sortOrder, Map<String, Object> filters);
 

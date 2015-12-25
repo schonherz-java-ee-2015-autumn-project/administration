@@ -56,27 +56,6 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 	}
 
-	@Override
-	public UserDTO registrationUser(UserDTO userDTO) throws Exception {
-
-		User user = userDao.save(UserConverter.toEntity(userDTO));
-
-		List<Role> roles = user.getRoles();
-		if (roles == null || roles.isEmpty()) {
-			roles = new ArrayList<>();
-		}
-
-		Role role = getUserRole();
-
-		roles.add(role);
-
-		user.setRoles(roles);
-
-		user = userDao.save(user);
-
-		return UserConverter.toVo(user);
-
-	}
 
 	@Override
 	public UserDTO registrationAdmin(UserDTO userDTO) throws Exception {
@@ -100,11 +79,11 @@ public class UserServiceImpl implements UserService {
 
 	}
 	
-	private Role getUserRole() {
-		Role role = roleDao.findByName("ROLE_USER");
+	private Role getRestaurantRole() {
+		Role role = roleDao.findByName("ROLE_RESTAURANT");
 		if (role == null) {
 			role = new Role();
-			role.setName("ROLE_USER");
+			role.setName("ROLE_RESTAURANT");
 			role = roleDao.save(role);
 		}
 		return role;
@@ -220,5 +199,27 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(UserDTO userDTO) {
 		userDao.save(UserConverter.toEntity(userDTO));
 	}
+
+	@Override
+	public UserDTO saveRestaurantUser(UserDTO userDTO) throws Exception {
+		User user = userDao.save(UserConverter.toEntity(userDTO));
+
+		List<Role> roles = user.getRoles();
+		if (roles == null || roles.isEmpty()) {
+			roles = new ArrayList<>();
+		}
+
+		Role role = getRestaurantRole();
+
+		roles.add(role);
+
+		user.setRoles(roles);
+
+		user = userDao.save(user);
+
+		return UserConverter.toVo(user);
+	}
+
+
 	
 }
