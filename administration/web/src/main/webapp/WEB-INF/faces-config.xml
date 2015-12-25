@@ -13,6 +13,7 @@
 	        <supported-locale>en</supported-locale>
         </locale-config>
         
+        
         <resource-bundle>
             <base-name>
                 hu.schonherz.administration.java.Messages

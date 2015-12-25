@@ -1,7 +1,6 @@
 package hu.schonherz.administration.web.restaurant.employee;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.EJB;
