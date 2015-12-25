@@ -29,25 +29,24 @@ public class RestaurantUserRegistrationBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@EJB(lookup="ejb.UserService" , beanInterface = UserService.class)
+	@EJB(lookup = "ejb.UserService", beanInterface = UserService.class)
 	UserService userService;
-	
-	@EJB(lookup="ejb.RestaurantService", beanInterface = RestaurantService.class)
+
+	@EJB(lookup = "ejb.RestaurantService", beanInterface = RestaurantService.class)
 	RestaurantService restaurantService;
-	
+
 	String name;
 	String username;
 	String phone;
 	String password;
 	String passconf;
-	RestaurantDTO  selectedRestaurant;
+	RestaurantDTO selectedRestaurant;
 	List<RestaurantDTO> restaurants;
 	FacesMessage msg;
 	FacesContext current;
-	UserDTO usere;
-	
+
 	public void registration() {
-		
+
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -58,30 +57,30 @@ public class RestaurantUserRegistrationBean implements Serializable {
 		user.setPassword(password);
 		user.setRemove(false);
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
-			
-				user.setPassword(bCryptPasswordEncoder.encode(password));
-				try {
-					usere = userService.registrationAdmin(user);
-				} catch (Exception e) {
-					
-				}
-				
-				List<UserDTO> userslist = new LinkedList<>();
-				userslist.add(usere);
-				selectedRestaurant.setEmployees(userslist);
-				try {
-					restaurantService.save(selectedRestaurant);
-				} catch (Exception e) {
-								
-				}
-				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", MessageProvider.getValue("regsucces"));
+
+			user.setPassword(bCryptPasswordEncoder.encode(password));
+			UserDTO savedUser;
+			try {
+				savedUser = userService.saveRestaurantUser(user);
+				selectedRestaurant.getEmployees().add(savedUser);
+				restaurantService.save(selectedRestaurant);
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+						MessageProvider.getValue("successful_save"));
 				current.addMessage("userregform:save_status", msg);
 				name = username = phone = null;
-		
+			} catch (Exception e) {
+				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+						MessageProvider.getValue("save_failed"));
+				current.addMessage("userregform:save_status", msg);
+			}
+		} else {
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
+					MessageProvider.getValue("save_failed"));
+			current.addMessage("userregform:save_status", msg);
 		}
 	}
-	
-	public void init(){
+
+	public void init() {
 		restaurants = restaurantService.getRestaurants();
 	}
 
