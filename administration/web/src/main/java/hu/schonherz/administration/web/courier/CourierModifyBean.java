@@ -24,12 +24,10 @@ public class CourierModifyBean {
 	private long id;
 	 
 	BCryptPasswordEncoder BCrypt = new BCryptPasswordEncoder();
-	
 	public void modify() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		if (UserValidator.isValidUser(selected)) {
+		if (UserValidator.isValidEditUser(selected)) {
 			try {
-				
 				userService.saveUser(selected);
 				
 				context.addMessage("courierForm:save_courier_status", new FacesMessage(MessageProvider.getValue("successful_edit")));

@@ -7,18 +7,20 @@
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-		<h:form id="courierForm">
+		<h:form id="adminForm">
 			<f:metadata>
 				<f:viewParam name="selected" value="#{courierEditBean.id}" />
 				<f:event type="preRenderView" listener="#{courierEditBean.init}" />
+				
 			</f:metadata>
-
+			<h:inputHidden  id="selectId" 
+						value="#{courierEditBean.selected.id}" />
 			<p:panel id="panel" header="#{out.edit_users}">
 				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 
 					<h:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{courierEditBean.selected.name}"
-						required="false" label="#{out.username}">
+						required="false" label="#{out.name}">
 						<f:validator validatorId="NameValidator"/>
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
@@ -27,7 +29,7 @@
 					<h:outputLabel for="userName" value="#{out.username}" />
 					<p:inputText id="userName"
 						value="#{courierEditBean.selected.username}" required="false"
-						label="#{out.username}" validator="#{usernameValidator.validate}">		
+						label="#{out.username}" validator="#{userNameEditValidator.validate}">		
 					<p:ajax update="usernameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="userName" id="usernameMsg" />
@@ -44,7 +46,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="1">
-					<p:commandButton value="#{out.save_button}" update="courierForm"
+					<p:commandButton value="#{out.save_button}" update="adminForm"
 						actionListener="#{courierEditBean.modify}"
 						id="save_courier_status" />
 				</h:panelGrid>
@@ -53,7 +55,7 @@
 				<p:commandButton value="#{out.remove}">
 					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
 	    			<f:param name="userID" value="#{courierEditBean.selected.id}" />
-					<p:ajax update="courierForm" listener="#{UserBean.removeUser}"/>
+					<p:ajax update="adminForm" listener="#{UserBean.removeUser}"/>
 				</p:commandButton>
 				 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
        				 <p:commandButton value="#{out.yes}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
@@ -62,5 +64,7 @@
 		
 			</p:panel>
 		</h:form>
+
+
 	</ui:define>
 </ui:composition>
