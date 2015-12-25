@@ -30,4 +30,6 @@ public interface UserService {
 
 	public UserDTO findById(long id);
 
+	public UserDTO registrationCourier(UserDTO userDTO) throws Exception;
+
 }

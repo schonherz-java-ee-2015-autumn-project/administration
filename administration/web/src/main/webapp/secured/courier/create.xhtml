@@ -4,28 +4,60 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	template="/templates/masterLayout.xhtml"
-	xmlns:sec="http://www.springframework.org/security/tags"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
-	
-	<h:form id="courierForm">
-		<p:panel id="panel" header="#{out.new_courier}">
-		
-			<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
-			
-			
-			
-			</h:panelGrid>
-		
-		</p:panel>
-	
-	
-	
-	</h:form>
+		<h:form id="courierregform">
+			<p:panel id="courierregpanel" header="#{out.new_courier}">
 
+				<p:panelGrid columns="3">
+					<p:outputLabel for="name" value="#{out.name}" />
+					<p:inputText id="name" value="#{courierregBean.name}" label="name">
+						<f:validator validatorId="NameValidator" />
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
 
+					<p:outputLabel for="username" value="#{out.username}" />
+					<p:inputText id="username" value="#{courierregBean.username}"
+						label="#{out.username }" validator="#{usernameValidator.validate}">
+						<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="username" id="usernameMsg" />
 
+					<p:outputLabel for="phone" value="#{out.tel}" />
+					<p:inputText id="phone" value="#{courierregBean.phone}"
+						label="phone">
+						<f:validator validatorId="PhoneNumberValidator" />
+						<p:ajax update="phoneMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="phone" id="phoneMsg" />
 
+					<p:outputLabel for="password" value="#{out.password}" />
+					<p:password id="password" value="#{courierregBean.password}"
+						label="password">
+						<f:validator validatorId="PasswordValidator" />
+						<p:ajax update="passMsg" event="keyup" />
+					</p:password>
+					<p:message for="password" id="passMsg" />
+
+					<p:outputLabel for="passwordconf" value="#{out.passconf}" />
+					<p:password id="passwordconf" value="#{courierregBean.passconf}"
+						label="passwordconf">
+						<f:validator validatorId="PasswordValidator" />
+						<f:validator validatorId="passMatchValidator" />
+						<p:ajax update="passconfMsg" event="keyup" />
+
+					</p:password>
+					<p:message for="passwordconf" id="passconfMsg" />
+
+				</p:panelGrid>
+				<p:commandButton style="width:35%;margin-left:37%;"
+					value="#{out.save}" update="courierregpanel" resetValues="true"
+					actionListener="#{courierregBean.registration}" />
+				<p:growl id="regMsg" showDetail="true" />
+			</p:panel>
+		</h:form>
 	</ui:define>
+
 </ui:composition>

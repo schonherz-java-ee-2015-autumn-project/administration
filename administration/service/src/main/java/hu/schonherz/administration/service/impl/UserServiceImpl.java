@@ -100,6 +100,28 @@ public class UserServiceImpl implements UserService {
 
 	}
 	
+	@Override
+	public UserDTO registrationCourier(UserDTO userDTO) throws Exception {
+		
+		User user = userDao.save(UserConverter.toEntity(userDTO));
+		
+		List<Role> roles = user.getRoles();
+		if (roles == null || roles.isEmpty()) {
+			roles = new ArrayList<>();
+		}
+		
+		Role role = getCourierRole();
+		
+		roles.add(role);
+		
+		user.setRoles(roles);
+		
+		user = userDao.save(user);
+		
+		return UserConverter.toVo(user);
+		
+	}
+	
 	private Role getUserRole() {
 		Role role = roleDao.findByName("ROLE_USER");
 		if (role == null) {
@@ -115,6 +137,16 @@ public class UserServiceImpl implements UserService {
 		if (role == null) {
 			role = new Role();
 			role.setName("ROLE_ADMIN");
+			role = roleDao.save(role);
+		}
+		return role;
+	}
+	
+	private Role getCourierRole() {
+		Role role = roleDao.findByName("ROLE_COURIER");
+		if (role == null) {
+			role = new Role();
+			role.setName("ROLE_COURIER");
 			role = roleDao.save(role);
 		}
 		return role;
@@ -220,5 +252,7 @@ public class UserServiceImpl implements UserService {
 	public void saveUser(UserDTO userDTO) {
 		userDao.save(UserConverter.toEntity(userDTO));
 	}
+
+	
 	
 }
