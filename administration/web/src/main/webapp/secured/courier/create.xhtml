@@ -9,10 +9,11 @@
 	<ui:define name="content">
 		<h:form id="userregform">
 			<p:panel id="courierregpanel" header="#{out.new_courier}">
-				<p:panelGrid>
+				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{courierregBean.name}" label="name">
 						<f:validator validatorId="NameValidator" />
+						<p:ajax update="phoneMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
 
@@ -27,6 +28,7 @@
 					<p:inputText id="phone" value="#{courierregBean.phone}"
 						label="phone">
 						<f:validator validatorId="PhoneNumberValidator" />
+						<p:ajax update="phoneMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="phone" id="phoneMsg" />
 
