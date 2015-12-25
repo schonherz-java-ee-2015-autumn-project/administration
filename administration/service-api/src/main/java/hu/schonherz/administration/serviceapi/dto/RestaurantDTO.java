@@ -1,6 +1,7 @@
 package hu.schonherz.administration.serviceapi.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class RestaurantDTO implements Serializable{
 
@@ -12,6 +13,7 @@ public class RestaurantDTO implements Serializable{
 	private String phoneNumber;
 	private Integer price;
 	private Boolean isDeleted;
+	private List<UserDTO> employees;
 	
 	public String getName() {
 		return name;
@@ -72,6 +74,12 @@ public class RestaurantDTO implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	public List<UserDTO> getEmployees() {
+		return employees;
+	}
+	public void setEmployees(List<UserDTO> employees) {
+		this.employees = employees;
 	}
 	
 	

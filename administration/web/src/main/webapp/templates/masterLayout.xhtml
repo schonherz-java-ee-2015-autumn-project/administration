@@ -58,12 +58,16 @@
 			</div>
 
 			<div class="header-right">
+				
+				
+				
 				<sec:authorize ifNotGranted="ROLE_ADMIN">
 					<a href="#{request.contextPath}/public/login.xhtml"
 						class="btn btn-info" title="LOGIN"> <b>#{out.login}</b>
 					</a>
 					<a> </a>
 				</sec:authorize>
+				
 				<sec:authorize access="hasAnyRole('ADMIN')">
 					<a href="#{request.contextPath}/logout" class="btn btn-danger"
 						title="Logout"> <b>#{out.logout}</b>
@@ -88,9 +92,11 @@
 									<br />
 								</div>
 							</p:outputPanel></li>
+
 							<li><a href="#{request.contextPath}/secured/administration/list.xhtml">#{out.admin_list}</a></li>
 							<li><a href="#{request.contextPath}/secured/restaurant/list.xhtml">#{out.restaurant_list}</a></li>
 							<li><a href="#{request.contextPath}/secured/courier/list.xhtml">#{out.courier_list}</a></li>
+
 						</sec:authorize>
 					</ul>
 				</div>

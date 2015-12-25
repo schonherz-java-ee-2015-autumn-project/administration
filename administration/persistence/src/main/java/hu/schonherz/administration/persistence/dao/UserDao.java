@@ -12,9 +12,9 @@ import hu.schonherz.administration.persistence.entities.User;
 public interface UserDao extends JpaRepository<User, Long> ,  JpaSpecificationExecutor<User>{
 
 	User findByUsername(String username);
+	
+	User findById(long id);
 
 	Long countByUsername(String username);
-
-	
 
 }

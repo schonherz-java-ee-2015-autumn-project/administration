@@ -10,9 +10,13 @@ import hu.schonherz.administration.serviceapi.dto.UserRole;
 public interface UserService {
 
 	public UserDTO findUserByName(String name) throws Exception;
+	
+	public void removeUser(long id) throws Exception;
 
 	public UserDTO registrationUser(UserDTO UserDTO) throws Exception;
 
+	public UserDTO registrationAdmin(UserDTO UserDTO) throws Exception;
+	
 	public List<UserDTO> getUserList(int first, int pageSize, String sortField,  CustomSortOrder sortOrder,
 			Map<String, Object> filters, UserRole role);
 
@@ -22,8 +26,8 @@ public interface UserService {
 	
 	public int getUserCount(Map<String, Object> filters, UserRole role);
 
-	public UserDTO saveUser(UserDTO selectedUser);
+	public void saveUser(UserDTO selectedUser);
 
-	public UserDTO findById(Long id);
+	public UserDTO findById(long id);
 
 }
