@@ -18,12 +18,15 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
+import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.RestaurantSpecification;
 import hu.schonherz.administration.persistence.entities.Restaurant;
+import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 @Stateless(mappedName = "RestaurantService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -33,6 +36,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Autowired
 	RestaurantDao restaurantDao;
+	
+	@Autowired
+	UserDao userDao;
 
 	@Override
 	public RestaurantDTO findRestaurantByName(String name) {
@@ -139,5 +145,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 		return RestaurantConverter
 				.toDTO(restaurantDao.findAll(Specifications.where(RestaurantSpecification.notDeleted())));
 
+	}
+
+	@Override
+	public RestaurantDTO findRestaurantByUser(UserDTO user) {
+		User u = userDao.findByUsername(user.getUsername());
+		List<Restaurant> result = restaurantDao.findAll(Specifications.where(RestaurantSpecification.notDeleted()).and(RestaurantSpecification.hasUser(u)));
+		return RestaurantConverter.toDTO(result.get(0));
 	}
 }

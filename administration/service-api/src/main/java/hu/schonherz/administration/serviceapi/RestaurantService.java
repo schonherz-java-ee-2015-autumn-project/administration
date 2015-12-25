@@ -5,6 +5,7 @@ import java.util.Map;
 
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
 
 public interface RestaurantService {
 
@@ -13,6 +14,8 @@ public interface RestaurantService {
 	public RestaurantDTO findById(Long id);
 
 	public void save(RestaurantDTO restaurantDTO);
+	
+	public RestaurantDTO findRestaurantByUser(UserDTO user);
 	
 	public void remove(RestaurantDTO restaurantDTO);
 
