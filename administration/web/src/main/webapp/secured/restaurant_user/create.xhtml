@@ -58,26 +58,30 @@
 
 					</p:password>
 					<p:message for="passwordconf" id="passconfMsg" />
-
-					<p:selectOneMenu id="advanced" value="#{restaurantUserRegistrationBean.selectedRestaurant}"
-						converter="#{restaurantConverter}" panelStyle="width:180px" effect="fade"
-						var="restaurant" style="width:160px" filter="true"
+					
+					<p:outputLabel for="restaurant_list" value="#{out.restaurants}" />
+					<p:selectOneMenu id="restaurant_list"
+						value="#{restaurantUserRegistrationBean.selectedRestaurant}"
+						converter="#{restaurantConverter}" panelStyle="width:180px"
+						effect="fade" var="restaurant" style="width:160px" filter="true"
 						filterMatchMode="startsWith">
-						
-						<f:selectItems value="#{restaurantUserRegistrationBean.restaurants}" var="rest"
+
+						<f:selectItems
+							value="#{restaurantUserRegistrationBean.restaurants}" var="rest"
 							itemLabel="#{rest.name}" itemValue="#{rest}" />
 
 						<p:column>
 							<h:outputText value="#{restaurant.name}" />
 						</p:column>
 					</p:selectOneMenu>
-
+					<p:message for="restaurant_list" id="restaurant_listMsg" />
+					<p:commandButton value="#{out.save}" update="userregpanel"
+					resetValues="true"
+					actionListener="#{restaurantUserRegistrationBean.registration}"
+					id="save_status" />
+					<p:message for="save_status" />
 				</p:panelGrid>
-				<p:commandButton style="width:35%;margin-left:37%;"
-					value="#{out.save}" update="userregpanel" resetValues="true"
-					actionListener="#{restaurantUserRegistrationBean.registration}" 
-					id="save_status"/>
-				<p:message for="save_status" />
+				
 			</p:panel>
 		</h:form>
 	</ui:define>
