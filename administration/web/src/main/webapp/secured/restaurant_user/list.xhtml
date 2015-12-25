@@ -7,12 +7,14 @@
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
+		<a href="#{request.contextPath}/secured/restaurant_user/create.xhtml"
+			class="btn btn-info" title="#{out.create}"> <b>#{out.create}</b>
+		</a>
 		<h:form id="restaurantUserList">
 			<p:dataTable var="user" value="#{restaurantUserBean.lazyDataModel}"
 				paginator="true" rows="10" rowsPerPageTemplate="5,10,50"
-				id="restaurantUserTable" lazy="true"
-				selectionMode="single" selection="#{restaurantUserBean.selected}"
-				rowKey="#{user.id}"
+				id="restaurantUserTable" lazy="true" selectionMode="single"
+				selection="#{restaurantUserBean.selected}" rowKey="#{user.id}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 				<p:ajax event="rowSelect" listener="#{restaurantUserBean.redirect}" />
 				<p:column headerText="#{out.adminName}" sortBy="#{user.name}"
@@ -23,18 +25,14 @@
 					filterBy="#{user.username}">
 					<h:outputText value="#{user.username}" />
 				</p:column>
-				<p:column headerText="#{out.adminPhoneNumber}" sortBy="#{user.phoneNumber}"
-					filterBy="#{user.phoneNumber}">
+				<p:column headerText="#{out.adminPhoneNumber}"
+					sortBy="#{user.phoneNumber}" filterBy="#{user.phoneNumber}">
 					<h:outputText value="#{user.phoneNumber}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>
-		
-					<a href="#{request.contextPath}/secured/restaurant_user/create.xhtml"
-						class="btn btn-info" title=""> <b>#{out.add_new_admin}</b>
-					</a>
-					
-		
+
+
 	</ui:define>
 
 </ui:composition>
