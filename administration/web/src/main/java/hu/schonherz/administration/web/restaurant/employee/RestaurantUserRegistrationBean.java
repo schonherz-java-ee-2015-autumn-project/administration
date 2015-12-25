@@ -81,7 +81,7 @@ public class RestaurantUserRegistrationBean implements Serializable {
 	}
 
 	public void init() {
-		restaurants = restaurantService.getRestaurants();
+		restaurants = restaurantService.getOnlyActiveRestaurants();
 	}
 
 	public UserService getUserService() {

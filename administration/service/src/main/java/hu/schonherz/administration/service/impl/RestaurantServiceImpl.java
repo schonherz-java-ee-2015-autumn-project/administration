@@ -99,13 +99,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 		if (filters.containsKey("price")) {
 			String priceString = (String) filters.get("price");
 			Integer price = 0;
-			try{
-			price = Integer.parseInt(priceString);
-			}catch(NumberFormatException e){
+			try {
+				price = Integer.parseInt(priceString);
+			} catch (NumberFormatException e) {
 			}
 			spec = Specifications.where(spec).and(RestaurantSpecification.priceBetween(price));
 		}
-		
+
 		return spec;
 	}
 
@@ -131,6 +131,13 @@ public class RestaurantServiceImpl implements RestaurantService {
 			return new PageRequest(first, pageSize);
 
 		}
+
+	}
+
+	@Override
+	public List<RestaurantDTO> getOnlyActiveRestaurants() {
+		return RestaurantConverter
+				.toDTO(restaurantDao.findAll(Specifications.where(RestaurantSpecification.notDeleted())));
 
 	}
 }
