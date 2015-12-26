@@ -53,23 +53,25 @@ public class RestaurantUserModifyBean {
 	}
 
 	public void delete() {
-		FacesContext context = FacesContext.getCurrentInstance();
+		
 		try {
-			selected.setRemove(true);
+			
 			userService.removeUser(selected.getId());
-			RestaurantDTO r = restaurantService.findRestaurantByUser(selected);
-			if (r != null) {
-				r.getEmployees().remove(selected);
-				restaurantService.save(r);
-			}
-			context.addMessage("adminForm:deletion_status",
-					new FacesMessage(MessageProvider.getValue("successful_deletion")));
+			FacesMessage m = new FacesMessage(MessageProvider.getValue("successful_deletion"));
+			addMessage(m);
+
 
 		} catch (Exception e) {
-			context.addMessage("adminForm:deletion_status",
-					new FacesMessage(MessageProvider.getValue("deletion_failed")));
+			FacesMessage m = new FacesMessage(MessageProvider.getValue("deletion_failed"));
+			addMessage(m);
 		}
 
+	}
+	
+	
+	private void addMessage(FacesMessage message){
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage("adminForm:deletion_status", message);
 	}
 
 	public void init() {
