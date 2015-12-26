@@ -48,11 +48,14 @@
 				<h:panelGrid columns="1">
 					<p:commandButton value="#{out.save_button}" update="adminForm"
 						actionListener="#{courierEditBean.modify}"
-						id="save_courier_status" />
+						id="save_courier_status" 
+						icon="ui-icon-check" 
+						style="width:100px;height:30px"/>
 				</h:panelGrid>
 				
 				<p:growl id="passMsg" showDetail="true" />
-				<p:commandButton value="#{out.remove}">
+				<p:commandButton value="#{out.remove}" icon="ui-icon-trash" 
+				style="width:100px;height:30px">
 					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
 	    			<f:param name="userID" value="#{courierEditBean.selected.id}" />
 					<p:ajax update="adminForm" listener="#{UserBean.removeUser}"/>

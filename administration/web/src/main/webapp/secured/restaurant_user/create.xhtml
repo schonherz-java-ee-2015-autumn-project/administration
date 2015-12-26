@@ -75,12 +75,16 @@
 						</p:column>
 					</p:selectOneMenu>
 					<p:message for="restaurant_list" id="restaurant_listMsg" />
-					<p:commandButton value="#{out.save}" update="userregpanel"
-					resetValues="true"
-					actionListener="#{restaurantUserRegistrationBean.registration}"
-					id="save_status" />
-					<p:message for="save_status" />
+					
 				</p:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{out.save_button}" update="userregpanel"
+						actionListener="#{restaurantUserRegistrationBean.registration}"
+						icon="ui-icon-check" 
+						resetValues="true" />
+				</h:panelGrid>
+				<p:growl id="regMsg" showDetail="true" />
 				
 			</p:panel>
 		</h:form>

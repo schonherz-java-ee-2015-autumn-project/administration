@@ -61,11 +61,15 @@
 				<h:panelGrid columns="1">
 					<p:commandButton value="#{out.save_button}" update="adminForm"
 						actionListener="#{adminEditBean.modify}"
-						id="save_status" />
+						id="save_status" 
+						icon="ui-icon-check"
+						style="width:100px;height:30px"/>
 				</h:panelGrid>
 				
 				<p:growl id="passMsg" showDetail="true" />
-				<p:commandButton value="#{out.remove_admin}">
+				
+				<p:commandButton value="#{out.remove_admin}" icon="ui-icon-trash"
+				style="width:100px;height:30px">
 					<p:confirm header="#{out.confirmation_header}" message="#{out.confirmation_text}" icon="ui-icon-alert" />
 	    			<f:param name="userID" value="#{adminEditBean.selected.id}" />
 					<p:ajax update="adminForm" listener="#{UserBean.removeUser}"/>

@@ -53,9 +53,13 @@
 
 
 				</p:panelGrid>
-				<p:commandButton style="width:35%;margin-left:37%;"
-					value="#{out.save}" update="courierregpanel" resetValues="true"
-					actionListener="#{courierregBean.registration}" />
+				
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{out.save_button}" update="courierregpanel"
+						actionListener="#{courierregBean.registration}"
+						icon="ui-icon-check" 
+						resetValues="true" />
+				</h:panelGrid>
 				<p:growl id="regMsg" showDetail="true" />
 
 			</p:panel>

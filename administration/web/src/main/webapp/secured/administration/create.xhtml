@@ -55,9 +55,14 @@
 					<p:message for="passwordconf" id="passconfMsg" />
 
 				</p:panelGrid>
-				<p:commandButton style="width:35%;margin-left:37%;"
-					value="#{out.save}" update="userregpanel" resetValues="true"
-					actionListener="#{registrationBean.registration}" />
+				
+				
+				<h:panelGrid columns="2">
+					<p:commandButton value="#{out.save_button}" update="userregpanel"
+						actionListener="#{registrationBean.registration}"
+						icon="ui-icon-check"
+						resetValues="true" />
+				</h:panelGrid>
 				<p:growl id="regMsg" showDetail="true" />
 			</p:panel>
 		</h:form>

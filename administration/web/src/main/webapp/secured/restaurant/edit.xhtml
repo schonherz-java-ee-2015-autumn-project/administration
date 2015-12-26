@@ -58,16 +58,20 @@
 					</p:inputMask>
 					<p:message for="price" id="priceMsg" />
 				</h:panelGrid>
-				<h:panelGrid columns="2">
+				<h:panelGrid columns="1">
 					<p:commandButton value="#{out.save_button}" update="panel"
 						actionListener="#{restaurantEditBean.modify}" icon="ui-icon-check"
-						id="save_status" />
-					<p:message for="save_status" />
+						id="save_status" 
+						style="width:100px;height:30px"
+						/>
+					<p:growl id="passMsg" showDetail="true" />
 
 					<p:commandButton value="#{out.delete}"
 						actionListener="#{restaurantEditBean.delete}"
 						update="panel"
-						id="deletion_status">
+						id="deletion_status"
+						icon="ui-icon-trash"
+						style="width:100px;height:30px">
 						<p:confirm header="#{out.confirmation}"
 							message="#{out.confirmation_question}" icon="ui-icon-alert" />
 					</p:commandButton>
