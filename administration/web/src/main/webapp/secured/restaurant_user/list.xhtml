@@ -29,6 +29,11 @@
 					sortBy="#{user.phoneNumber}" filterBy="#{user.phoneNumber}">
 					<h:outputText value="#{user.phoneNumber}" />
 				</p:column>
+				
+				<p:column headerText="#{out.restaurant}"
+					 >
+					<h:outputText value="#{user.restaurant.name}" />
+				</p:column>
 			</p:dataTable>
 		</h:form>
 

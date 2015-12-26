@@ -10,30 +10,33 @@ import javax.inject.Named;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
+import hu.schonherz.administration.serviceapi.RestaurantService;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
 
 @Named
-@EJB(name = "ejb.UserService", beanInterface = UserService.class)
-public class LazyRestaurantUser extends LazyDataModel<UserDTO> {
+public class LazyRestaurantUser extends LazyDataModel<RestaurantEmployee> {
 
-	@EJB
-	UserService userService;
+	@EJB(lookup = "ejb.UserService", beanInterface = UserService.class)
+	private UserService userService;
+
+	@EJB(lookup = "ejb.RestaurantService", beanInterface = RestaurantService.class)
+	private RestaurantService restaurantService;
 
 	@Override
-	public UserDTO getRowData(String rowKey) {
-		return userService.findById(Long.parseLong(rowKey));
+	public RestaurantEmployee getRowData(String rowKey) {
+		return EmployeeConverter.dtoToEmployee(userService.findById(Long.parseLong(rowKey)));
 	}
 
 	@Override
-	public Object getRowKey(UserDTO userDTO) {
+	public Object getRowKey(RestaurantEmployee userDTO) {
 		return userDTO.getId();
 	}
 
 	@Override
-	public List<UserDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+	public List<RestaurantEmployee> load(int first, int pageSize, String sortField, SortOrder sortOrder,
 			Map<String, Object> filters) {
 		
 		CustomSortOrder order;
@@ -52,7 +55,7 @@ public class LazyRestaurantUser extends LazyDataModel<UserDTO> {
 				return Collections.emptyList();
 			} else {
 				this.setRowCount(rowCount);
-				return list;
+				return EmployeeConverter.dtoListToEmployee(list, restaurantService);
 			}
 		} else {
 			return Collections.emptyList();
