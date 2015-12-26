@@ -13,7 +13,7 @@
 					<p:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{courierregBean.name}" label="name">
 						<f:validator validatorId="NameValidator" />
-						<p:ajax update="phoneMsg" event="keyup" />
+						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>
 					<p:message for="name" id="nameMsg" />
 
