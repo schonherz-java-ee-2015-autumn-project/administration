@@ -35,7 +35,7 @@ public class RestaurantUserModifyBean {
 		if (UserValidator.isValidEditUser(selected)) {
 			try {
 				userService.saveUser(selected);
-				if(!selected.equals(oldRestaurant)){
+				if (!selected.equals(oldRestaurant)) {
 					oldRestaurant.getEmployees().remove(selected);
 					restaurantService.save(oldRestaurant);
 					selectedRestaurant.getEmployees().add(selected);
@@ -45,13 +45,31 @@ public class RestaurantUserModifyBean {
 						new FacesMessage(MessageProvider.getValue("successful_edit")));
 
 			} catch (Exception e) {
-				context.addMessage("adminForm:edit_status",
-						new FacesMessage(MessageProvider.getValue("edit_failed")));
+				context.addMessage("adminForm:edit_status", new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
 		} else {
-			context.addMessage("adminForm:edit_status",
-					new FacesMessage(MessageProvider.getValue("edit_failed")));
+			context.addMessage("adminForm:edit_status", new FacesMessage(MessageProvider.getValue("edit_failed")));
 		}
+	}
+
+	public void delete() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		try {
+			selected.setRemove(true);
+			userService.removeUser(selected.getId());
+			RestaurantDTO r = restaurantService.findRestaurantByUser(selected);
+			if (r != null) {
+				r.getEmployees().remove(selected);
+				restaurantService.save(r);
+			}
+			context.addMessage("adminForm:deletion_status",
+					new FacesMessage(MessageProvider.getValue("successful_deletion")));
+
+		} catch (Exception e) {
+			context.addMessage("adminForm:deletion_status",
+					new FacesMessage(MessageProvider.getValue("deletion_failed")));
+		}
+
 	}
 
 	public void init() {
