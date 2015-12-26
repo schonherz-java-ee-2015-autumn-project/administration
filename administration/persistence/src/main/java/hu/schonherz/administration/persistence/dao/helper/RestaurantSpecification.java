@@ -1,7 +1,10 @@
 package hu.schonherz.administration.persistence.dao.helper;
 
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -9,6 +12,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.persistence.entities.Restaurant_;
+import hu.schonherz.administration.persistence.entities.Role;
+import hu.schonherz.administration.persistence.entities.User;
+import hu.schonherz.administration.persistence.entities.User_;
 
 public class RestaurantSpecification {
 
@@ -93,5 +99,16 @@ public class RestaurantSpecification {
 
 		};
 	}
+	
+	public static Specification<Restaurant> hasUser(User user) {
+		return new Specification<Restaurant>() {
 
+			@Override
+			public Predicate toPredicate(Root<Restaurant> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				Expression<List<User>> employees = root.get(Restaurant_.employees); 
+				return cb.isMember(user, employees);
+			}
+
+		};
+	}
 }

@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="adminForm">
+			<f:metadata>
+				<f:viewParam name="selected" value="#{restaurantUserEditBean.id}" />
+				<f:event type="preRenderView"
+					listener="#{restaurantUserEditBean.init}" />
+			</f:metadata>
+			<h:inputHidden id="selectId" value="#{restaurantUserEditBean.id}" />
+			<p:panel id="panel" header="#{out.edit_users}">
+				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
+
+					<h:outputLabel for="name" value="#{out.username}" />
+					<p:inputText id="name"
+						value="#{restaurantUserEditBean.selected.name}" required="false"
+						label="#{out.username}">
+						<f:validator validatorId="NameValidator" />
+						<p:ajax update="nameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="name" id="nameMsg" />
+
+					<h:outputLabel for="userName" value="#{out.username}" />
+					<p:inputText id="userName"
+						value="#{restaurantUserEditBean.selected.username}"
+						required="false" label="#{out.username}"
+						validator="#{userNameEditValidator.validate}">
+						<p:ajax update="usernameMsg" event="keyup" />
+					</p:inputText>
+					<p:message for="userName" id="usernameMsg" />
+
+					<p:outputLabel for="phoneNumber" value="#{out.adminPhoneNumber }" />
+					<p:inputMask id="phoneNumber"
+						value="#{restaurantUserEditBean.selected.phoneNumber}"
+						required="false" label="#{out.restaurantPrice }"
+						mask="9999999?9999" maxlength="11" slotChar=" ">
+						<f:validator validatorId="phoneNumberValidator" />
+						<p:ajax update="phoneNumberMsg" event="keyup" />
+
+					</p:inputMask>
+					<p:message for="phoneNumber" id="phoneNumberMsg" />
+
+					<p:outputLabel for="restaurant_list" value="#{out.restaurants}" />
+					<p:selectOneMenu id="restaurant_list"
+						value="#{restaurantUserEditBean.selectedRestaurant}"
+						converter="#{restaurantConverter}" panelStyle="width:180px"
+						effect="fade" var="restaurant" style="width:160px" filter="true"
+						filterMatchMode="startsWith">
+						<f:selectItems value="#{restaurantUserEditBean.restaurants}"
+							var="rest" itemLabel="#{rest.name}" itemValue="#{rest}" />
+
+						<p:column>
+							<h:outputText value="#{restaurant.name}" />
+						</p:column>
+					</p:selectOneMenu>
+					<p:message for="restaurant_list" id="restaurant_listMsg" />
+
+					<p:commandButton value="#{out.save}" update="panel"
+						resetValues="true"
+						actionListener="#{restaurantUserEditBean.modify}" id="edit_status" />
+					<p:message for="edit_status" />
+
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
