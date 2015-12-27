@@ -7,5 +7,5 @@ import javax.jws.WebService;
 public interface Example {
 	@WebMethod
 	public String echo(String message);
-	
+
 }
