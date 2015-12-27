@@ -151,6 +151,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 	public RestaurantDTO findRestaurantByUser(UserDTO user) {
 		User u = userDao.findByUsername(user.getUsername());
 		List<Restaurant> result = restaurantDao.findAll(Specifications.where(RestaurantSpecification.notDeleted()).and(RestaurantSpecification.hasUser(u)));
-		return RestaurantConverter.toDTO(result.get(0));
+		if(result!=null && !result.isEmpty()){
+			return RestaurantConverter.toDTO(result.get(0));
+		}else{
+			return null;
+		}
 	}
 }
