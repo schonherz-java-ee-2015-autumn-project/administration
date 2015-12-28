@@ -1,6 +1,7 @@
 package hu.schonherz.administration.web.restaurant.employee;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -55,6 +56,7 @@ public class RestaurantUserRegistrationBean implements Serializable {
 		user.setPhoneNumber(phone);
 		user.setPassword(password);
 		user.setRemove(false);
+		user.setModdate(new Date());
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
 
 			user.setPassword(bCryptPasswordEncoder.encode(password));

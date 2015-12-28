@@ -1,6 +1,7 @@
 package hu.schonherz.administration.web.courier;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -36,8 +37,6 @@ public class CourierRegistrationBean implements Serializable {
 	
 	public void registration() {
 		
-		
-		System.out.println("eeeeeeeeeeeeeeeeee");
 
 		current = FacesContext.getCurrentInstance();
 		UserDTO user = new UserDTO();
@@ -48,6 +47,7 @@ public class CourierRegistrationBean implements Serializable {
 		user.setPhoneNumber(phone);
 		user.setPassword(password);
 		user.setRemove(false);
+		user.setModdate(new Date());
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
 			try {
 				user.setPassword(bCryptPasswordEncoder.encode(password));
