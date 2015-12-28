@@ -11,7 +11,7 @@
 		<h:form id="restaurantForm">
 
 			<p:panel id="panel" header="#{out.new_restaurant }">
-				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
+				<p:panelGrid columns="3">
 					<p:outputLabel for="name" value="#{out.restaurantName }" />
 					<p:inputText id="name" value="#{RestaurantCreateBean.name}"
 						required="false" label="#{out.restaurantName }">
@@ -51,13 +51,16 @@
 						<p:ajax update="priceMsg" event="keyup" />
 					</p:inputMask>
 					<p:message for="price" id="priceMsg" />
-				</h:panelGrid>
+				</p:panelGrid>
+				
+				
 				<h:panelGrid columns="2">
 					<p:commandButton value="#{out.save_button}" update="panel"
 						actionListener="#{RestaurantCreateBean.save}"
-						icon="ui-icon-check" id="save_status" />
-					<p:message for="save_status" />
+						icon="ui-icon-check" 
+						resetValues="true" />
 				</h:panelGrid>
+				<p:growl id="regMsg" showDetail="true" />
 			</p:panel>
 
 		</h:form>
