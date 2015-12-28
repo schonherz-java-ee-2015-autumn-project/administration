@@ -28,7 +28,11 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>service-api</artifactId>
+			<version>${version}</version>
+		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>

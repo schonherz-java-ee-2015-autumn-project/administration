@@ -1,6 +1,7 @@
 package hu.schonherz.administration.persistence.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -34,6 +35,8 @@ public class User extends BaseEntity implements Serializable {
 	@Column(nullable=false)
 	private boolean remove;
 	
+	@Column(nullable=false, columnDefinition = "DATETIME DEFAULT NOW()")
+	private Date moddate = new Date();
 	
 	public boolean isRemove() {
 		return remove;
@@ -85,6 +88,14 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getModdate() {
+		return moddate;
+	}
+
+	public void setModdate(Date moddate) {
+		this.moddate = moddate;
 	}
 
 }

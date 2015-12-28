@@ -16,5 +16,7 @@ public interface UserDao extends JpaRepository<User, Long> ,  JpaSpecificationEx
 	User findById(long id);
 
 	Long countByUsername(String username);
+	
+	
 
 }

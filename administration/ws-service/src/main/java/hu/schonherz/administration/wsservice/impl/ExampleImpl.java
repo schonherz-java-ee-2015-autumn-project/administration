@@ -12,6 +12,7 @@ import javax.jws.WebService;
 			portName="examplePort")
 public class ExampleImpl implements Example {
 
+	
 	public String echo(String message) {
 		System.out.println(message);
 		return "Example: " + message;
