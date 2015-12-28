@@ -60,19 +60,19 @@
 						</p:column>
 					</p:selectOneMenu>
 					<p:message for="restaurant_list" id="restaurant_listMsg" />
+				</h:panelGrid>
 
+				<h:panelGrid columns="1">
+					<p:commandButton value="#{out.save_button}" update="panel"
+						actionListener="#{restaurantUserEditBean.modify}" id="save_status"
+						icon="ui-icon-check" style="width:100px;height:30px" />
 
-					<h:panelGrid columns="1">
-						<p:commandButton value="#{out.save_button}" update="panel"
-							actionListener="#{restaurantUserEditBean.modify}" id="save_status"
-							icon="ui-icon-check" style="width:100px;height:30px" />
-					</h:panelGrid>
 					<p:growl id="passMsg" showDetail="true" />
 
 					<p:commandButton value="#{out.delete}"
-						actionListener="#{restaurantUserEditBean.delete}"
-						update="panel"
-						id="deletion_status">
+						actionListener="#{restaurantUserEditBean.delete}" update="panel"
+						id="deletion_status" icon="ui-icon-trash"
+						style="width:100px;height:30px">
 						<p:confirm header="#{out.confirmation}"
 							message="#{out.confirmation_question}" icon="ui-icon-alert" />
 					</p:commandButton>
@@ -83,6 +83,8 @@
 						<p:commandButton value="#{out.no}" type="button"
 							styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 					</p:confirmDialog>
+
+
 				</h:panelGrid>
 			</p:panel>
 		</h:form>
