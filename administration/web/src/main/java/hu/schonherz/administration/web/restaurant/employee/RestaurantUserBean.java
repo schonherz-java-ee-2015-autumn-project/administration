@@ -20,11 +20,11 @@ public class RestaurantUserBean {
 	@Inject
 	private LazyRestaurantUser lazyDataModel;
 	
-	private UserDTO selected;
+	private RestaurantEmployee selected;
 	
 	public void redirect(SelectEvent event) {
-		if(!selected.equals(((UserDTO)event.getObject()))){
-			selected = (UserDTO)event.getObject();
+		if(!selected.equals(((RestaurantEmployee)event.getObject()))){
+			selected = (RestaurantEmployee)event.getObject();
 		}
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 	    try {
@@ -35,12 +35,12 @@ public class RestaurantUserBean {
 	}
 	
 	
-	public UserDTO getSelected() {
+	public RestaurantEmployee getSelected() {
 		return selected;
 	}
 
 
-	public void setSelected(UserDTO selected) {
+	public void setSelected(RestaurantEmployee selected) {
 		this.selected = selected;
 	}
 

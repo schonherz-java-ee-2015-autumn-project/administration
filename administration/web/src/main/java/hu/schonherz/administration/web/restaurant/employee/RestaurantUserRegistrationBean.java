@@ -61,8 +61,10 @@ public class RestaurantUserRegistrationBean implements Serializable {
 			UserDTO savedUser;
 			try {
 				savedUser = userService.saveRestaurantUser(user);
+				if(selectedRestaurant!=null){
 				selectedRestaurant.getEmployees().add(savedUser);
 				restaurantService.save(selectedRestaurant);
+				}
 				FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "",
 						MessageProvider.getValue("successful_save"));
 				current.addMessage("userregform:save_status", msg);

@@ -35,30 +35,54 @@ public class RestaurantUserModifyBean {
 		if (UserValidator.isValidEditUser(selected)) {
 			try {
 				userService.saveUser(selected);
-				if(!selected.equals(oldRestaurant)){
-					oldRestaurant.getEmployees().remove(selected);
-					restaurantService.save(oldRestaurant);
+				if (oldRestaurant == null && selectedRestaurant!=null) {
 					selectedRestaurant.getEmployees().add(selected);
 					restaurantService.save(selectedRestaurant);
+				} else {
+					if (!selected.equals(oldRestaurant)) {
+						oldRestaurant.getEmployees().remove(selected);
+						restaurantService.save(oldRestaurant);
+						selectedRestaurant.getEmployees().add(selected);
+						restaurantService.save(selectedRestaurant);
+					}
 				}
 				context.addMessage("adminForm:edit_status",
 						new FacesMessage(MessageProvider.getValue("successful_edit")));
 
 			} catch (Exception e) {
-				context.addMessage("adminForm:edit_status",
-						new FacesMessage(MessageProvider.getValue("edit_failed")));
+				context.addMessage("adminForm:edit_status", new FacesMessage(MessageProvider.getValue("edit_failed")));
 			}
 		} else {
-			context.addMessage("adminForm:edit_status",
-					new FacesMessage(MessageProvider.getValue("edit_failed")));
+			context.addMessage("adminForm:edit_status", new FacesMessage(MessageProvider.getValue("edit_failed")));
 		}
+	}
+
+	public void delete() {
+
+		try {
+
+			userService.removeUser(selected.getId());
+			FacesMessage m = new FacesMessage(MessageProvider.getValue("successful_deletion"));
+			addMessage(m);
+
+		} catch (Exception e) {
+			FacesMessage m = new FacesMessage(MessageProvider.getValue("deletion_failed"));
+			addMessage(m);
+		}
+
+	}
+
+	private void addMessage(FacesMessage message) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage("adminForm:deletion_status", message);
 	}
 
 	public void init() {
 		selected = userService.findById(id);
 		restaurants = restaurantService.getOnlyActiveRestaurants();
 		oldRestaurant = restaurantService.findRestaurantByUser(selected);
-		selectedRestaurant = oldRestaurant;
+		if (oldRestaurant != null)
+			selectedRestaurant = oldRestaurant;
 	}
 
 	public UserService getUserService() {

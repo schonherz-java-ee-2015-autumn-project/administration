@@ -99,5 +99,6 @@
 		<module>persistence</module>
 		<module>web</module>
 		<module>ear</module>
+		<module>ws-service</module>
 	</modules>
 </project>
