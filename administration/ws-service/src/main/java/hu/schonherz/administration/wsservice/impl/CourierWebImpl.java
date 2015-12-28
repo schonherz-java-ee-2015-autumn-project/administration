@@ -3,30 +3,32 @@ package hu.schonherz.administration.wsservice.impl;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import javax.jws.WebService;
 
+import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
-import hu.schonherz.administration.serviceapi.*;
+import hu.schonherz.administration.serviceapi.RemoteUserService;
+import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.wsservice.dto.WebUserDTO;
 import hu.schonherz.administration.wsserviceapi.CourierWeb;
-import hu.schonherz.administration.wsserviceapi.WebUserDTO;
 import hu.schonherz.administration.wsserviceapi.converter.UserConverter;
+
 @Stateless(mappedName = "courierWebImpl")
-@WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.CourierWeb",
-			serviceName="courierWebImpl")
+@WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.CourierWeb", serviceName = "courierWebImpl")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-@Local(CourierWeb.class)
+@Interceptors(SpringBeanAutowiringInterceptor.class)
 public class CourierWebImpl implements CourierWeb {
 
-	@EJB(lookup = "java:global.ear.service-1.0.0.RemoteUserServiceImpl!hu.schonherz.administration.serviceapi.RemoteUserService")
+	@EJB
 	private RemoteUserService remoteUserService;
+
 	@Override
-	public List<WebUserDTO> getUsers() {
-		return UserConverter.toWebUserDTO(remoteUserService.getUsers("eee"));		
-		
+	public List<WebUserDTO> getUsers(UserRole role) {
+		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role));
 	}
 
 }

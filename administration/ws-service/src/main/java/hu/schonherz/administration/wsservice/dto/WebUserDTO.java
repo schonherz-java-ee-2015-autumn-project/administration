@@ -1,4 +1,4 @@
-package hu.schonherz.administration.wsserviceapi;
+package hu.schonherz.administration.wsservice.dto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +13,6 @@ public class WebUserDTO implements Serializable {
 	private String password;
 	private boolean remove;
 	private Date moddate;
-	
 
 	public boolean isRemove() {
 		return remove;
@@ -22,7 +21,7 @@ public class WebUserDTO implements Serializable {
 	public void setRemove(boolean remove) {
 		this.remove = remove;
 	}
-	
+
 	public Date getModdate() {
 		return moddate;
 	}

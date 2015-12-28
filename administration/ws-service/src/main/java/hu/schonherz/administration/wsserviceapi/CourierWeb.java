@@ -6,27 +6,16 @@ import javax.jws.WebMethod;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 
+import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.wsservice.dto.WebUserDTO;
+
 
 @WebService
 public interface CourierWeb {
 	
-	/**
-	 * A felhasz�ln�l�kat adja vissza az adatb�zisb�l amit ut�na egy UserVO list�ban dob �t a Courier Modul-ra.
-	 * UserVO:
-	 *  Long id;
-		String fullname;
-		String username;
-		String password;
-		Long transporting;
-		List<RoleVO> roles; 
-		Long globalid;
-		Date regdate;
-	    Date moddate;
-	 */
-	
-	@WebMethod(operationName = "getUsersList")
+	@WebMethod(operationName = "getUsersByRole")
 	@WebResult(name = "usersListResponse")
-	public List<WebUserDTO> getUsers();
+	public List<WebUserDTO> getUsers(UserRole role);
 	
 	/**
 	 * A szabad sz�ll�t�sokat adja vissza egy CargoVO t�pus� list�ban.
