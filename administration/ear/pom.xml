@@ -33,9 +33,20 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>ws-service</artifactId>
+			<version>1.0.0</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
 			</dependency>
+			
+<dependency>
+<groupId>org.springframework</groupId>
+<artifactId>spring-web</artifactId>
+</dependency>
 	</dependencies>
 
 	<build>
@@ -56,6 +67,10 @@
 						<ejbModule>
 							<groupId>hu.schonherz.administration</groupId>
 							<artifactId>service</artifactId>
+						</ejbModule>
+						<ejbModule>
+							<groupId>hu.schonherz.administration</groupId>
+							<artifactId>ws-service</artifactId>
 						</ejbModule>
 					</modules>
 				</configuration>
