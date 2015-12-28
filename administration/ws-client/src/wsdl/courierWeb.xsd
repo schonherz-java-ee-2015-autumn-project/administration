@@ -1,0 +1,38 @@
+
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). 
+	RI's version is JAX-WS RI 2.2.10-b140319.1121 svn-revision#7b34660d6bc70e587e8ec81a17e4d76af68816a6. -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:ns0="http://wsserviceapi.administration.schonherz.hu/"
+	targetNamespace="http://wsserviceapi.administration.schonherz.hu/">
+	<xsd:complexType name="getUsersByRole">
+		<xsd:sequence>
+			<xsd:element name="arg0" type="ns0:userRole" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="webUserDTO">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:long" minOccurs="0" />
+			<xsd:element name="moddate" type="xsd:dateTime"
+				minOccurs="0" />
+			<xsd:element name="name" type="xsd:string" minOccurs="0" />
+			<xsd:element name="password" type="xsd:string" minOccurs="0" />
+			<xsd:element name="remove" type="xsd:boolean" />
+			<xsd:element name="username" type="xsd:string" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="getUsersByRoleResponse">
+		<xsd:sequence>
+			<xsd:element name="usersListResponse" type="ns0:webUserDTO"
+				minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="getUsersByRole" type="ns0:getUsersByRole" />
+	<xsd:element name="getUsersByRoleResponse" type="ns0:getUsersByRoleResponse" />
+	<xsd:simpleType name="userRole">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ADMIN" />
+			<xsd:enumeration value="COURIER" />
+			<xsd:enumeration value="RESTAURANT" />
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
