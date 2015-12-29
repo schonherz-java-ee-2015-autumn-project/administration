@@ -36,7 +36,7 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 
 
 	@Override
-	public List<WebUserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException {
+	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role, lastModified));
 	}
 

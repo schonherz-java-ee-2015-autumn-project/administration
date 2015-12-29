@@ -21,7 +21,7 @@ public interface SynchronizationService {
 
 	@WebMethod(operationName = "getUsersByRoleAndDate")
 	@WebResult(name = "usersListResponse")
-	public List<WebUserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException;
+	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException;
 	/**
 	 * A szabad sz�ll�t�sokat adja vissza egy CargoVO t�pus� list�ban. CargoVO:
 	 * Long id; UserVO user; RestaurantVO restaurant; List<AddressVO> addresses;
