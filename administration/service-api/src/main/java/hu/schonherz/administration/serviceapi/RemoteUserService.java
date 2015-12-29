@@ -4,9 +4,10 @@ import java.util.List;
 
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
 
 public interface RemoteUserService {
 
-	public List<UserDTO> getUsers(UserRole role);
+	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException;
 
 }

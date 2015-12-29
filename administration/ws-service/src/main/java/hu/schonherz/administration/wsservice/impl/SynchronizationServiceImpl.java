@@ -13,21 +13,23 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
 import hu.schonherz.administration.wsservice.dto.WebUserDTO;
-import hu.schonherz.administration.wsserviceapi.CourierWeb;
+import hu.schonherz.administration.wsserviceapi.SynchronizationService;
 import hu.schonherz.administration.wsserviceapi.converter.UserConverter;
 
-@Stateless(mappedName = "courierWebImpl")
-@WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.CourierWeb", serviceName = "courierWebImpl")
+@Stateless(mappedName = "SynchronizationServiceImpl")
+@WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.SynchronizationService", serviceName = "SynchronizationServiceImpl")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
-public class CourierWebImpl implements CourierWeb {
+public class SynchronizationServiceImpl implements SynchronizationService {
 
 	@EJB
 	private RemoteUserService remoteUserService;
 
+	
 	@Override
-	public List<WebUserDTO> getUsers(UserRole role) {
+	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role));
 	}
 

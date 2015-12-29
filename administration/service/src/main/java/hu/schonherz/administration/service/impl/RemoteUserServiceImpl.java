@@ -24,6 +24,7 @@ import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
 
 @Stateless(mappedName = "RemoteUserService")
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -38,8 +39,11 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 	RoleDao roleDao;
 	
 	@Override
-	public List<UserDTO> getUsers(UserRole role) {
-		System.out.println(role);
+	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException{
+
+		if(role.equals(UserRole.ADMIN)){
+			throw new NotAllowedRoleException();
+		}
 		Specification<User> roleSpec = buildRoleSpecification(role);
 		return UserConverter.toVo(userDao.findAll(roleSpec));
 	}
@@ -48,15 +52,14 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 		Specification<User> spec = null;
 		Role roleEntity;
 		switch(role){
-		case ADMIN:
-			roleEntity = roleDao.findByName("ROLE_ADMIN");
-			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
 		case COURIER:
 			roleEntity = roleDao.findByName("ROLE_COURIER");
 			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
 		case RESTAURANT: 
 			roleEntity = roleDao.findByName("ROLE_RESTAURANT");
 			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
+		default:
+			break;
 		}
 		return spec;
 	}
