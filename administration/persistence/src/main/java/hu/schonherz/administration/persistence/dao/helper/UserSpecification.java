@@ -1,5 +1,6 @@
 package hu.schonherz.administration.persistence.dao.helper;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -84,5 +85,14 @@ public class UserSpecification {
 
 		};
 	}
-	
+	public static Specification<User> lastModifiedAt(Date date) {
+		return new Specification<User>() {
+
+			@Override
+			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.greaterThanOrEqualTo(root.<Date>get(User_.moddate),date );
+			}
+
+		};
+	}
 }

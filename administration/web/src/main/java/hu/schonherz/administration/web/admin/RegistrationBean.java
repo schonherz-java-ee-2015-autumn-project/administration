@@ -1,6 +1,7 @@
 package hu.schonherz.administration.web.admin;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -48,6 +49,7 @@ public class RegistrationBean implements Serializable {
 		user.setPhoneNumber(phone);
 		user.setPassword(password);
 		user.setRemove(false);
+		user.setModdate(new Date());
 		if (UserValidator.isValidUser(user) && password.equals(passconf)) {
 			try {
 				user.setPassword(bCryptPasswordEncoder.encode(password));

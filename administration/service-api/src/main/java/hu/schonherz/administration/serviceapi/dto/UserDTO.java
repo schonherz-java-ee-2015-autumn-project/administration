@@ -1,6 +1,7 @@
 package hu.schonherz.administration.serviceapi.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class UserDTO implements Serializable {
@@ -13,7 +14,7 @@ public class UserDTO implements Serializable {
 	private String password;
 	private List<RoleDTO> roles;
 	private boolean remove;
-	
+	private Date moddate;
 
 	public boolean isRemove() {
 		return remove;
@@ -97,5 +98,13 @@ public class UserDTO implements Serializable {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Date getModdate() {
+		return moddate;
+	}
+
+	public void setModdate(Date moddate) {
+		this.moddate = moddate;
 	}
 }

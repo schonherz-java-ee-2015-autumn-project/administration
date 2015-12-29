@@ -100,5 +100,6 @@
 		<module>web</module>
 		<module>ear</module>
 		<module>ws-service</module>
+		<module>ws-client</module>
 	</modules>
 </project>

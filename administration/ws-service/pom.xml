@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>hu.schonherz.administration</groupId>
-    <artifactId>administration</artifactId>
-    <version>1.0.0</version>
-  </parent>
-  <artifactId>ws-service</artifactId>
-  <packaging>ejb</packaging>
-  <name>ws-service</name>
-  	<properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>hu.schonherz.administration</groupId>
+		<artifactId>administration</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>ws-service</artifactId>
+	<packaging>ejb</packaging>
+	<name>ws-service</name>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
@@ -22,16 +23,24 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>service-api</artifactId>
+			<version>${version}</version>
+		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 	</dependencies>
 </project>
