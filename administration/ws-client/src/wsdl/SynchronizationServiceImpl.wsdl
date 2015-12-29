@@ -12,7 +12,7 @@
 	<types>
 		<xsd:schema>
 			<xsd:import namespace="http://wsserviceapi.administration.schonherz.hu/"
-				schemaLocation="http://192.168.0.16:7001/SynchronizationServiceImpl/SynchronizationServiceImpl?xsd=1" />
+				schemaLocation="http://192.168.0.14:7001/SynchronizationServiceImpl/SynchronizationServiceImpl?xsd=1" />
 		</xsd:schema>
 	</types>
 	<message name="getUsersByRole">
@@ -24,6 +24,12 @@
 	<message name="NotAllowedRoleException">
 		<part name="fault" element="tns:NotAllowedRoleException" />
 	</message>
+	<message name="getUsersByRoleAndDate">
+		<part name="parameters" element="tns:getUsersByRoleAndDate" />
+	</message>
+	<message name="getUsersByRoleAndDateResponse">
+		<part name="parameters" element="tns:getUsersByRoleAndDateResponse" />
+	</message>
 	<portType name="SynchronizationService">
 		<operation name="getUsersByRole">
 			<input
@@ -34,6 +40,16 @@
 				message="tns:getUsersByRoleResponse" />
 			<fault message="tns:NotAllowedRoleException" name="NotAllowedRoleException"
 				wsam:Action="http://wsserviceapi.administration.schonherz.hu/SynchronizationService/getUsersByRole/Fault/NotAllowedRoleException" />
+		</operation>
+		<operation name="getUsersByRoleAndDate">
+			<input
+				wsam:Action="http://wsserviceapi.administration.schonherz.hu/SynchronizationService/getUsersByRoleAndDateRequest"
+				message="tns:getUsersByRoleAndDate" />
+			<output
+				wsam:Action="http://wsserviceapi.administration.schonherz.hu/SynchronizationService/getUsersByRoleAndDateResponse"
+				message="tns:getUsersByRoleAndDateResponse" />
+			<fault message="tns:NotAllowedRoleException" name="NotAllowedRoleException"
+				wsam:Action="http://wsserviceapi.administration.schonherz.hu/SynchronizationService/getUsersByRoleAndDate/Fault/NotAllowedRoleException" />
 		</operation>
 	</portType>
 	<binding name="SynchronizationServiceImplPortBinding" type="tns:SynchronizationService">
@@ -51,11 +67,23 @@
 				<soap:fault name="NotAllowedRoleException" use="literal" />
 			</fault>
 		</operation>
+		<operation name="getUsersByRoleAndDate">
+			<soap:operation soapAction="" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="NotAllowedRoleException">
+				<soap:fault name="NotAllowedRoleException" use="literal" />
+			</fault>
+		</operation>
 	</binding>
 	<service name="SynchronizationServiceImpl">
 		<port name="SynchronizationServiceImplPort" binding="tns:SynchronizationServiceImplPortBinding">
 			<soap:address
-				location="http://192.168.0.16:7001/SynchronizationServiceImpl/SynchronizationServiceImpl" />
+				location="http://192.168.0.14:7001/SynchronizationServiceImpl/SynchronizationServiceImpl" />
 		</port>
 	</service>
 </definitions>
