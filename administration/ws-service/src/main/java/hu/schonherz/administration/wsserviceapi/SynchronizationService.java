@@ -1,5 +1,6 @@
 package hu.schonherz.administration.wsserviceapi;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jws.WebMethod;
@@ -17,6 +18,10 @@ public interface SynchronizationService {
 	@WebResult(name = "usersListResponse")
 	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException;
 
+
+	@WebMethod(operationName = "getUsersByRoleAndDate")
+	@WebResult(name = "usersListResponse")
+	public List<WebUserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException;
 	/**
 	 * A szabad sz�ll�t�sokat adja vissza egy CargoVO t�pus� list�ban. CargoVO:
 	 * Long id; UserVO user; RestaurantVO restaurant; List<AddressVO> addresses;

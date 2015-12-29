@@ -1,5 +1,6 @@
 package hu.schonherz.administration.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -37,30 +38,42 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 
 	@Autowired
 	RoleDao roleDao;
-	
-	@Override
-	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException{
 
-		if(role.equals(UserRole.ADMIN)){
+	@Override
+	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
+
+		if (role.equals(UserRole.ADMIN)) {
 			throw new NotAllowedRoleException();
 		}
 		Specification<User> roleSpec = buildRoleSpecification(role);
 		return UserConverter.toVo(userDao.findAll(roleSpec));
 	}
-	
-	private Specification<User> buildRoleSpecification(UserRole role){
+
+	private Specification<User> buildRoleSpecification(UserRole role) {
 		Specification<User> spec = null;
 		Role roleEntity;
-		switch(role){
+		switch (role) {
 		case COURIER:
 			roleEntity = roleDao.findByName("ROLE_COURIER");
-			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
-		case RESTAURANT: 
+			spec = Specifications.where(UserSpecification.hasRole(roleEntity));
+			break;
+		case RESTAURANT:
 			roleEntity = roleDao.findByName("ROLE_RESTAURANT");
-			spec = Specifications.where(UserSpecification.hasRole(roleEntity )); break;
+			spec = Specifications.where(UserSpecification.hasRole(roleEntity));
+			break;
 		default:
 			break;
 		}
 		return spec;
+	}
+
+	@Override
+	public List<UserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException {
+		if(role.equals(UserRole.ADMIN))
+			throw new NotAllowedRoleException();
+		Specification<User> spec = Specifications.where(buildRoleSpecification(role))
+				.and(UserSpecification.lastModifiedAt(lastModified));
+		
+		return UserConverter.toVo(userDao.findAll(spec));
 	}
 }

@@ -1,5 +1,6 @@
 package hu.schonherz.administration.wsservice.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -31,6 +32,12 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 	@Override
 	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role));
+	}
+
+
+	@Override
+	public List<WebUserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException {
+		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role, lastModified));
 	}
 
 }
