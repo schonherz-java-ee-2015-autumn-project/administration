@@ -13,14 +13,27 @@ public class CargoStateConverter {
 		if (state == null) {
 			return null;
 		}
-		return mapper.map(state, CargoState.class);
+		switch(state){
+		case Delivered: return CargoState.Delivered;
+		case Delivering: return CargoState.Delivering;
+		case Free: return CargoState.Free;
+		case Taken: return CargoState.Taken;
+		}
+		return null;
 	}
 
 	public static State toEntity(CargoState CargoState) {
 		if (CargoState == null) {
 			return null;
 		}
-		return mapper.map(CargoState, State.class);
+		switch(CargoState){
+		case Delivered: return State.Delivered;
+		case Delivering: return State.Delivering;
+		case Free: return State.Free;
+		case Taken: return State.Taken;
+		}
+		return null;
+
 	}
 
 
