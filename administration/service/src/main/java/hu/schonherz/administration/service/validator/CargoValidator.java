@@ -55,7 +55,11 @@ public class CargoValidator {
 					err += "New orders should have the state 'Free'.";
 				}
 			}
+			if(order.getId()!=null){
+				err += "Order id should be null ";
+			}
 		}
+		
 
 		if (err == null) {
 			return true;
