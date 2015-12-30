@@ -16,7 +16,7 @@ public class InvalidFieldValuesException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return super.getMessage() + errMessage;
+		return  errMessage;
 	}
 	
 	public void setMessage(String message){
