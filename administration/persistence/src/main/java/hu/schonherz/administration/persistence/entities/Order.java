@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 
 import hu.schonherz.administration.persistence.entities.helper.Payment;
 import hu.schonherz.administration.persistence.entities.helper.State;
 
-@Entity
+@Entity(name="restaurant_order")
 public class Order extends BaseEntity implements Serializable {
 
 	/**
@@ -20,8 +22,10 @@ public class Order extends BaseEntity implements Serializable {
 	
 	private String addressToDeliver;
 	private Date deadline;
+	@Enumerated(EnumType.STRING)
 	private Payment payment;
 	private int fullCost;
+	@Enumerated(EnumType.STRING)
 	private State state;
 	@ManyToMany
 	private List<Item> items;
