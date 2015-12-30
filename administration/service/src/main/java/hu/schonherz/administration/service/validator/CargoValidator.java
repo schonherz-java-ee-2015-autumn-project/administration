@@ -21,7 +21,7 @@ public class CargoValidator {
 	public static boolean isValidCargo(CargoDTO cargo) throws InvalidFieldValuesException {
 		String err = null;
 		if (cargo.getCourierId() != null) {
-			err += "Courier id should not be set. ";
+			err += "Courier id should not be set. " + cargo.getCourierId();
 		}
 		if (cargo.getCourierName() != null)
 			if (!cargo.getCourierName().isEmpty()) {
