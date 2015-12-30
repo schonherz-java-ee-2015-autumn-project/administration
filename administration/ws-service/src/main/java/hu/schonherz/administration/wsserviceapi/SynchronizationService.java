@@ -26,10 +26,6 @@ public interface SynchronizationService {
 	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException;
 	
 	
-	@WebMethod(operationName = "saveCargo")
-	void saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException;
-	
-	
 	/**
 	 * A szabad sz�ll�t�sokat adja vissza egy CargoVO t�pus� list�ban. CargoVO:
 	 * Long id; UserVO user; RestaurantVO restaurant; List<AddressVO> addresses;
