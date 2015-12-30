@@ -13,8 +13,10 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -24,13 +26,15 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private CargoDao cargoDao;
-	
+
 	@Autowired
 	private CargoConverter cv;
-	
+
 	@Override
-	public void saveCargo(CargoDTO cargo) {
-		cargoDao.save(cv.toEntity(cargo));
+	public void saveCargo(CargoDTO cargo) throws InvalidFieldValuesException {
+		if (CargoValidator.isValidCargo(cargo))
+			cargoDao.save(cv.toEntity(cargo));
+
 	}
 
 	@Override
