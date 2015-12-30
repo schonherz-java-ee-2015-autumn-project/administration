@@ -1,0 +1,59 @@
+package hu.schonherz.administration.service.validator;
+
+import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+/**
+ * 
+ * @author Miklós Kosárkár
+ * This class validates a cargo. If it's invalid an InvalidFieldValuesException is thrown.
+ */
+public class CargoValidator {
+
+	/**
+	 * 
+	 * @param cargo 
+	 * @return true if the cargo is valid
+	 * @throws InvalidFieldValuesException
+	 */
+	public static boolean isValidCargo(CargoDTO cargo) throws InvalidFieldValuesException{
+		String err = null;
+		if(cargo.getCourierId()!=null){
+			err += "Courier id should not be set. ";
+		}
+		if(cargo.getCourierName()!=null || !cargo.getCourierName().isEmpty()){
+			err += "Courier name should not be set. ";
+		}
+		if(cargo.getCourierPhoneNumber()!=null || !cargo.getCourierPhoneNumber().isEmpty()){
+			err += "Courier phone number should not be set. ";	
+		}
+		if(!cargo.getState().equals(CargoState.Free)){
+			err += "Cargo state should be 'Free' and not: " + cargo.getState().toString();
+		}
+		
+		if(cargo.getOrders().isEmpty()){
+			err += "Cargo orders should not be empty. ";
+		}
+		for(OrderDTO order: cargo.getOrders()){
+			if(order.getAddressToDeliver().isEmpty() || order.getAddressToDeliver()==null){
+				err += "Order address should not be empty. ";
+			}
+			if(order.getItems().isEmpty()){
+				err += "Order should contain items";
+			}
+			if(!order.getState().equals(CargoState.Free)){
+				err +="New orders should have the state 'Free'.";
+			}
+		}
+		
+		if(err==null){
+			return true;
+		}else{
+			InvalidFieldValuesException exception = new InvalidFieldValuesException(); 
+			exception.setMessage(err);
+			throw exception;
+		}
+	}
+	
+}
