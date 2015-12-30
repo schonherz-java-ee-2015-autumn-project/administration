@@ -31,9 +31,12 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	private CargoConverter cv;
 
 	@Override
-	public void saveCargo(CargoDTO cargo) throws InvalidFieldValuesException {
+	public CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException {
 		if (CargoValidator.isValidCargo(cargo))
-			cargoDao.save(cv.toEntity(cargo));
+			return cv.toDTO(cargoDao.save(cv.toEntity(cargo)));
+		else{
+			return null;
+		}
 
 	}
 

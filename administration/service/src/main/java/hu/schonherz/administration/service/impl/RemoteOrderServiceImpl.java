@@ -14,21 +14,20 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.persistence.dao.OrderDao;
 import hu.schonherz.administration.service.converter.OrderConverter;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
-import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 
 @Stateless(mappedName = "RemoteOrderService")
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
-@Local(RemoteUserService.class)
+@Local(RemoteOrderService.class)
 public class RemoteOrderServiceImpl implements RemoteOrderService {
 
 	@Autowired
 	private OrderDao orderDao;
 	
 	@Override
-	public void saveOrder(OrderDTO order) {
-		orderDao.save(OrderConverter.toEntity(order));
+	public OrderDTO saveOrder(OrderDTO order) {
+		return OrderConverter.toDTO(orderDao.save(OrderConverter.toEntity(order)));
 	}
 
 	@Override
