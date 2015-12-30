@@ -61,4 +61,10 @@ public class Order extends BaseEntity implements Serializable {
 	public void setState(State state) {
 		this.state = state;
 	}
+	public List<ItemQuantity> getItems() {
+		return items;
+	}
+	public void setItems(List<ItemQuantity> items) {
+		this.items = items;
+	}
 }
