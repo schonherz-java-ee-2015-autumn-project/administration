@@ -6,7 +6,7 @@ import hu.schonherz.administration.serviceapi.dto.ItemDTO;
 
 public interface RemoteItemService {
 	
-	void saveItem(ItemDTO item);
+	ItemDTO saveItem(ItemDTO item);
 	
 	List<ItemDTO> getItems();
 

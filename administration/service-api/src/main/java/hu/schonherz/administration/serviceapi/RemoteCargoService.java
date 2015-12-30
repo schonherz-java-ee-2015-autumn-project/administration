@@ -7,7 +7,7 @@ import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesExcepti
 
 public interface RemoteCargoService {
 	
-	void saveCargo(CargoDTO cargo) throws InvalidFieldValuesException;
+	CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException;
 	List<CargoDTO> getCargos();
 
 }
