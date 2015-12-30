@@ -16,6 +16,8 @@ import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteItemQuantityService;
 import hu.schonherz.administration.serviceapi.RemoteItemService;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
+import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteItemDTO;
@@ -56,14 +58,17 @@ public class RestaurantServiceImpl implements RestaurantService {
 				RemoteItemDTO i = RemoteItemConverter.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
 				RemoteItemQuantityDTO itemQuantity = item;
 				itemQuantity.setItemDTO(i);
-				itemQuantity = RemoteItemQuantityConverter.toRemoteDTO(remoteItemQuantityService.saveItemQuantity(RemoteItemQuantityConverter.toDTO(itemQuantity)));
-				items.add(itemQuantity);
+				ItemQuantityDTO iqdto = RemoteItemQuantityConverter.toDTO(itemQuantity);
+				ItemQuantityDTO result = remoteItemQuantityService.saveItemQuantity(iqdto);
+				RemoteItemQuantityDTO itemQuantity2 = RemoteItemQuantityConverter.toRemoteDTO(result);
+				items.add(itemQuantity2);
 			}
 			order.setItems(items);
-			orders.add(
-					RemoteOrderConverter.toRemoteDTO(remoteOrderService.saveOrder(RemoteOrderConverter.toDTO(order))));
-
-		}
+			OrderDTO oDTO = RemoteOrderConverter.toDTO(order);
+			OrderDTO oDTO2 = remoteOrderService.saveOrder(oDTO);
+			RemoteOrderDTO roDTO = RemoteOrderConverter.toRemoteDTO(oDTO2);
+			orders.add(roDTO);
+					}
 		cargo.setOrders(orders);
 		remoteCargoService.saveCargo(RemoteCargoConverter.toDTO(cargo));
 	}
