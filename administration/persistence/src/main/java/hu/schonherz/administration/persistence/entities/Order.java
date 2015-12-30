@@ -20,6 +20,8 @@ public class Order extends BaseEntity implements Serializable {
 	 */
 	private static final long serialVersionUID = -8878384846302993044L;
 	
+	@ManyToMany
+	private List<ItemQuantity> items;
 	private String addressToDeliver;
 	private Date deadline;
 	@Enumerated(EnumType.STRING)
@@ -27,8 +29,7 @@ public class Order extends BaseEntity implements Serializable {
 	private int fullCost;
 	@Enumerated(EnumType.STRING)
 	private State state;
-	@ManyToMany
-	private List<Item> items;
+
 	
 	public String getAddressToDeliver() {
 		return addressToDeliver;
@@ -59,11 +60,5 @@ public class Order extends BaseEntity implements Serializable {
 	}
 	public void setState(State state) {
 		this.state = state;
-	}
-	public List<Item> getItems() {
-		return items;
-	}
-	public void setItems(List<Item> items) {
-		this.items = items;
 	}
 }

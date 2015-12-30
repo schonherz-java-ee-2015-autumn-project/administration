@@ -12,7 +12,6 @@ public class RemoteItemDTO implements Serializable {
 	private Long id;
 	private String name;
 	private int price;
-	private int count;
 	public String getName() {
 		return name;
 	}
@@ -25,12 +24,7 @@ public class RemoteItemDTO implements Serializable {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public int getCount() {
-		return count;
-	}
-	public void setCount(int count) {
-		this.count = count;
-	}
+	
 	public Long getId() {
 		return id;
 	}

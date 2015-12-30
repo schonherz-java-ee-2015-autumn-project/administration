@@ -15,7 +15,6 @@ public class Item extends BaseEntity implements Serializable {
 	
 	private String name;
 	private Integer price;
-	private Integer count;
 	public String getName() {
 		return name;
 	}
@@ -27,12 +26,6 @@ public class Item extends BaseEntity implements Serializable {
 	}
 	public void setPrice(Integer price) {
 		this.price = price;
-	}
-	public Integer getCount() {
-		return count;
-	}
-	public void setCount(Integer count) {
-		this.count = count;
 	}
 
 }

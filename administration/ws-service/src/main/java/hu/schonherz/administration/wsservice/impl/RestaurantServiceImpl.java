@@ -13,15 +13,18 @@ import javax.jws.WebService;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
+import hu.schonherz.administration.serviceapi.RemoteItemQuantityService;
 import hu.schonherz.administration.serviceapi.RemoteItemService;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteItemDTO;
+import hu.schonherz.administration.wsservice.dto.RemoteItemQuantityDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteOrderDTO;
 import hu.schonherz.administration.wsserviceapi.RestaurantService;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteCargoConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteItemConverter;
+import hu.schonherz.administration.wsserviceapi.converter.RemoteItemQuantityConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteOrderConverter;
 
 
@@ -40,14 +43,21 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@EJB
 	private RemoteOrderService remoteOrderService;
+	
+	@EJB
+	private RemoteItemQuantityService remoteItemQuantityService;
 
 	@Override
 	public void saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException {
 		List<RemoteOrderDTO> orders = new ArrayList<>();
 		for (RemoteOrderDTO order : cargo.getOrders()) {
-			List<RemoteItemDTO> items = new ArrayList<>();
-			for (RemoteItemDTO item : order.getItems()) {
-				items.add(RemoteItemConverter.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item))));
+			List<RemoteItemQuantityDTO> items = new ArrayList<>();
+			for (RemoteItemQuantityDTO item : order.getItems()) {
+				RemoteItemDTO i = RemoteItemConverter.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
+				RemoteItemQuantityDTO itemQuantity = item;
+				itemQuantity.setItemDTO(i);
+				itemQuantity = RemoteItemQuantityConverter.toRemoteDTO(remoteItemQuantityService.saveItemQuantity(RemoteItemQuantityConverter.toDTO(itemQuantity)));
+				items.add(itemQuantity);
 			}
 			order.setItems(items);
 			orders.add(

@@ -18,7 +18,7 @@ public class OrderDTO implements Serializable{
 	private PaymentMethod payment;
 	private int fullCost;
 	private CargoState state;
-	private List<ItemDTO> items;
+	private List<ItemQuantityDTO> items;
 	public String getAddressToDeliver() {
 		return addressToDeliver;
 	}
@@ -49,10 +49,10 @@ public class OrderDTO implements Serializable{
 	public void setState(CargoState state) {
 		this.state = state;
 	}
-	public List<ItemDTO> getItems() {
+	public List<ItemQuantityDTO> getItems() {
 		return items;
 	}
-	public void setItems(List<ItemDTO> items) {
+	public void setItems(List<ItemQuantityDTO> items) {
 		this.items = items;
 	}
 	public Long getId() {

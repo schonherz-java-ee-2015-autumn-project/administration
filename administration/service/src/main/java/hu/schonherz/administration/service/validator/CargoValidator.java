@@ -56,13 +56,6 @@ public class CargoValidator {
 				}
 			}
 
-			if (order.getItems() == null) {
-				err += "Order should contain items";
-			} else {
-				if (order.getItems().isEmpty()) {
-					err += "Order should contain items";
-				}
-			}
 			if (order.getState() == null) {
 				err += "New orders should have the state 'Free'.";
 			} else {
