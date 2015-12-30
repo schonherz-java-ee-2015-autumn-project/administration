@@ -22,17 +22,13 @@ public class CargoConverter {
 		CargoDTO result = new CargoDTO();
 		if(cargo.getCourier()!=null){
 		result.setCourierId(cargo.getCourier().getId());
-		result.setCourierName(cargo.getCourier().getName());
-		result.setCourierPhoneNumber(cargo.getCourier().getPhoneNumber());
 		}
 		result.setId(cargo.getId());
 		
 		result.setOrders(OrderConverter.toDTO(cargo.getOrders()));
 		
 		if(cargo.getRestaurant()!=null){
-		result.setRestaurantAddresss(cargo.getRestaurant().getAddress());
 		result.setRestaurantId(cargo.getRestaurant().getId());
-		result.setRestaurantName(cargo.getRestaurant().getName());
 		}
 		result.setState(CargoStateConverter.toDTO( cargo.getState()));
 		return result;
