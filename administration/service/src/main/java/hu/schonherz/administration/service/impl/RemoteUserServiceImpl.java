@@ -10,14 +10,12 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
-import hu.schonherz.administration.persistence.dao.helper.RestaurantSpecification;
 import hu.schonherz.administration.persistence.dao.helper.UserSpecification;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
