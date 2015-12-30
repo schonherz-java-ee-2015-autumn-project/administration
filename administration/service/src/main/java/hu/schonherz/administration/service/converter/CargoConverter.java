@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 
+@Service
 public class CargoConverter {
 
 	@Autowired
