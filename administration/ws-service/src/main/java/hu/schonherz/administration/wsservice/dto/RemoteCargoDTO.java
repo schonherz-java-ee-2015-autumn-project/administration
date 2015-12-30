@@ -12,11 +12,8 @@ public class RemoteCargoDTO implements Serializable{
 	
 	private Long id;
 	private Long restaurantId;
-	private Long courierId;
 	private String restaurantAddresss;
 	private String restaurantName;
-	private String courierName;
-	private String courierPhoneNumber;
 	private List<RemoteOrderDTO> orders;
 	private RemoteCargoState state;
 	public Long getId() {
@@ -31,12 +28,6 @@ public class RemoteCargoDTO implements Serializable{
 	public void setRestaurantId(Long restaurantId) {
 		this.restaurantId = restaurantId;
 	}
-	public Long getCourierId() {
-		return courierId;
-	}
-	public void setCourierId(Long courierId) {
-		this.courierId = courierId;
-	}
 	public String getRestaurantAddresss() {
 		return restaurantAddresss;
 	}
@@ -48,18 +39,6 @@ public class RemoteCargoDTO implements Serializable{
 	}
 	public void setRestaurantName(String restaurantName) {
 		this.restaurantName = restaurantName;
-	}
-	public String getCourierName() {
-		return courierName;
-	}
-	public void setCourierName(String courierName) {
-		this.courierName = courierName;
-	}
-	public String getCourierPhoneNumber() {
-		return courierPhoneNumber;
-	}
-	public void setCourierPhoneNumber(String courierPhoneNumber) {
-		this.courierPhoneNumber = courierPhoneNumber;
 	}
 	public List<RemoteOrderDTO> getOrders() {
 		return orders;
