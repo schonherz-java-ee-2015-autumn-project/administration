@@ -11,6 +11,9 @@
 		<class>hu.schonherz.administration.persistence.entities.Restaurant</class>
 		<class>hu.schonherz.administration.persistence.entities.Role</class>
 		<class>hu.schonherz.administration.persistence.entities.User</class>
+		<class>hu.schonherz.administration.persistence.entities.Cargo</class>
+		<class>hu.schonherz.administration.persistence.entities.Order</class>
+		<class>hu.schonherz.administration.persistence.entities.Item</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="hibernate.show_sql" value="false" />
