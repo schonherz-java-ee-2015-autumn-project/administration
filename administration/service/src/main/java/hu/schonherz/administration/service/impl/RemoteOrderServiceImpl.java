@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.OrderDao;
+import hu.schonherz.administration.persistence.entities.Order;
 import hu.schonherz.administration.service.converter.OrderConverter;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
@@ -27,7 +28,9 @@ public class RemoteOrderServiceImpl implements RemoteOrderService {
 	
 	@Override
 	public OrderDTO saveOrder(OrderDTO order) {
-		return OrderConverter.toDTO(orderDao.save(OrderConverter.toEntity(order)));
+		Order orderEntity = OrderConverter.toEntity(order);
+		
+		return OrderConverter.toDTO(orderDao.save(orderEntity));
 	}
 
 	@Override
