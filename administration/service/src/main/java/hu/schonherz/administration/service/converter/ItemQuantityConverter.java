@@ -16,14 +16,22 @@ public class ItemQuantityConverter {
 		if (item == null) {
 			return null;
 		}
-		return mapper.map(item, ItemQuantityDTO.class);
+		ItemQuantityDTO result = new ItemQuantityDTO();
+		result.setId(item.getId());
+		result.setItem(ItemConverter.toDTO(item.getItem()));
+		result.setQuantity(item.getQuantity());
+		return result;
 	}
 
 	public static ItemQuantity toEntity(ItemQuantityDTO ItemQuantityDTO) {
 		if (ItemQuantityDTO == null) {
 			return null;
 		}
-		return mapper.map(ItemQuantityDTO, ItemQuantity.class);
+		ItemQuantity result = new ItemQuantity();
+		result.setId(ItemQuantityDTO.getId());
+		result.setItem(ItemConverter.toEntity(ItemQuantityDTO.getItem()));
+		result.setQuantity(ItemQuantityDTO.getQuantity());
+		return result;
 	}
 
 	public static List<ItemQuantityDTO> toDTO(List<ItemQuantity> item) {

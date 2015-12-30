@@ -11,20 +11,30 @@ import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 
 public class RemoteCargoConverter {
 
-	static Mapper mapper = new DozerBeanMapper();
-
 	public static CargoDTO toDTO(RemoteCargoDTO cargo) {
 		if (cargo == null) {
 			return null;
 		}
-		return mapper.map(cargo, CargoDTO.class);
+		CargoDTO result = new CargoDTO();
+		result.setCourierId(null);
+		result.setId(cargo.getId());
+		result.setOrders(RemoteOrderConverter.toDTO(cargo.getOrders()));
+		result.setRestaurantId(cargo.getRestaurantId());
+		result.setState(RemoteCargoStateConverter.toLocal(cargo.getState()));
+		return result;
 	}
 
 	public static RemoteCargoDTO toRemoteDTO(CargoDTO CargoDTO) {
 		if (CargoDTO == null) {
 			return null;
 		}
-		return mapper.map(CargoDTO, RemoteCargoDTO.class);
+		RemoteCargoDTO result = new RemoteCargoDTO();
+		result.setId(CargoDTO.getId());
+		result.setOrders(RemoteOrderConverter.toRemoteDTO(CargoDTO.getOrders()));
+		result.setRestaurantId(CargoDTO.getRestaurantId());
+		result.setState(RemoteCargoStateConverter.toRemote(CargoDTO.getState()));
+		return result;
+
 	}
 
 	public static List<RemoteCargoDTO> toRemoteDTO(List<CargoDTO> cargos) {

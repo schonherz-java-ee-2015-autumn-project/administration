@@ -16,14 +16,23 @@ public class RemoteItemQuantityConverter {
 		if (item == null) {
 			return null;
 		}
-		return mapper.map(item, RemoteItemQuantityDTO.class);
+		RemoteItemQuantityDTO result = new RemoteItemQuantityDTO();
+		result.setId(item.getId());
+		result.setItemDTO(RemoteItemConverter.toRemoteDTO(item.getItem()));
+		result.setQuantity(item.getQuantity());
+		return result;
 	}
 
-	public static ItemQuantityDTO toDTO(RemoteItemQuantityDTO RemoteItemQuantityDTO) {
-		if (RemoteItemQuantityDTO == null) {
+	public static ItemQuantityDTO toDTO(RemoteItemQuantityDTO remoteDTO) {
+		if (remoteDTO == null) {
 			return null;
 		}
-		return mapper.map(RemoteItemQuantityDTO, ItemQuantityDTO.class);
+		ItemQuantityDTO result = new ItemQuantityDTO();
+		result.setId(remoteDTO.getId());
+		result.setItem(RemoteItemConverter.toDTO(remoteDTO.getItemDTO()));
+		result.setQuantity(remoteDTO.getQuantity());
+		return result;
+	
 	}
 
 	public static List<RemoteItemQuantityDTO> toRemoteDTO(List<ItemQuantityDTO> item) {

@@ -3,27 +3,40 @@ package hu.schonherz.administration.service.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
-
 import hu.schonherz.administration.persistence.entities.Order;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 
 public class OrderConverter {
-	static Mapper mapper = new DozerBeanMapper();
 
 	public static OrderDTO toDTO(Order order) {
 		if (order == null) {
 			return null;
 		}
-		return mapper.map(order, OrderDTO.class);
+		OrderDTO result = new OrderDTO();
+		result.setAddressToDeliver(order.getAddressToDeliver());
+		result.setDeadline(order.getDeadline());
+		result.setFullCost(order.getFullCost());
+		result.setId(order.getId());
+		result.setItems(ItemQuantityConverter.toDTO(order.getItems()));
+		result.setPayment(PaymentConverter.toDTO(order.getPayment()));
+		result.setState(CargoStateConverter.toDTO(order.getState()));
+		return result;
 	}
 
-	public static Order toEntity(OrderDTO OrderDTO) {
-		if (OrderDTO == null) {
+	public static Order toEntity(OrderDTO orderDTO) {
+		if (orderDTO == null) {
 			return null;
 		}
-		return mapper.map(OrderDTO, Order.class);
+		Order result = new Order();
+		result.setAddressToDeliver(orderDTO.getAddressToDeliver());
+		result.setDeadline(orderDTO.getDeadline());
+		result.setFullCost(orderDTO.getFullCost());
+		result.setId(orderDTO.getId());
+		result.setItems(ItemQuantityConverter.toEntity(orderDTO.getItems()));
+		result.setPayment(PaymentConverter.toEntity(orderDTO.getPayment()));
+		result.setState(CargoStateConverter.toEntity(orderDTO.getState()));
+		return result;
+
 	}
 
 	public static List<OrderDTO> toDTO(List<Order> order) {
