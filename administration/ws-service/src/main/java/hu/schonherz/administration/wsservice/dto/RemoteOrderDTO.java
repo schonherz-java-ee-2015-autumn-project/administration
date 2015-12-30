@@ -12,6 +12,7 @@ public class RemoteOrderDTO implements Serializable{
 	 */
 	private static final long serialVersionUID = -7688276666937378335L;
 	
+	private Long id;
 	private String addressToDeliver;
 	private Date deadline;
 	private RemotePaymentMethod payment;
@@ -53,6 +54,12 @@ public class RemoteOrderDTO implements Serializable{
 	}
 	public void setItems(List<RemoteItemDTO> items) {
 		this.items = items;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	
