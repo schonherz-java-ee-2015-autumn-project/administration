@@ -10,14 +10,12 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
-import hu.schonherz.administration.persistence.dao.helper.RestaurantSpecification;
 import hu.schonherz.administration.persistence.dao.helper.UserSpecification;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
@@ -40,10 +38,14 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 	RoleDao roleDao;
 
 	@Override
-	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
+	public List<UserDTO> getUsers(UserRole role) {
 
 		if (role.equals(UserRole.ADMIN)) {
-			throw new NotAllowedRoleException();
+			try {
+				throw new NotAllowedRoleException("Admin role is not allowed");
+			} catch (NotAllowedRoleException e) {
+				e.getErrMessage();
+			}
 		}
 		Specification<User> roleSpec = buildRoleSpecification(role);
 		return UserConverter.toVo(userDao.findAll(roleSpec));
@@ -68,12 +70,16 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 	}
 
 	@Override
-	public List<UserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException {
-		if(role.equals(UserRole.ADMIN))
-			throw new NotAllowedRoleException();
+	public List<UserDTO> getUsers(UserRole role, Date lastModified) {
+		if (role.equals(UserRole.ADMIN))
+			try {
+				throw new NotAllowedRoleException("Admin role is not allowed");
+			} catch (NotAllowedRoleException e) {
+				e.getErrMessage();
+			}
 		Specification<User> spec = Specifications.where(buildRoleSpecification(role))
 				.and(UserSpecification.lastModifiedAt(lastModified));
-		
+
 		return UserConverter.toVo(userDao.findAll(spec));
 	}
 }
