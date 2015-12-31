@@ -17,7 +17,7 @@ public class RemoteOrderDTO implements Serializable{
 	private Date deadline;
 	private RemotePaymentMethod payment;
 	private int fullCost;
-	private RemoteCargoState state;
+	private DeliveryStateWeb deliveryState;
 	private List<RemoteItemQuantityDTO> items;
 	public String getAddressToDeliver() {
 		return addressToDeliver;
@@ -43,12 +43,6 @@ public class RemoteOrderDTO implements Serializable{
 	public void setFullCost(int fullCost) {
 		this.fullCost = fullCost;
 	}
-	public RemoteCargoState getState() {
-		return state;
-	}
-	public void setState(RemoteCargoState state) {
-		this.state = state;
-	}
 	public List<RemoteItemQuantityDTO> getItems() {
 		return items;
 	}
@@ -60,6 +54,12 @@ public class RemoteOrderDTO implements Serializable{
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public DeliveryStateWeb getDeliveryState() {
+		return deliveryState;
+	}
+	public void setDeliveryState(DeliveryStateWeb deliveryState) {
+		this.deliveryState = deliveryState;
 	}
 	
 	

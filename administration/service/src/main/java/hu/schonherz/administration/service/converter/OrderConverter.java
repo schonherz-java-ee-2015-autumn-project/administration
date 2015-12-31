@@ -19,7 +19,7 @@ public class OrderConverter {
 		result.setId(order.getId());
 		result.setItems(ItemQuantityConverter.toDTO(order.getItems()));
 		result.setPayment(PaymentConverter.toDTO(order.getPayment()));
-		result.setState(CargoStateConverter.toDTO(order.getState()));
+		result.setDeliveryState(DeliveryStateConverter.toDTO(order.getDeliveryState()));
 		return result;
 	}
 
@@ -34,7 +34,7 @@ public class OrderConverter {
 		result.setId(orderDTO.getId());
 		result.setItems(ItemQuantityConverter.toEntity(orderDTO.getItems()));
 		result.setPayment(PaymentConverter.toEntity(orderDTO.getPayment()));
-		result.setState(CargoStateConverter.toEntity(orderDTO.getState()));
+		result.setDeliveryState(DeliveryStateConverter.toEntity(orderDTO.getDeliveryState()));
 		return result;
 
 	}

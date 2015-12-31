@@ -19,7 +19,7 @@ public class RemoteOrderConverter {
 		result.setId(order.getId());
 		result.setItems(RemoteItemQuantityConverter.toDTO(order.getItems()));
 		result.setPayment(RemotePaymentConverter.toDTO(order.getPayment()));
-		result.setState(RemoteCargoStateConverter.toLocal(order.getState()));
+		result.setDeliveryState(RemoteDeliveryStateConverter.toLocal(order.getDeliveryState()));
 		return result;
 	}
 
@@ -34,7 +34,7 @@ public class RemoteOrderConverter {
 		result.setId(orderDTO.getId());
 		result.setItems(RemoteItemQuantityConverter.toRemoteDTO(orderDTO.getItems()));
 		result.setPayment(RemotePaymentConverter.toRemoteDTO(orderDTO.getPayment()));
-		result.setState(RemoteCargoStateConverter.toRemote(orderDTO.getState()));
+		result.setDeliveryState(RemoteDeliveryStateConverter.toRemote(orderDTO.getDeliveryState()));
 		return result;
 	}
 
