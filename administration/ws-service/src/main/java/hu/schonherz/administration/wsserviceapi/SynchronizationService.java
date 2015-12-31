@@ -8,6 +8,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NoRestaurantAssignedUserException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
 import hu.schonherz.administration.wsservice.dto.WebRestaurantDTO;
 import hu.schonherz.administration.wsservice.dto.WebUserDTO;
@@ -25,9 +26,9 @@ public interface SynchronizationService {
 	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException;
 	
 	
-	@WebMethod(operationName = "findRestaurantById")
+	@WebMethod(operationName = "findRestaurantByUserId")
 	@WebResult(name = "restaurantResponse")
-	public WebRestaurantDTO findRestaurantById(Long id);
+	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException;
 	/**
 	 * A szabad sz�ll�t�sokat adja vissza egy CargoVO t�pus� list�ban. CargoVO:
 	 * Long id; UserVO user; RestaurantVO restaurant; List<AddressVO> addresses;

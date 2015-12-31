@@ -20,7 +20,7 @@ import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.serviceapi.RemoteRestaurantService;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
-import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.exeption.NoRestaurantAssignedUserException;
 
 @Stateless(mappedName = "RemoteRestaurantService")
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -28,23 +28,21 @@ import hu.schonherz.administration.serviceapi.dto.UserDTO;
 @Local(RemoteRestaurantService.class)
 public class RemoteRestaurantServiceImpl implements RemoteRestaurantService {
 
-	
 	@Autowired
 	RestaurantDao restaurantDao;
-	
 
 	@Autowired
 	UserDao userDao;
-	
+
 	@Override
-	public RestaurantDTO findById(Long id) {
+	public RestaurantDTO findById(Long id) throws NoRestaurantAssignedUserException {
 		User user = userDao.findById(id);
-		List<Restaurant> result = restaurantDao.findAll(Specifications.where(RestaurantSpecification.notDeleted()).and(RestaurantSpecification.hasUser(user)));
-		if(result!=null && !result.isEmpty()){
+		List<Restaurant> result = restaurantDao.findAll(
+				Specifications.where(RestaurantSpecification.notDeleted()).and(RestaurantSpecification.hasUser(user)));
+		if (result != null && !result.isEmpty()) {
 			return RestaurantConverter.toDTO(result.get(0));
-		}else{
-			return null;
 		}
+		throw new NoRestaurantAssignedUserException("User is not working in restaurant");
 	}
 
 }

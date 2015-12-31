@@ -15,6 +15,7 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.serviceapi.RemoteRestaurantService;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NoRestaurantAssignedUserException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
 import hu.schonherz.administration.wsservice.dto.WebRestaurantDTO;
 import hu.schonherz.administration.wsservice.dto.WebUserDTO;
@@ -46,8 +47,7 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 
 
 	@Override
-	public WebRestaurantDTO findRestaurantById(Long id) {
-		System.out.println("ID = " + id);
+	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException{
 		return RestaurantConverter.toWebRestaurantDTO(RemoteRestaurantService.findById(id));
 	}
 
