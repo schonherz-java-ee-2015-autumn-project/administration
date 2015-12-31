@@ -11,6 +11,7 @@ public class RemoteCargoDTO implements Serializable{
 	private static final long serialVersionUID = 3854313547198931721L;
 	
 	private Long id;
+	private Long courierId;
 	private Long restaurantId;
 	private List<RemoteOrderDTO> orders;
 	private RemoteCargoState state;
@@ -37,6 +38,12 @@ public class RemoteCargoDTO implements Serializable{
 	}
 	public void setState(RemoteCargoState state) {
 		this.state = state;
+	}
+	public Long getCourierId() {
+		return courierId;
+	}
+	public void setCourierId(Long courierId) {
+		this.courierId = courierId;
 	}
 	
 	

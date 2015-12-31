@@ -3,9 +3,6 @@ package hu.schonherz.administration.wsserviceapi.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
-
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 
@@ -16,7 +13,7 @@ public class RemoteCargoConverter {
 			return null;
 		}
 		CargoDTO result = new CargoDTO();
-		result.setCourierId(null);
+		result.setCourierId(cargo.getCourierId());
 		result.setId(cargo.getId());
 		result.setOrders(RemoteOrderConverter.toDTO(cargo.getOrders()));
 		result.setRestaurantId(cargo.getRestaurantId());
@@ -29,6 +26,7 @@ public class RemoteCargoConverter {
 			return null;
 		}
 		RemoteCargoDTO result = new RemoteCargoDTO();
+		result.setCourierId(CargoDTO.getCourierId());
 		result.setId(CargoDTO.getId());
 		result.setOrders(RemoteOrderConverter.toRemoteDTO(CargoDTO.getOrders()));
 		result.setRestaurantId(CargoDTO.getRestaurantId());
