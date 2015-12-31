@@ -47,14 +47,6 @@ public class CargoValidator {
 					err += "Order address should not be empty. ";
 				}
 			}
-
-			if (order.getState() == null) {
-				err += "New orders should have the state 'Free'.";
-			} else {
-				if (!order.getState().equals(CargoState.Free)) {
-					err += "New orders should have the state 'Free'.";
-				}
-			}
 		}
 		
 
