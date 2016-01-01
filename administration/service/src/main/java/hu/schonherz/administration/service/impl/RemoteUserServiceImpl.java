@@ -38,14 +38,10 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 	RoleDao roleDao;
 
 	@Override
-	public List<UserDTO> getUsers(UserRole role) {
+	public List<UserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
 
 		if (role.equals(UserRole.ADMIN)) {
-			try {
-				throw new NotAllowedRoleException("Admin role is not allowed");
-			} catch (NotAllowedRoleException e) {
-				e.getErrMessage();
-			}
+			throw new NotAllowedRoleException("Admin role is not allowed");
 		}
 		Specification<User> roleSpec = buildRoleSpecification(role);
 		return UserConverter.toVo(userDao.findAll(roleSpec));
@@ -70,13 +66,10 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 	}
 
 	@Override
-	public List<UserDTO> getUsers(UserRole role, Date lastModified) {
-		if (role.equals(UserRole.ADMIN))
-			try {
+	public List<UserDTO> getUsers(UserRole role, Date lastModified) throws NotAllowedRoleException{
+		if (role.equals(UserRole.ADMIN)){
 				throw new NotAllowedRoleException("Admin role is not allowed");
-			} catch (NotAllowedRoleException e) {
-				e.getErrMessage();
-			}
+		}
 		Specification<User> spec = Specifications.where(buildRoleSpecification(role))
 				.and(UserSpecification.lastModifiedAt(lastModified));
 
