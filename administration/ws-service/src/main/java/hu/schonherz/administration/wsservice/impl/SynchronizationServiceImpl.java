@@ -12,11 +12,15 @@ import javax.jws.WebService;
 
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
+import hu.schonherz.administration.serviceapi.RemoteRestaurantService;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.NoRestaurantAssignedUserException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
+import hu.schonherz.administration.wsservice.dto.WebRestaurantDTO;
 import hu.schonherz.administration.wsservice.dto.WebUserDTO;
 import hu.schonherz.administration.wsserviceapi.SynchronizationService;
+import hu.schonherz.administration.wsserviceapi.converter.RestaurantConverter;
 import hu.schonherz.administration.wsserviceapi.converter.UserConverter;
 
 @Stateless(mappedName = "SynchronizationServiceImpl")
@@ -27,7 +31,8 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 
 	@EJB
 	private RemoteUserService remoteUserService;
-
+	@EJB
+	private RemoteRestaurantService RemoteRestaurantService;
 	
 	@Override
 	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
@@ -38,6 +43,12 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 	@Override
 	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role, lastModified));
+	}
+
+
+	@Override
+	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException{
+		return RestaurantConverter.toWebRestaurantDTO(RemoteRestaurantService.findById(id));
 	}
 
 }

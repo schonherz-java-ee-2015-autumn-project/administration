@@ -10,5 +10,4 @@ import hu.schonherz.administration.persistence.entities.Restaurant;
 public interface RestaurantDao extends JpaRepository<Restaurant, Long>, JpaSpecificationExecutor<Restaurant> {
 
 	Restaurant findByName(String name);
-
 }

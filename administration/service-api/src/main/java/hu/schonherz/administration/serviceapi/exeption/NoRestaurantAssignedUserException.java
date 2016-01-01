@@ -1,15 +1,15 @@
 package hu.schonherz.administration.serviceapi.exeption;
 
-public class NotAllowedRoleException extends Exception {
+public class NoRestaurantAssignedUserException extends Exception {
 
-	private static final long serialVersionUID = -7247043701282868348L;
+	private static final long serialVersionUID = -5973380655795963481L;
 
 	private String errMessage;
 
-	public NotAllowedRoleException(String string) {
+	public NoRestaurantAssignedUserException(String string) {
 		setErrMessage(string);
 	}
-
+	
 	public String getErrMessage() {
 		return errMessage;
 	}
@@ -17,5 +17,4 @@ public class NotAllowedRoleException extends Exception {
 	public void setErrMessage(String errMessage) {
 		this.errMessage = errMessage;
 	}
-
 }
