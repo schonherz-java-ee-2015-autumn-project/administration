@@ -23,7 +23,7 @@ import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 
 @Stateless(mappedName = "RemoteCargoService")
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 @Local(RemoteCargoService.class)
 public class RemoteCargoServiceImpl implements RemoteCargoService {

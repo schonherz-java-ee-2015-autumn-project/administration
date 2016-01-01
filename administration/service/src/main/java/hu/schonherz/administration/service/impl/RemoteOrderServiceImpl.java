@@ -18,7 +18,7 @@ import hu.schonherz.administration.serviceapi.RemoteOrderService;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 
 @Stateless(mappedName = "RemoteOrderService")
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 @Local(RemoteOrderService.class)
 public class RemoteOrderServiceImpl implements RemoteOrderService {

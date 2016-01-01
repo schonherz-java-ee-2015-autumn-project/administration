@@ -17,7 +17,7 @@ import hu.schonherz.administration.serviceapi.RemoteItemService;
 import hu.schonherz.administration.serviceapi.dto.ItemDTO;
 
 @Stateless(mappedName = "RemoteItemService")
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 @Local(RemoteItemService.class)
 public class RemoteItemServiceImpl implements RemoteItemService {
