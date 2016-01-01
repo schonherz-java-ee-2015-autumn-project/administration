@@ -11,6 +11,7 @@ import javax.interceptor.Interceptors;
 import javax.jws.WebService;
 
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
+import org.springframework.transaction.annotation.Transactional;
 
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteItemQuantityService;
@@ -29,8 +30,6 @@ import hu.schonherz.administration.wsserviceapi.converter.RemoteItemConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteItemQuantityConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteOrderConverter;
 
-
-
 @Stateless(mappedName = "RestaurantServiceImpl")
 @WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.RestaurantService", serviceName = "RestaurantServiceImpl")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -45,17 +44,18 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@EJB
 	private RemoteOrderService remoteOrderService;
-	
+
 	@EJB
 	private RemoteItemQuantityService remoteItemQuantityService;
-
+	
 	@Override
 	public void saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException {
 		List<RemoteOrderDTO> orders = new ArrayList<>();
 		for (RemoteOrderDTO order : cargo.getOrders()) {
 			List<RemoteItemQuantityDTO> items = new ArrayList<>();
 			for (RemoteItemQuantityDTO item : order.getItems()) {
-				RemoteItemDTO i = RemoteItemConverter.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
+				RemoteItemDTO i = RemoteItemConverter
+						.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
 				RemoteItemQuantityDTO itemQuantity = item;
 				itemQuantity.setItemDTO(i);
 				ItemQuantityDTO iqdto = RemoteItemQuantityConverter.toDTO(itemQuantity);
@@ -68,7 +68,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 			OrderDTO oDTO2 = remoteOrderService.saveOrder(oDTO);
 			RemoteOrderDTO roDTO = RemoteOrderConverter.toRemoteDTO(oDTO2);
 			orders.add(roDTO);
-					}
+		}
 		cargo.setOrders(orders);
 		remoteCargoService.saveCargo(RemoteCargoConverter.toDTO(cargo));
 	}
