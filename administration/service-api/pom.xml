@@ -24,10 +24,5 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 </project>
