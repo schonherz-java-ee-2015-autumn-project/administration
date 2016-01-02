@@ -9,8 +9,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 
-import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.Payment;
+import hu.schonherz.administration.persistence.entities.helper.State;
 
 @Entity(name="restaurant_order")
 public class Order extends BaseEntity implements Serializable {
@@ -28,7 +28,9 @@ public class Order extends BaseEntity implements Serializable {
 	private Payment payment;
 	private int fullCost;
 	@Enumerated(EnumType.STRING)
-	private DeliveryState deliveryState;
+	private State state;
+
+	
 	public String getAddressToDeliver() {
 		return addressToDeliver;
 	}
@@ -53,16 +55,16 @@ public class Order extends BaseEntity implements Serializable {
 	public void setFullCost(int fullCost) {
 		this.fullCost = fullCost;
 	}
+	public State getState() {
+		return state;
+	}
+	public void setState(State state) {
+		this.state = state;
+	}
 	public List<ItemQuantity> getItems() {
 		return items;
 	}
 	public void setItems(List<ItemQuantity> items) {
 		this.items = items;
-	}
-	public DeliveryState getDeliveryState() {
-		return deliveryState;
-	}
-	public void setDeliveryState(DeliveryState deliveryState) {
-		this.deliveryState = deliveryState;
 	}
 }
