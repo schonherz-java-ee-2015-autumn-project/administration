@@ -15,22 +15,30 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
+import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
+import hu.schonherz.administration.persistence.entities.Order;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
+import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
+import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -43,6 +51,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private RoleDao roleDao;
 
 	@Autowired
 	private RestaurantDao restaurantDao;
@@ -122,13 +133,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		User courier = userDao.findOne(courierID);
 		if (courier == null)
 			throw new CourierNotFoundException();
-		boolean isCourier = false;
-		for (Role role : courier.getRoles()) {
-			if (role.getName().equals("ROLE_COURIER")) {
-				isCourier = true;
-			}
-		}
-		if (!isCourier)
+		if (!isCourier(courier))
 			throw new CourierNotFoundException();
 
 		List<Cargo> cargosTakenByCourier = cargoDao.findByCourier(courier);
@@ -150,5 +155,51 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargo.setState(State.Taken);
 
 		return cv.toDTO(cargo);
+	}
+
+	@Override
+	public void changeCargoState(long cargoId, long courierId, CargoState local)
+			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
+			CourierNotFoundException, NotAllOrderCompletedException {
+		Cargo cargo = cargoDao.findOne(cargoId);
+		if (cargo == null) {
+			throw new CargoNotFoundException();
+		}
+		if (cargo.getCourier() == null) {
+			throw new IllegalStateTransitionException();
+		}
+		if (cargo.getCourier().getId() != courierId) {
+			throw new CargoAlreadyTakenException();
+		}
+		if (cargo.getState().compareTo(CargoStateConverter.toEntity(local)) != -1) {
+			throw new IllegalStateTransitionException();
+		}
+		User courier = userDao.findOne(courierId);
+		if (courier == null) {
+			throw new CourierNotFoundException();
+		}
+		if (!isCourier(courier)) {
+			throw new CourierNotFoundException();
+		}
+		if (local.equals(DeliveryStateServ.Delivered))
+			for (Order order : cargo.getOrders()) {
+				if (order.getDeliveryState().equals(DeliveryState.Failed)
+						|| order.getDeliveryState().equals(DeliveryState.In_progress)) {
+					throw new NotAllOrderCompletedException();
+				}
+
+			}
+		cargo.setState(CargoStateConverter.toEntity(local));
+		cargoDao.save(cargo);
+	}
+
+	private boolean isCourier(User user) {
+		Role role = roleDao.findByName("ROLE_COURIER");
+		if (role != null)
+			if (user.getRoles().contains(role))
+				return true;
+			else
+				return false;
+		return false;
 	}
 }

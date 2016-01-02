@@ -32,11 +32,9 @@ public interface SynchronizationService {
 	@WebResult(name = "restaurantResponse")
 	public WebRestaurantDTO findRestaurantById(@WebParam(name = "UserId") Long id)
 			throws NoRestaurantAssignedUserException;
-	
+
 	@WebMethod(operationName = "getCargosByDate")
 	@WebResult(name = "SyncCargoResponse")
-	public List<RemoteCargoDTO> findCargoByDate(@WebParam(name = "Date") Date date)
-			throws InvalidDateException;
-	
-	
+	public List<RemoteCargoDTO> findCargoByDate(@WebParam(name = "Date") Date date) throws InvalidDateException;
+
 }
