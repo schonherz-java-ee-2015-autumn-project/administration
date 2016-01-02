@@ -9,17 +9,17 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 
+import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.Payment;
-import hu.schonherz.administration.persistence.entities.helper.State;
 
-@Entity(name="restaurant_order")
+@Entity(name = "restaurant_order")
 public class Order extends BaseEntity implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8878384846302993044L;
-	
+
 	@ManyToMany
 	private List<ItemQuantity> items;
 	private String addressToDeliver;
@@ -28,42 +28,52 @@ public class Order extends BaseEntity implements Serializable {
 	private Payment payment;
 	private int fullCost;
 	@Enumerated(EnumType.STRING)
-	private State state;
+	private DeliveryState deliveryState;
 
-	
+	public DeliveryState getDeliveryState() {
+		return deliveryState;
+	}
+
+	public void setDeliveryState(DeliveryState deliveryState) {
+		this.deliveryState = deliveryState;
+	}
+
 	public String getAddressToDeliver() {
 		return addressToDeliver;
 	}
+
 	public void setAddressToDeliver(String addressToDeliver) {
 		this.addressToDeliver = addressToDeliver;
 	}
+
 	public Date getDeadline() {
 		return deadline;
 	}
+
 	public void setDeadline(Date deadline) {
 		this.deadline = deadline;
 	}
+
 	public Payment getPayment() {
 		return payment;
 	}
+
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
+
 	public int getFullCost() {
 		return fullCost;
 	}
+
 	public void setFullCost(int fullCost) {
 		this.fullCost = fullCost;
 	}
-	public State getState() {
-		return state;
-	}
-	public void setState(State state) {
-		this.state = state;
-	}
+
 	public List<ItemQuantity> getItems() {
 		return items;
 	}
+
 	public void setItems(List<ItemQuantity> items) {
 		this.items = items;
 	}
