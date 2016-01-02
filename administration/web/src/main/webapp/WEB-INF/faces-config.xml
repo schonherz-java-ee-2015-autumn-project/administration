@@ -11,7 +11,7 @@
         <locale-config>
             <default-locale>hu</default-locale>
 	        <supported-locale>en</supported-locale>
-        </locale-config>        
+        </locale-config>    
         
         <resource-bundle>
             <base-name>

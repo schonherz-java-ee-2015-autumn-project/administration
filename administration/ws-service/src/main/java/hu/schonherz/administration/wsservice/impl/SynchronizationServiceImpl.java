@@ -33,21 +33,19 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 	private RemoteUserService remoteUserService;
 	@EJB
 	private RemoteRestaurantService RemoteRestaurantService;
-	
+
 	@Override
 	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role));
 	}
-
 
 	@Override
 	public List<WebUserDTO> getUsersByDate(UserRole role, Date lastModified) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role, lastModified));
 	}
 
-
 	@Override
-	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException{
+	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException {
 		return RestaurantConverter.toWebRestaurantDTO(RemoteRestaurantService.findById(id));
 	}
 

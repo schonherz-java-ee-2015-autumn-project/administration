@@ -71,7 +71,7 @@ public class RemoteUserServiceImpl implements RemoteUserService {
 				throw new NotAllowedRoleException("Admin role is not allowed");
 		}
 		Specification<User> spec = Specifications.where(buildRoleSpecification(role))
-				.and(UserSpecification.lastModifiedAt(lastModified));
+				.and(UserSpecification.lastModifiedAt(lastModified)).and(buildRoleSpecification(role));
 
 		return UserConverter.toVo(userDao.findAll(spec));
 	}
