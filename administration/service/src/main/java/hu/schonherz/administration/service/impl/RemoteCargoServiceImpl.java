@@ -163,9 +163,11 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	public void changeCargoState(long cargoId, long courierId, CargoState local)
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
 			CourierNotFoundException, NotAllOrderCompletedException {
-		if(local.equals(State.Taken) || local.equals(State.Free))
+		if (local.equals(CargoState.Taken) || local.equals(CargoState.Free))
 			throw new IllegalStateTransitionException();
+
 		Cargo cargo = cargoDao.findOne(cargoId);
+
 		if (cargo == null) {
 			throw new CargoNotFoundException();
 		}
@@ -175,9 +177,6 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (cargo.getCourier().getId() != courierId) {
 			throw new CargoAlreadyTakenException();
 		}
-		if (cargo.getState().compareTo(CargoStateConverter.toEntity(local)) != -1) {
-			throw new IllegalStateTransitionException();
-		}
 		User courier = userDao.findOne(courierId);
 		if (courier == null) {
 			throw new CourierNotFoundException();
@@ -185,7 +184,15 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (!isCourier(courier)) {
 			throw new CourierNotFoundException();
 		}
-		if (local.equals(DeliveryStateServ.Delivered))
+		
+		if (cargo.getState().equals(State.Delivered)) {
+			throw new IllegalStateTransitionException();
+		}
+		if (local.equals(CargoState.Delivered) && cargo.getState().equals(State.Taken)) {
+			throw new IllegalStateTransitionException();
+		}
+		
+		if (local.equals(CargoState.Delivered))
 			for (Order order : cargo.getOrders()) {
 				if (order.getDeliveryState().equals(DeliveryState.Failed)
 						|| order.getDeliveryState().equals(DeliveryState.In_progress)) {
