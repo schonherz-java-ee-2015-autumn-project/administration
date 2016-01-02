@@ -139,7 +139,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		List<Cargo> cargosTakenByCourier = cargoDao.findByCourier(courier);
 		if (cargosTakenByCourier != null) {
 			if (!cargosTakenByCourier.isEmpty()) {
-				throw new BusyCourierException();
+				for (Cargo cargo : cargosTakenByCourier)
+					if (cargo.getState().equals(State.Delivering) || cargo.getState().equals(State.Taken))
+						throw new BusyCourierException();
 			}
 		}
 
@@ -161,6 +163,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	public void changeCargoState(long cargoId, long courierId, CargoState local)
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
 			CourierNotFoundException, NotAllOrderCompletedException {
+		if(local.equals(State.Taken) || local.equals(State.Free))
+			throw new IllegalStateTransitionException();
 		Cargo cargo = cargoDao.findOne(cargoId);
 		if (cargo == null) {
 			throw new CargoNotFoundException();
@@ -194,12 +198,11 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	}
 
 	private boolean isCourier(User user) {
-		Role role = roleDao.findByName("ROLE_COURIER");
-		if (role != null)
-			if (user.getRoles().contains(role))
+		for (Role role : user.getRoles()) {
+			if (role.getName().equals("ROLE_COURIER")) {
 				return true;
-			else
-				return false;
+			}
+		}
 		return false;
 	}
 }
