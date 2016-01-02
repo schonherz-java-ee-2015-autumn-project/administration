@@ -1,10 +1,14 @@
 package hu.schonherz.administration.serviceapi.exeption;
+
+import javax.ejb.ApplicationException;
+
 /**
  * 
  * @author Miklós Kosárkár
  * This exceptions is thrown when the required parameter has invalid fields according to documentation.
  *
  */
+@ApplicationException(rollback=true)
 public class InvalidFieldValuesException extends Exception {
 
 	/**
