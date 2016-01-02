@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -32,10 +33,13 @@ public class Cargo extends BaseEntity implements Serializable {
 	private List<Order> orders;
 	@Enumerated(EnumType.STRING)
 	private State state;
-	@Temporal(TemporalType.TIMESTAMP) @Column(name = "Date", insertable=false, updatable=false)
+	@Temporal(TemporalType.TIMESTAMP) @Column(name = "Date")
 	private Date date;
 
-	
+	  @PrePersist
+	  void createdAt() {
+	    this.date =  new Date();
+	  }
 	public List<Order> getOrders() {
 		return orders;
 	}

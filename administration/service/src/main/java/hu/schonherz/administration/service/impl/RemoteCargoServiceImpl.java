@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
@@ -106,7 +107,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			ex.setMessage("Future dates are not supported.");
 			throw ex;
 		}
-		return cv.toDTO(cargoDao.findAll(CargoSpecification.lastModifiedAt(date)));
+		List<Cargo> c2 = cargoDao.findAll(CargoSpecification.lastModifiedAt(date));
+		return cv.toDTO(c2);
 	}
 
 
