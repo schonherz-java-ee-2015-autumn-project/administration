@@ -16,10 +16,18 @@ import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.entities.Cargo;
+import hu.schonherz.administration.persistence.entities.Role;
+import hu.schonherz.administration.persistence.entities.User;
+import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
+import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
+import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
+import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 
 @Stateless(mappedName = "RemoteCargoService")
@@ -95,6 +103,43 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	public void setCv(CargoConverter cv) {
 		this.cv = cv;
 	}
+
+	@Override
+	public CargoDTO assignCargoToCourier(Long cargoID, Long courierID)
+			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
+		User courier = userDao.findOne(courierID);
+		if(courier==null)
+			throw new CourierNotFoundException();
+		boolean isCourier = false;
+		for(Role role :courier.getRoles()){
+			if(role.getName().equals("ROLE_COURIER")){
+				isCourier = true;
+			}
+		}
+		if(!isCourier)
+			throw new CourierNotFoundException();
+		
+		List<Cargo> cargosTakenByCourier = cargoDao.findByCourier(courier);
+		if(cargosTakenByCourier!=null){
+			if(!cargosTakenByCourier.isEmpty()){
+				throw new BusyCourierException();
+			}
+		}
+		
+		Cargo cargo = cargoDao.findOne(cargoID);
+		if(cargo==null){
+			throw new CargoNotFoundException();
+		}
+		if(cargo.getCourier()!=null){
+			throw new CargoAlreadyTakenException();
+		}
+		
+		cargo.setCourier(courier);
+		cargo.setState(State.Taken);
+		
+		return cv.toDTO(cargo);
+	}
+	
 
 
 }
