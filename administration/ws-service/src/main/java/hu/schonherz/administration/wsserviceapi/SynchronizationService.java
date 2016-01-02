@@ -30,4 +30,11 @@ public interface SynchronizationService {
 	@WebResult(name = "restaurantResponse")
 	public WebRestaurantDTO findRestaurantById(@WebParam(name = "UserId") Long id)
 			throws NoRestaurantAssignedUserException;
+	
+	@WebMethod(operationName = "getCargos")
+	@WebResult(name = "SyncCargoResponse")
+	public WebRestaurantDTO findCargoByDate(@WebParam(name = "Date") Long id)
+			throws NoFutureDatesAllowedException;
+	
+	
 }

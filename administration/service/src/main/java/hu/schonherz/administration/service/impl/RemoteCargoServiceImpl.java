@@ -1,5 +1,6 @@
 package hu.schonherz.administration.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -94,6 +95,12 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	public void setCv(CargoConverter cv) {
 		this.cv = cv;
+	}
+
+	@Override
+	public List<CargoDTO> getCargosByDate(Date date) {
+		
+		return null;
 	}
 
 
