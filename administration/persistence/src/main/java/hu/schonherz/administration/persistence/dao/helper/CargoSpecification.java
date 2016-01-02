@@ -3,7 +3,7 @@ package hu.schonherz.administration.persistence.dao.helper;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.DateFormat;
-
+import java.text.ParseException;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -17,13 +17,13 @@ import hu.schonherz.administration.persistence.entities.Cargo_;
 
 public class CargoSpecification {
 	
-	public static Specification<Date> lastModifiedAt(Date date) {
-		return new Specification<Date>() {
+	public static Specification<Cargo> lastModifiedAt(Date date) {
+		return new Specification<Cargo>() {
 
 			
 			
 			@Override
-			public Predicate toPredicate(Root<Date> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Cargo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy/hh/mm/ss"); 
 				Date today = new Date();
 				today.setHours(0);
@@ -33,8 +33,15 @@ public class CargoSpecification {
 				tomorrow.setHours(23);
 				tomorrow.setMinutes(59);
 				tomorrow.setSeconds(59);
-				Date todayWithZeroTime = formatter.parse(formatter.format(today));
-				Date todayMidnight = formatter.parse(formatter.format(tomorrow));
+				Date todayWithZeroTime=null,todayMidnight=null;
+				try {
+					todayWithZeroTime = formatter.parse(formatter.format(today));
+					todayMidnight = formatter.parse(formatter.format(tomorrow));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				return cb.between(root.get(Cargo_.date), todayWithZeroTime, todayMidnight);
 			}
 

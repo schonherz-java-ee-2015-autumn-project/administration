@@ -16,11 +16,13 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
+import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 
 @Stateless(mappedName = "RemoteCargoService")
@@ -98,9 +100,13 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	}
 
 	@Override
-	public List<CargoDTO> getCargosByDate(Date date) {
-		
-		return null;
+	public List<CargoDTO> getCargosByDate(Date date) throws InvalidDateException{
+		if(date.after(new Date())){
+			InvalidDateException ex=new InvalidDateException();
+			ex.setMessage("Future dates are not supported.");
+			throw ex;
+		}
+		return cv.toDTO(cargoDao.findAll(CargoSpecification.lastModifiedAt(date)));
 	}
 
 

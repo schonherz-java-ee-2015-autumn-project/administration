@@ -12,14 +12,18 @@ import javax.jws.WebService;
 
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
+import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteRestaurantService;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
+import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.NoRestaurantAssignedUserException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllowedRoleException;
+import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 import hu.schonherz.administration.wsservice.dto.WebRestaurantDTO;
 import hu.schonherz.administration.wsservice.dto.WebUserDTO;
 import hu.schonherz.administration.wsserviceapi.SynchronizationService;
+import hu.schonherz.administration.wsserviceapi.converter.RemoteCargoConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RestaurantConverter;
 import hu.schonherz.administration.wsserviceapi.converter.UserConverter;
 
@@ -33,7 +37,9 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 	private RemoteUserService remoteUserService;
 	@EJB
 	private RemoteRestaurantService RemoteRestaurantService;
-
+	@EJB
+	private RemoteCargoService remoteCargoService;
+	
 	@Override
 	public List<WebUserDTO> getUsers(UserRole role) throws NotAllowedRoleException {
 		return UserConverter.toWebUserDTO(remoteUserService.getUsers(role));
@@ -47,6 +53,11 @@ public class SynchronizationServiceImpl implements SynchronizationService {
 	@Override
 	public WebRestaurantDTO findRestaurantById(Long id) throws NoRestaurantAssignedUserException {
 		return RestaurantConverter.toWebRestaurantDTO(RemoteRestaurantService.findById(id));
+	}
+
+	@Override
+	public List<RemoteCargoDTO> findCargoByDate(Date date) throws InvalidDateException {
+		return RemoteCargoConverter.toRemoteDTO(remoteCargoService.getCargosByDate(date));
 	}
 
 }
