@@ -4,13 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
-
-import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
+import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
+import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.OrderException;
 
 public interface RemoteCargoService {
 	
@@ -20,5 +22,7 @@ public interface RemoteCargoService {
 	
 	CargoDTO assignCargoToCourier(Long cargoID, Long courierID) throws CargoAlreadyTakenException, CargoNotFoundException,
 	CourierNotFoundException, BusyCourierException;
+	
+	void changePaymentState(Long courierId, Long orderId, PaymentMethod paymentMethod) throws CourierNotFoundException, CargoNotFoundException, OrderException, AddressNotFoundException;
 
 }

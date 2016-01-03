@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
+import hu.schonherz.administration.persistence.dao.OrderDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
@@ -22,15 +23,25 @@ import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.OrderConverter;
+import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
+import hu.schonherz.administration.serviceapi.dto.RoleDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
+import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.OrderException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -43,6 +54,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private OrderDao orderDao;
 
 	@Autowired
 	private RestaurantDao restaurantDao;
@@ -150,5 +164,54 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargo.setState(State.Taken);
 
 		return cv.toDTO(cargo);
+	}
+
+	@Override
+	public void changePaymentState(Long courierId, Long orderId, PaymentMethod paymentMethod)
+			throws CourierNotFoundException, CargoNotFoundException, OrderException, AddressNotFoundException {
+
+		UserDTO courierDTO = UserConverter.toVo(userDao.findOne(courierId));
+		if (courierDTO == null)
+			throw new CourierNotFoundException();
+
+		boolean isCourier = false;
+		boolean isOrderBelongsToCourier = true;
+		for (RoleDTO role : courierDTO.getRoles()) {
+			if (role.getName().equals("ROLE_COURIER")) {
+				isCourier = true;
+			}
+		}
+		if (!isCourier)
+			throw new CourierNotFoundException();
+
+		List<CargoDTO> cargoesDTO = cv.toDTO(cargoDao.findByCourier(UserConverter.toEntity(courierDTO)));
+		if (cargoesDTO == null)
+			throw new CargoNotFoundException();
+
+		OrderDTO ord = OrderConverter.toDTO(orderDao.findOne(orderId));
+		if (ord == null) {
+			throw new AddressNotFoundException("Address does not exist");
+		}
+
+		for (CargoDTO c : cargoesDTO) {
+			for (OrderDTO orderDTO : c.getOrders()) {
+				if (orderDTO.getId().equals(orderId)) {
+					if (!(orderDTO.getDeliveryState().equals(DeliveryStateServ.Delivered))) {
+						throw new OrderException("This order state is not delivered");
+					}
+					if (!(c.getState().equals(CargoState.Delivering))) {
+						throw new OrderException("Cargo state is not delivered");
+					}
+					isOrderBelongsToCourier = true;
+					orderDTO.setPayment(paymentMethod);
+					orderDao.save(OrderConverter.toEntity(orderDTO));
+					break;
+				}
+			}
+		}
+		if (!isOrderBelongsToCourier) {
+			throw new OrderException("This order is not belongs to this courier");
+		}
+		
 	}
 }
