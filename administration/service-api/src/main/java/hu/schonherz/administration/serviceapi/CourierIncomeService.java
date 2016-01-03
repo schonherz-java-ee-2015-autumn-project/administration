@@ -12,10 +12,13 @@ public interface CourierIncomeService {
 
 	List<CourierIncomeDTO> getCourierIncome(Long courierId);
 
-	List<CourierIncomeDTO> getCourierIncome(int page, int pageSize, List<SortMetaDTO> sortMeta, Map<String, Object> filters);
+	List<CourierIncomeDTO> getCourierIncome(int page, int pageSize, List<SortMetaDTO> sortMeta,
+			Map<String, Object> filters);
 
 	int getCourierIncomeCount(Map<String, Object> filters);
 
 	CourierIncomeDTO getCourierIncomeById(long parseLong);
+
+	void save(CourierIncomeDTO edited);
 
 }

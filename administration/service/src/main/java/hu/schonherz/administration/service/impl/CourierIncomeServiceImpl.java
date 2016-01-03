@@ -106,7 +106,7 @@ public class CourierIncomeServiceImpl implements CourierIncomeService {
 
 	private Pageable createPageRequest(int first, int pageSize, List<SortMetaDTO> sortMeta) {
 		List<Order> orders = new ArrayList<>();
-		if(sortMeta==null)
+		if (sortMeta == null)
 			return new PageRequest(first, pageSize);
 		for (SortMetaDTO sm : sortMeta) {
 			if (sm.getOrder().equals(CustomSortOrder.DESC))
@@ -125,13 +125,16 @@ public class CourierIncomeServiceImpl implements CourierIncomeService {
 	private Specification<CourierIncome> buildSpecification(Map<String, Object> filters) {
 		Specification<CourierIncome> spec = null;
 		String name;
-
 		if (filters.containsKey("name")) {
 			name = (String) filters.get("name");
 			spec = Specifications.where(CourierIncomeSpecification.courierNameLike(name));
 		}
-
 		return spec;
+	}
+
+	@Override
+	public void save(CourierIncomeDTO edited) {
+		courierIncomeDao.save(cv.toEntity(edited));
 	}
 
 }

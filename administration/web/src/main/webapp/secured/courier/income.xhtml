@@ -9,12 +9,17 @@
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
 		<h:form id="courierIncomeForm">
-			<p:dataTable var="courierIncome" sortMode="multiple"
-				value="#{courierIncomeLazyBean.lazyDataModel}" paginator="true"
-				rows="25" rowsPerPageTemplate="5,25,50" id="incomeTable" lazy="true"
-				selectionMode="single" selection="#{courierIncomeLazyBean.selected}"
-				rowKey="#{courierIncome.id}"
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable var="courierIncome" sortMode="multiple" editable="true"
+				editMode="cell" value="#{courierIncomeLazyBean.lazyDataModel}"
+				paginator="true" rowKey="#{courierIncome.id}" rows="25"
+				rowsPerPageTemplate="5,25,50" id="incomeTable" lazy="true"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+				<p:ajax event="cellEdit" 
+					listener="#{courierIncomeLazyBean.onCellEdit}"
+					update=":courierIncomeForm:msgs" />
+
 
 				<p:column headerText="#{out.courier_name}"
 					sortBy="#{courierIncome.courierName}"
@@ -31,6 +36,46 @@
 					<h:outputText value="#{courierIncome.date}" />
 				</p:column>
 
+				<p:column headerText="#{out.credit_card}"
+					sortBy="#{courierIncome.crediCard}">
+					<h:outputText value="#{courierIncome.crediCard}" />
+				</p:column>
+
+				<p:column headerText="#{out.SZÉPCard}"
+					sortBy="#{courierIncome.SZÉPCard}">
+					<h:outputText value="#{courierIncome.SZÉPCard}" />
+				</p:column>
+
+				<p:column headerText="#{out.cash}" sortBy="#{courierIncome.cash}">
+					<h:outputText value="#{courierIncome.cash}" />
+				</p:column>
+
+				<p:column headerText="#{out.actual_cash}" id="actual_cash"
+					sortBy="#{courierIncome.actualCash}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{courierIncome.actualCash}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="cashInput" value="#{courierIncome.actualCash}"
+								style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+
+				</p:column>
+
+				<p:column headerText="#{out.actual_voucher}" id="actual_voucher"
+					sortBy="#{courierIncome.actualVoucher}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{courierIncome.actualVoucher}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="voucherInput"
+								value="#{courierIncome.actualVoucher}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
 
 			</p:dataTable>
 

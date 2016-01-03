@@ -29,6 +29,7 @@ public class CourierIncomeConverter {
 			result.setCourierId(u.getId());
 			result.setCourierName(u.getName());
 		}
+		result.setCash(income.getCash());
 		result.setCrediCard(income.getCrediCard());
 		result.setDate(income.getDate());
 		result.setSZÉPCard(income.getSZÉPCard());
@@ -47,6 +48,7 @@ public class CourierIncomeConverter {
 				result.setCourier(u);
 			}
 		}
+		result.setCash(income.getCash());
 		result.setCrediCard(income.getCrediCard());
 		result.setDate(income.getDate());
 		result.setSZÉPCard(income.getSZÉPCard());

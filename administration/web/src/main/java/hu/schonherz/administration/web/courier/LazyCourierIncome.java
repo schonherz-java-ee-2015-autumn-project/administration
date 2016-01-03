@@ -35,8 +35,8 @@ public class LazyCourierIncome extends LazyDataModel<CourierIncomeDTO> {
 	}
 
 	@Override
-	public Object getRowKey(CourierIncomeDTO userDTO) {
-		return userDTO.getId();
+	public Object getRowKey(CourierIncomeDTO income) {
+		return income.getId();
 	}
 
 	@Override
