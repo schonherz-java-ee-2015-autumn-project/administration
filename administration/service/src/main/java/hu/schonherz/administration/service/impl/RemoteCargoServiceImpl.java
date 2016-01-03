@@ -18,6 +18,7 @@ import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
+import hu.schonherz.administration.persistence.entities.Order;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
@@ -25,12 +26,16 @@ import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.dto.UserRole;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.OrderIsNotInProgressException;
+import hu.schonherz.administration.serviceapi.exeption.WrongCourierException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -46,7 +51,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private RestaurantDao restaurantDao;
-
+	
 	private CargoConverter cv;
 
 	@Override
@@ -150,5 +155,49 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargo.setState(State.Taken);
 
 		return cv.toDTO(cargo);
+	}
+
+	@Override
+	public CargoDTO GetCargoByCourier(long courierId) throws CourierNotFoundException {
+		User courier=null;
+		courier=userDao.findById(courierId);
+		System.err.println("paraszt: "+courier.getRoles().contains("ROLE_COURIER"));
+		if(!courier.getRoles().contains(UserRole.COURIER)||courier==null)
+			throw new CourierNotFoundException();
+		if(courier.getRoles().contains(UserRole.COURIER)){
+			List<Cargo> cargos = cargoDao.findByCourier(courier);
+			for(Cargo c:cargos)
+				if (c.getState().equals(State.Taken)||c.getState().equals(State.Delivering))
+					return cv.toDTO(c);
+			
+		
+		}
+		return null;	
+	}
+
+	@Override
+	public void hasOrderId(long OrderId, long courierId) throws OrderIsNotInProgressException, CourierNotFoundException {
+		User courier=null;
+		courier=userDao.findById(courierId);
+		if(!courier.getRoles().contains(UserRole.COURIER)||courier==null)
+			throw new CourierNotFoundException();
+		if(courier.getRoles().contains(UserRole.COURIER)){
+			List<Cargo> cargos = cargoDao.findByCourier(courier);
+			for(Cargo c:cargos)
+				for(Order o:c.getOrders())
+					if (o.getId()==OrderId);
+						throw new OrderIsNotInProgressException();
+		}
+				
+	}
+
+	@Override
+	public void hasOrderId(long OrderId) throws WrongCourierException {
+		List<CargoDTO> cargos=getCargos();
+		for(CargoDTO c:cargos)
+			for(OrderDTO o:c.getOrders())
+				if(o.getId()==OrderId)
+					throw new WrongCourierException();
+		
 	}
 }

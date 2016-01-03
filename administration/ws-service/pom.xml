@@ -26,6 +26,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>service</artifactId>
+			<version>${version}</version>
+		</dependency>
+		<dependency>
+			<groupId>hu.schonherz.administration</groupId>
+			<artifactId>persistence</artifactId>
+			<version>${version}</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
 		</dependency>

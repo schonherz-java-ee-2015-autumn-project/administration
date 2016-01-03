@@ -1,5 +1,7 @@
 package hu.schonherz.administration.wsservice.impl;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -9,11 +11,19 @@ import javax.jws.WebService;
 
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
+import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
+import hu.schonherz.administration.service.converter.DeliveryStateConverter;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
+import hu.schonherz.administration.serviceapi.RemoteOrderService;
+import hu.schonherz.administration.serviceapi.RemoteUserService;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
+import hu.schonherz.administration.serviceapi.exeption.OrderIsNotInProgressException;
+import hu.schonherz.administration.serviceapi.exeption.WrongCourierException;
 import hu.schonherz.administration.wsserviceapi.CourierService;
 
 @Stateless(mappedName = "CourierServiceImpl")
@@ -25,10 +35,35 @@ public class CourierServiceImpl implements CourierService {
 	@EJB
 	private RemoteCargoService cargoService;
 	
+	@EJB
+	private RemoteUserService userService;
+	
+	@EJB
+	private RemoteOrderService orderService;
+	
 	@Override
 	public void assignCargoToCourier(long cargoId, long courierId)
 			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
 		cargoService.assignCargoToCourier(cargoId, courierId);
 	}
+
+	@Override
+	public void ChangeDeliveryState(long OrderId, long courierId, DeliveryState newState)
+	        throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException, WrongCourierException {
+		List<OrderDTO> orders=cargoService.GetCargoByCourier(courierId).getOrders();
+		OrderDTO order=null;
+		for(OrderDTO o:orders)
+			if(o.getId()==OrderId)
+				order=o;
+			if (order==null){
+				cargoService.hasOrderId(OrderId,courierId);
+				cargoService.hasOrderId(OrderId);
+				throw new AddressNotFoundException();
+			}
+			order.setDeliveryState(DeliveryStateConverter.toDTO(newState));
+			orderService.saveOrder(order);
+	}
+	
+	
 
 }
