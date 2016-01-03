@@ -156,15 +156,22 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		return cv.toDTO(cargo);
 	}
-
+	
+	private boolean isCourier(User user){
+		for (Role role : user.getRoles()) 
+			if (role.getName().equals("ROLE_COURIER"))
+				return true;
+		return false;
+	}
+	
 	@Override
 	public CargoDTO GetCargoByCourier(long courierId) throws CourierNotFoundException {
-		User courier=null;
+		User courier;
 		courier=userDao.findById(courierId);
-		System.err.println("paraszt: "+courier.getRoles().contains("ROLE_COURIER"));
-		if(!courier.getRoles().contains(UserRole.COURIER)||courier==null)
+		
+		if(courier==null||!isCourier(courier))
 			throw new CourierNotFoundException();
-		if(courier.getRoles().contains(UserRole.COURIER)){
+		if(isCourier(courier)){
 			List<Cargo> cargos = cargoDao.findByCourier(courier);
 			for(Cargo c:cargos)
 				if (c.getState().equals(State.Taken)||c.getState().equals(State.Delivering))
@@ -177,15 +184,15 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Override
 	public void hasOrderId(long OrderId, long courierId) throws OrderIsNotInProgressException, CourierNotFoundException {
-		User courier=null;
+		User courier;
 		courier=userDao.findById(courierId);
-		if(!courier.getRoles().contains(UserRole.COURIER)||courier==null)
+		if(courier==null||!isCourier(courier))
 			throw new CourierNotFoundException();
-		if(courier.getRoles().contains(UserRole.COURIER)){
+		if(isCourier(courier)){
 			List<Cargo> cargos = cargoDao.findByCourier(courier);
 			for(Cargo c:cargos)
 				for(Order o:c.getOrders())
-					if (o.getId()==OrderId);
+					if (o.getId()==OrderId)
 						throw new OrderIsNotInProgressException();
 		}
 				
