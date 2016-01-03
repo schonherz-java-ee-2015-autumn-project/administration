@@ -13,12 +13,15 @@
 
 	<context:component-scan base-package="hu.schonherz.administration.web" />
 	<import resource="classpath:spring-persistence.xml" />
-	
+
 	<jee:local-slsb id="userService" jndi-name="ejb.UserService"
 		business-interface="hu.schonherz.administration.serviceapi.UserService" />
-		
+
 	<jee:local-slsb id="restaurantService" jndi-name="ejb.RestaurantService"
 		business-interface="hu.schonherz.administration.serviceapi.RestaurantService" />
-			
+
+	<jee:local-slsb id="courierIncomeService" jndi-name="ejb.CourierIncomeService"
+		business-interface="hu.schonherz.administration.serviceapi.CourierIncomeService" />
+
 
 </beans>

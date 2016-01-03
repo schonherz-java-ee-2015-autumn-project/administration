@@ -1,5 +1,6 @@
 package hu.schonherz.administration.web.courier;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.inject.Named;
 
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 
 import hu.schonherz.administration.serviceapi.CourierIncomeService;
 import hu.schonherz.administration.serviceapi.dto.CourierIncomeDTO;
@@ -56,6 +58,13 @@ public class LazyCourierIncome extends LazyDataModel<CourierIncomeDTO> {
 			return Collections.emptyList();
 		}
 
+	}
+
+	@Override
+	public List<CourierIncomeDTO> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+			Map<String, Object> filters) {
+		// TODO Auto-generated method stub
+		return new ArrayList<>();
 	}
 
 }

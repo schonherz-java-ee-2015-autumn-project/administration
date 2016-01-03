@@ -13,7 +13,7 @@ public class SortMetaConverter {
 
 	public static SortMetaDTO toDTO(SortMeta sortMeta) {
 		SortMetaDTO result = new SortMetaDTO();
-		result.setColumnName(sortMeta.getColumn().getField());
+		result.setColumnName(sortMeta.getSortField());
 		if (sortMeta.getSortOrder().equals(SortOrder.ASCENDING))
 			result.setOrder(CustomSortOrder.ASC);
 		else

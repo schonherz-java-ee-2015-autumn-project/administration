@@ -106,6 +106,8 @@ public class CourierIncomeServiceImpl implements CourierIncomeService {
 
 	private Pageable createPageRequest(int first, int pageSize, List<SortMetaDTO> sortMeta) {
 		List<Order> orders = new ArrayList<>();
+		if(sortMeta==null)
+			return new PageRequest(first, pageSize);
 		for (SortMetaDTO sm : sortMeta) {
 			if (sm.getOrder().equals(CustomSortOrder.DESC))
 				orders.add(new Order(Sort.Direction.DESC, sm.getColumnName()));
