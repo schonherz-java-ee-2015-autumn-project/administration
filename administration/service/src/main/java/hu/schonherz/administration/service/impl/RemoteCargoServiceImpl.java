@@ -175,7 +175,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			throw new CourierNotFoundException();
 
 		boolean isCourier = false;
-		boolean isOrderBelongsToCourier = true;
+		boolean isOrderBelongsToCourier = false;
 		for (RoleDTO role : courierDTO.getRoles()) {
 			if (role.getName().equals("ROLE_COURIER")) {
 				isCourier = true;
