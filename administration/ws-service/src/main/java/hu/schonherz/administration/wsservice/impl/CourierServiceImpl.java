@@ -16,6 +16,7 @@ import hu.schonherz.administration.service.converter.DeliveryStateConverter;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
+import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
@@ -31,39 +32,39 @@ import hu.schonherz.administration.wsserviceapi.CourierService;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 public class CourierServiceImpl implements CourierService {
-	
+
 	@EJB
 	private RemoteCargoService cargoService;
-	
+
 	@EJB
 	private RemoteUserService userService;
-	
+
 	@EJB
 	private RemoteOrderService orderService;
-	
+
 	@Override
-	public void assignCargoToCourier(long cargoId, long courierId)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
+	public void assignCargoToCourier(long cargoId, long courierId) throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
 		cargoService.assignCargoToCourier(cargoId, courierId);
 	}
 
 	@Override
 	public void ChangeDeliveryState(long OrderId, long courierId, DeliveryState newState)
 	        throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException, WrongCourierException {
-		List<OrderDTO> orders=cargoService.GetCargoByCourier(courierId).getOrders();
-		OrderDTO order=null;
-		for(OrderDTO o:orders)
-			if(o.getId()==OrderId)
-				order=o;
-			if (order==null){
-				cargoService.hasOrderId(OrderId,courierId);
+		CargoDTO cargo = cargoService.GetCargoByCourier(courierId);
+		if (cargo != null) {
+			List<OrderDTO> orders = cargo.getOrders();
+			OrderDTO order = null;
+			for (OrderDTO o : orders)
+				if (o.getId() == OrderId)
+					order = o;
+			if (order == null) {
+				cargoService.hasOrderId(OrderId, courierId);
 				cargoService.hasOrderId(OrderId);
 				throw new AddressNotFoundException();
 			}
 			order.setDeliveryState(DeliveryStateConverter.toDTO(newState));
 			orderService.saveOrder(order);
+		}
 	}
-	
-	
 
 }
