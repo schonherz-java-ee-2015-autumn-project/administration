@@ -18,19 +18,25 @@ import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
-import hu.schonherz.administration.persistence.entities.Role;
-import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
+import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.dto.RoleDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
+import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -117,38 +123,91 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		return cv.toDTO(c2);
 	}
 
-	public CargoDTO assignCargoToCourier(Long cargoID, Long courierID)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
-		User courier = userDao.findOne(courierID);
+	public void assignCargoToCourier(Long cargoID, Long courierID)
+			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException {
+		UserDTO courier = UserConverter.toVo(userDao.findOne(courierID));
 		if (courier == null)
 			throw new CourierNotFoundException();
-		boolean isCourier = false;
-		for (Role role : courier.getRoles()) {
-			if (role.getName().equals("ROLE_COURIER")) {
-				isCourier = true;
-			}
-		}
-		if (!isCourier)
+		if (!isCourier(courier))
 			throw new CourierNotFoundException();
 
-		List<Cargo> cargosTakenByCourier = cargoDao.findByCourier(courier);
+		List<CargoDTO> cargosTakenByCourier = cv.toDTO(cargoDao.findByCourier(UserConverter.toEntity(courier)));
 		if (cargosTakenByCourier != null) {
 			if (!cargosTakenByCourier.isEmpty()) {
-				throw new BusyCourierException();
+				for (CargoDTO cargoDTO : cargosTakenByCourier)
+					if (cargoDTO.getState().equals(State.Delivering) || cargoDTO.getState().equals(State.Taken))
+						throw new BusyCourierException();
 			}
 		}
 
-		Cargo cargo = cargoDao.findOne(cargoID);
-		if (cargo == null) {
+		CargoDTO cargoDTO = cv.toDTO(cargoDao.findOne(cargoID));
+		if (cargoDTO == null) {
 			throw new CargoNotFoundException();
 		}
-		if (cargo.getCourier() != null) {
+		if (cargoDTO.getCourierId() != null) {
 			throw new CargoAlreadyTakenException();
 		}
 
-		cargo.setCourier(courier);
-		cargo.setState(State.Taken);
+		cargoDTO.setCourierId(courierID);
+		cargoDTO.setState(CargoState.Taken);
+		cargoDao.save(cv.toEntity(cargoDTO));
+	}
 
-		return cv.toDTO(cargo);
+	@Override
+	public void changeCargoState(long cargoId, long courierId, CargoState local)
+			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
+			CourierNotFoundException, NotAllOrderCompletedException, InvalidFieldValuesException {
+		if (local.equals(CargoState.Taken) || local.equals(CargoState.Free))
+			throw new IllegalStateTransitionException();
+
+		CargoDTO cargoDTO = cv.toDTO(cargoDao.findOne(cargoId));
+		UserDTO courierDTO = UserConverter.toVo(userDao.findOne(courierId));
+		
+		if (courierDTO == null) {
+			throw new CourierNotFoundException();
+		}
+		
+		if (cargoDTO == null) {
+			throw new CargoNotFoundException();
+		}
+		
+		if (cargoDTO.getCourierId() == null) {
+			throw new IllegalStateTransitionException();
+		}
+		
+		if (cargoDTO.getCourierId() != courierId) {
+			throw new CargoAlreadyTakenException();
+		}
+		
+		if (!isCourier(courierDTO)) {
+			throw new CourierNotFoundException();
+		}
+		
+		if (cargoDTO.getState().equals(State.Delivered)) {
+			throw new IllegalStateTransitionException();
+		}
+		if (local.equals(CargoState.Delivered) && cargoDTO.getState().equals(CargoState.Taken)) {
+			throw new IllegalStateTransitionException();
+		}
+		
+		if (local.equals(CargoState.Delivered))
+			for (OrderDTO order : cargoDTO.getOrders()) {
+				if (order.getDeliveryState().equals(DeliveryStateServ.Failed)
+						|| order.getDeliveryState().equals(DeliveryStateServ.In_progress)) {
+					throw new NotAllOrderCompletedException();
+				}
+
+			}
+		cargoDTO.setState(local);
+		cargoDao.save(cv.toEntity(cargoDTO));
+	}
+
+	private boolean isCourier(UserDTO user) {
+		for (RoleDTO role : user.getRoles()) {
+			if (role.getName().equals("ROLE_COURIER")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

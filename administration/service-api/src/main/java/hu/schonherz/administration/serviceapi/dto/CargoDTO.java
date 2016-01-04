@@ -1,6 +1,7 @@
 package hu.schonherz.administration.serviceapi.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class CargoDTO implements Serializable{
@@ -15,6 +16,7 @@ public class CargoDTO implements Serializable{
 	private Long courierId;
 	private List<OrderDTO> orders;
 	private CargoState state;
+	private Date date;
 	public Long getId() {
 		return id;
 	}
@@ -44,6 +46,12 @@ public class CargoDTO implements Serializable{
 	}
 	public void setState(CargoState state) {
 		this.state = state;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 	
