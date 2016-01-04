@@ -1,6 +1,5 @@
 package hu.schonherz.administration.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -258,7 +257,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			}
 		}
 
-		if (cargos.isEmpty()) {
+		if (cargos.size() == 1) {
 			income = new CourierIncomeDTO();
 			income.setCash(cash);
 			income.setCourierId(courier.getId());
@@ -270,13 +269,32 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		} else {
 			income = getIncomeOfCourierAtDate(courier, new Date());
-			income.setCash(income.getCash() + cash);
+			if (income == null)
+				income = new CourierIncomeDTO();
+			if (income.getCash() != null)
+				income.setCash(income.getCash() + cash);
+			else
+				income.setCash(cash);
 			income.setCourierId(courier.getId());
 			income.setCourierName(courier.getName());
-			income.setCrediCard(income.getCrediCard() + creditCard);
+
+			if (income.getCrediCard() != null)
+				income.setCrediCard(income.getCrediCard() + creditCard);
+			else
+				income.setCrediCard(creditCard);
+
 			income.setDate(new Date());
-			income.setSZÉPCard(income.getSZÉPCard() + SZÉPCard);
-			income.setVoucher(income.getVoucher() + voucher);
+
+			if (income.getVoucher() != null)
+				income.setVoucher(income.getVoucher() + voucher);
+			else
+				income.setVoucher(voucher);
+
+			if (income.getSZÉPCard() != null)
+				income.setSZÉPCard(income.getSZÉPCard() + SZÉPCard);
+			else
+				income.setSZÉPCard(SZÉPCard);
+
 		}
 		return income;
 	}
