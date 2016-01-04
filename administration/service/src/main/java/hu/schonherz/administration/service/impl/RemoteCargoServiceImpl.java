@@ -259,6 +259,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		if (cargos.size() == 1) {
 			income = new CourierIncomeDTO();
+			income.setActualCash(0);
+			income.setActualVoucher(0);
 			income.setCash(cash);
 			income.setCourierId(courier.getId());
 			income.setCourierName(courier.getName());
@@ -269,8 +271,11 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		} else {
 			income = getIncomeOfCourierAtDate(courier, new Date());
-			if (income == null)
+			if (income == null) {
 				income = new CourierIncomeDTO();
+				income.setActualCash(0);
+				income.setActualVoucher(0);
+			}
 			if (income.getCash() != null)
 				income.setCash(income.getCash() + cash);
 			else
@@ -294,7 +299,6 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 				income.setSZÉPCard(income.getSZÉPCard() + SZÉPCard);
 			else
 				income.setSZÉPCard(SZÉPCard);
-
 		}
 		return income;
 	}

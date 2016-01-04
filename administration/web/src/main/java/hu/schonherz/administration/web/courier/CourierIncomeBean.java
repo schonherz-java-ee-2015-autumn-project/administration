@@ -55,7 +55,7 @@ public class CourierIncomeBean {
 			String columnName = event.getColumn().getClientId();
 			if (columnName.contains("actual_cash")) {
 
-				if (edited.getCash() >= newValue && newValue>oldValue) {
+				if (edited.getCash() >= newValue ) {
 					edited.setActualCash(newValue);
 					incomeService.save(edited);
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succed", "ok");
@@ -63,7 +63,7 @@ public class CourierIncomeBean {
 					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "failed",
 							MessageProvider.getValue("out.invalid_income_value"));
 			} else {
-				if (edited.getVoucher() >= newValue && newValue>oldValue) {
+				if (edited.getVoucher() >= newValue ) {
 					incomeService.save(edited);
 					edited.setActualVoucher(newValue);
 					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succed", "ok");
@@ -73,7 +73,9 @@ public class CourierIncomeBean {
 
 			}
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succed", "ok");
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "failed",
+					MessageProvider.getValue("out.invalid_income_value"));
+
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
