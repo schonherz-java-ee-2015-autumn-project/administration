@@ -10,6 +10,7 @@ import javax.jws.WebService;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
+import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
@@ -17,9 +18,12 @@ import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
+import hu.schonherz.administration.serviceapi.exeption.OrderException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoState;
+import hu.schonherz.administration.wsservice.dto.RemotePaymentMethod;
 import hu.schonherz.administration.wsserviceapi.CourierService;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteCargoStateConverter;
+import hu.schonherz.administration.wsserviceapi.converter.RemotePaymentConverter;
 
 @Stateless(mappedName = "CourierServiceImpl")
 @WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.CourierService", serviceName = "CourierServiceImpl")
@@ -31,8 +35,8 @@ public class CourierServiceImpl implements CourierService {
 	private RemoteCargoService cargoService;
 
 	@Override
-	public void assignCargoToCourier(long cargoId, long courierId)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException {
+	public void assignCargoToCourier(long cargoId, long courierId) throws CargoAlreadyTakenException,
+			CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException {
 		cargoService.assignCargoToCourier(cargoId, courierId);
 	}
 
@@ -41,6 +45,13 @@ public class CourierServiceImpl implements CourierService {
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
 			CourierNotFoundException, NotAllOrderCompletedException, InvalidFieldValuesException {
 		cargoService.changeCargoState(cargoId, courierId, RemoteCargoStateConverter.toLocal(state));
+	}
+
+	@Override
+	public void changePaymentState(Long courierId, Long orderId, RemotePaymentMethod paymentMethod)
+			throws CourierNotFoundException, CargoNotFoundException, OrderException, AddressNotFoundException {
+		cargoService.changePaymentState(courierId, orderId, RemotePaymentConverter.toDTO(paymentMethod));
+
 	}
 
 }
