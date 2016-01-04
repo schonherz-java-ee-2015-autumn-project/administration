@@ -18,7 +18,6 @@ import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
-import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
@@ -26,6 +25,7 @@ import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.CargoState;
+import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.dto.RoleDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
@@ -186,14 +186,14 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (cargoDTO.getState().equals(State.Delivered)) {
 			throw new IllegalStateTransitionException();
 		}
-		if (local.equals(CargoState.Delivered) && cargoDTO.getState().equals(State.Taken)) {
+		if (local.equals(CargoState.Delivered) && cargoDTO.getState().equals(CargoState.Taken)) {
 			throw new IllegalStateTransitionException();
 		}
 		
 		if (local.equals(CargoState.Delivered))
 			for (OrderDTO order : cargoDTO.getOrders()) {
-				if (order.getDeliveryState().equals(DeliveryState.Failed)
-						|| order.getDeliveryState().equals(DeliveryState.In_progress)) {
+				if (order.getDeliveryState().equals(DeliveryStateServ.Failed)
+						|| order.getDeliveryState().equals(DeliveryStateServ.In_progress)) {
 					throw new NotAllOrderCompletedException();
 				}
 
