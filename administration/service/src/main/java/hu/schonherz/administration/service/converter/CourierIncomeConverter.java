@@ -46,6 +46,7 @@ public class CourierIncomeConverter {
 			User u = userDao.findOne(income.getCourierId());
 			if (u != null) {
 				result.setCourier(u);
+				result.setCourierName(u.getName());
 			}
 		}
 		result.setCash(income.getCash());
