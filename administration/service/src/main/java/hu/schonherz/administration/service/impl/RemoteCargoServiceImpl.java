@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
+import hu.schonherz.administration.persistence.dao.CourierIncomeDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
@@ -26,11 +27,15 @@ import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.converter.CargoStateConverter;
+import hu.schonherz.administration.service.converter.CourierIncomeConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.CargoState;
-import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
+import hu.schonherz.administration.serviceapi.dto.CourierIncomeDTO;
+import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
+import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
@@ -59,6 +64,11 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	private RestaurantDao restaurantDao;
 
 	private CargoConverter cv;
+	
+	@Autowired
+	private CourierIncomeDao incomeDao;
+	
+	private CourierIncomeConverter incomeConverter;
 
 	@Override
 	public CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException {
@@ -103,6 +113,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@PostConstruct
 	void init() {
+		incomeConverter = new CourierIncomeConverter();
+		incomeConverter.setUserDao(userDao);
 		cv = new CargoConverter();
 		cv.setRestaurantDao(restaurantDao);
 		cv.setUserDao(userDao);
@@ -202,6 +214,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			}
 		cargo.setState(CargoStateConverter.toEntity(local));
 		cargoDao.save(cargo);
+		CourierIncomeDTO income = createIncomeFromCargo(cv.toDTO(cargo));
+		incomeDao.save(incomeConverter.toEntity(income));
+		
 	}
 
 	private boolean isCourier(User user) {
@@ -211,5 +226,40 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			}
 		}
 		return false;
+	}
+	
+	private CourierIncomeDTO createIncomeFromCargo(CargoDTO cargo) {
+		CourierIncomeDTO income = new CourierIncomeDTO();
+		int creditCard = 0;
+		int cash = 0;
+		int voucher = 0;
+		int SZÉPCard = 0;
+		for(OrderDTO order: cargo.getOrders()){
+			PaymentMethod p = order.getPayment();
+			switch(p) {
+			case Cash: cash += order.getFullCost(); break;
+			case VOUCHER: voucher +=order.getFullCost(); break;
+			case SZÉPCard: SZÉPCard+=order.getFullCost(); break;
+			case CreditCard: creditCard+= order.getFullCost(); break;
+			}
+		}
+		income.setActualCash(0);
+		income.setActualVoucher(0);
+		income.setCash(cash);
+		income.setCourierId(cargo.getCourierId());
+		income.setCourierName(userDao.findOne(cargo.getCourierId()).getName());
+		income.setCrediCard(creditCard);
+		income.setDate(new Date());
+		income.setSZÉPCard(SZÉPCard);
+		income.setVoucher(voucher);
+		
+		return income;
+	}
+	private Integer totalCostOf(OrderDTO order) {
+		Integer totalCost = 0;
+		for(ItemQuantityDTO i: order.getItems()) {
+			totalCost = i.getItem().getPrice() * i.getQuantity();
+		}
+		return totalCost;
 	}
 }
