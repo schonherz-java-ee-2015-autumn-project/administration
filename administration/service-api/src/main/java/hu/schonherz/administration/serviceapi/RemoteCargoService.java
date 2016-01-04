@@ -22,11 +22,11 @@ public interface RemoteCargoService {
 
 	List<CargoDTO> getCargosByDate(Date date) throws InvalidDateException;
 
-	CargoDTO assignCargoToCourier(Long cargoID, Long courierID)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException;
+	void assignCargoToCourier(Long cargoID, Long courierID)
+			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException;
 
 	void changeCargoState(long cargoId, long courierId, CargoState local)
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
-			CourierNotFoundException, NotAllOrderCompletedException;
+			CourierNotFoundException, NotAllOrderCompletedException, InvalidFieldValuesException;
 
 }

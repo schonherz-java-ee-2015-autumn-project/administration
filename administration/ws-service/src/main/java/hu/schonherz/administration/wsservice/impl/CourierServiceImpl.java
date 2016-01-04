@@ -15,6 +15,7 @@ import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenExceptio
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoState;
 import hu.schonherz.administration.wsserviceapi.CourierService;
@@ -31,14 +32,14 @@ public class CourierServiceImpl implements CourierService {
 
 	@Override
 	public void assignCargoToCourier(long cargoId, long courierId)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
+			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException {
 		cargoService.assignCargoToCourier(cargoId, courierId);
 	}
 
 	@Override
 	public void changeCargoState(long cargoId, long courierId, RemoteCargoState state)
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
-			CourierNotFoundException, NotAllOrderCompletedException {
+			CourierNotFoundException, NotAllOrderCompletedException, InvalidFieldValuesException {
 		cargoService.changeCargoState(cargoId, courierId, RemoteCargoStateConverter.toLocal(state));
 	}
 
