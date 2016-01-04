@@ -196,11 +196,11 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		for (CargoDTO c : cargoesDTO) {
 			for (OrderDTO orderDTO : c.getOrders()) {
 				if (orderDTO.getId().equals(orderId)) {
-					if (!(orderDTO.getDeliveryState().equals(DeliveryStateServ.Delivered))) {
-						throw new OrderException("This order state is not delivered");
+					if (!(orderDTO.getDeliveryState().equals(DeliveryStateServ.In_progress))) {
+						throw new OrderException("This order state is not In_progress");
 					}
 					if (!(c.getState().equals(CargoState.Delivering))) {
-						throw new OrderException("Cargo state is not delivered");
+						throw new OrderException("Cargo state is not delivering");
 					}
 					isOrderBelongsToCourier = true;
 					orderDTO.setPayment(paymentMethod);
