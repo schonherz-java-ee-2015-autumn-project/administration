@@ -13,10 +13,11 @@
 				listener="#{courierIncomeLazyBean.buildSortOrder}" />
 			<p:growl id="msgs" showDetail="true" />
 			<p:dataTable var="courierIncome" sortMode="multiple"
-				sortBy="#{courierIncomeLazyBean.preSortOrder}" editable="true"
-				editMode="cell" value="#{courierIncomeLazyBean.lazyDataModel}"
-				paginator="true" rowKey="#{courierIncome.id}" rows="25"
-				rowsPerPageTemplate="5,25,50" id="income_table" lazy="true"
+				widgetVar="table" sortBy="#{courierIncomeLazyBean.preSortOrder}"
+				editable="true" editMode="cell"
+				value="#{courierIncomeLazyBean.lazyDataModel}" paginator="true"
+				rowKey="#{courierIncome.id}" rows="25" rowsPerPageTemplate="5,25,50"
+				id="income_table" lazy="true"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
 				<p:ajax event="cellEdit"
@@ -32,11 +33,10 @@
 
 				<p:column headerText="#{out.date }" sortBy="#{courierIncome.date}"
 					id="income_date" filterBy="#{courierIncome.date}">
-					<f:facet name="filter">
-						<p:calendar onchange="PF('incomeTable').filter()">
-						</p:calendar>
-					</f:facet>
 					<h:outputText value="#{courierIncome.date}" />
+					<f:facet name="filter">
+						<p:inputMask mask="9999-99-99" onkeyup="PF('table').filter()" />
+					</f:facet>
 				</p:column>
 
 				<p:column headerText="#{out.credit_card}"

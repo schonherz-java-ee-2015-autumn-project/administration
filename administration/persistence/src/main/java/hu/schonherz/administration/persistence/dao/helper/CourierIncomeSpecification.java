@@ -12,8 +12,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import hu.schonherz.administration.persistence.entities.CourierIncome;
 import hu.schonherz.administration.persistence.entities.CourierIncome_;
-import hu.schonherz.administration.persistence.entities.CourierIncome;
-import hu.schonherz.administration.persistence.entities.CourierIncome_;
 import hu.schonherz.administration.persistence.entities.User;
 
 public class CourierIncomeSpecification {

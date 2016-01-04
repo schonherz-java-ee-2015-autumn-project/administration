@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -124,11 +125,32 @@ public class CourierIncomeServiceImpl implements CourierIncomeService {
 
 	private Specification<CourierIncome> buildSpecification(Map<String, Object> filters) {
 		Specification<CourierIncome> spec = null;
+
 		String name;
-		if (filters.containsKey("name")) {
-			name = (String) filters.get("name");
-			spec = Specifications.where(CourierIncomeSpecification.courierNameLike(name));
+		if (filters.containsKey("courierName")) {
+			name = (String) filters.get("courierName");
+			spec = Specifications.where(spec).and(CourierIncomeSpecification.courierNameLike(name));
 		}
+		if (filters.containsKey("date")) {
+			String date = (String) filters.get("date");
+			String[] components = date.split("-");
+			int year = 0;
+			int month = 0;
+			int day = 0;
+			try {
+				if (components.length > 2) {
+					year = Integer.parseInt(components[0]);
+					month = Integer.parseInt(components[1]);
+					day = Integer.parseInt(components[2]);
+				}
+				LocalDate localDate = new LocalDate(year, month, day);
+				spec = Specifications.where(spec).and(CourierIncomeSpecification.lastModifiedAt(localDate.toDate()));
+			} catch (Exception e) {
+
+			}
+
+		}
+
 		return spec;
 	}
 
