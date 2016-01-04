@@ -16,26 +16,24 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.CourierIncomeDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
-import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
-import hu.schonherz.administration.persistence.entities.Order;
-import hu.schonherz.administration.persistence.entities.Role;
-import hu.schonherz.administration.persistence.entities.User;
-import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
-import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
+import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.CargoState;
 import hu.schonherz.administration.serviceapi.dto.CourierIncomeDTO;
+import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
 import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
+import hu.schonherz.administration.serviceapi.dto.RoleDTO;
+import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
@@ -58,16 +56,13 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	private UserDao userDao;
 
 	@Autowired
-	private RoleDao roleDao;
-
-	@Autowired
 	private RestaurantDao restaurantDao;
 
 	private CargoConverter cv;
-	
+
 	@Autowired
 	private CourierIncomeDao incomeDao;
-	
+
 	private CourierIncomeConverter incomeConverter;
 
 	@Override
@@ -140,107 +135,118 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		return cv.toDTO(c2);
 	}
 
-	public CargoDTO assignCargoToCourier(Long cargoID, Long courierID)
-			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
-		User courier = userDao.findOne(courierID);
+	public void assignCargoToCourier(Long cargoID, Long courierID) throws CargoAlreadyTakenException,
+			CargoNotFoundException, CourierNotFoundException, BusyCourierException, InvalidFieldValuesException {
+		UserDTO courier = UserConverter.toVo(userDao.findOne(courierID));
 		if (courier == null)
 			throw new CourierNotFoundException();
 		if (!isCourier(courier))
 			throw new CourierNotFoundException();
 
-		List<Cargo> cargosTakenByCourier = cargoDao.findByCourier(courier);
+		List<CargoDTO> cargosTakenByCourier = cv.toDTO(cargoDao.findByCourier(UserConverter.toEntity(courier)));
 		if (cargosTakenByCourier != null) {
 			if (!cargosTakenByCourier.isEmpty()) {
-				for (Cargo cargo : cargosTakenByCourier)
-					if (cargo.getState().equals(State.Delivering) || cargo.getState().equals(State.Taken))
+				for (CargoDTO cargoDTO : cargosTakenByCourier)
+					if (cargoDTO.getState().equals(State.Delivering) || cargoDTO.getState().equals(State.Taken))
 						throw new BusyCourierException();
 			}
 		}
 
-		Cargo cargo = cargoDao.findOne(cargoID);
-		if (cargo == null) {
+		CargoDTO cargoDTO = cv.toDTO(cargoDao.findOne(cargoID));
+		if (cargoDTO == null) {
 			throw new CargoNotFoundException();
 		}
-		if (cargo.getCourier() != null) {
+		if (cargoDTO.getCourierId() != null) {
 			throw new CargoAlreadyTakenException();
 		}
 
-		cargo.setCourier(courier);
-		cargo.setState(State.Taken);
-
-		return cv.toDTO(cargo);
+		cargoDTO.setCourierId(courierID);
+		cargoDTO.setState(CargoState.Taken);
+		cargoDao.save(cv.toEntity(cargoDTO));
+		incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
 	}
 
 	@Override
 	public void changeCargoState(long cargoId, long courierId, CargoState local)
 			throws CargoNotFoundException, CargoAlreadyTakenException, IllegalStateTransitionException,
-			CourierNotFoundException, NotAllOrderCompletedException {
+			CourierNotFoundException, NotAllOrderCompletedException, InvalidFieldValuesException {
 		if (local.equals(CargoState.Taken) || local.equals(CargoState.Free))
 			throw new IllegalStateTransitionException();
 
-		Cargo cargo = cargoDao.findOne(cargoId);
+		CargoDTO cargoDTO = cv.toDTO(cargoDao.findOne(cargoId));
+		UserDTO courierDTO = UserConverter.toVo(userDao.findOne(courierId));
 
-		if (cargo == null) {
+		if (courierDTO == null) {
+			throw new CourierNotFoundException();
+		}
+
+		if (cargoDTO == null) {
 			throw new CargoNotFoundException();
 		}
-		if (cargo.getCourier() == null) {
+
+		if (cargoDTO.getCourierId() == null) {
 			throw new IllegalStateTransitionException();
 		}
-		if (cargo.getCourier().getId() != courierId) {
+
+		if (cargoDTO.getCourierId() != courierId) {
 			throw new CargoAlreadyTakenException();
 		}
-		User courier = userDao.findOne(courierId);
-		if (courier == null) {
+
+		if (!isCourier(courierDTO)) {
 			throw new CourierNotFoundException();
 		}
-		if (!isCourier(courier)) {
-			throw new CourierNotFoundException();
-		}
-		
-		if (cargo.getState().equals(State.Delivered)) {
+
+		if (cargoDTO.getState().equals(State.Delivered)) {
 			throw new IllegalStateTransitionException();
 		}
-		if (local.equals(CargoState.Delivered) && cargo.getState().equals(State.Taken)) {
+		if (local.equals(CargoState.Delivered) && cargoDTO.getState().equals(CargoState.Taken)) {
 			throw new IllegalStateTransitionException();
 		}
-		
+
 		if (local.equals(CargoState.Delivered))
-			for (Order order : cargo.getOrders()) {
-				if (order.getDeliveryState().equals(DeliveryState.Failed)
-						|| order.getDeliveryState().equals(DeliveryState.In_progress)) {
+			for (OrderDTO order : cargoDTO.getOrders()) {
+				if (order.getDeliveryState().equals(DeliveryStateServ.Failed)
+						|| order.getDeliveryState().equals(DeliveryStateServ.In_progress)) {
 					throw new NotAllOrderCompletedException();
 				}
 
 			}
-		cargo.setState(CargoStateConverter.toEntity(local));
-		cargoDao.save(cargo);
-		CourierIncomeDTO income = createIncomeFromCargo(cv.toDTO(cargo));
-		incomeDao.save(incomeConverter.toEntity(income));
-		
+
+		cargoDTO.setState(local);
+		cargoDao.save(cv.toEntity(cargoDTO));
+
 	}
 
-	private boolean isCourier(User user) {
-		for (Role role : user.getRoles()) {
+	private boolean isCourier(UserDTO user) {
+		for (RoleDTO role : user.getRoles()) {
 			if (role.getName().equals("ROLE_COURIER")) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private CourierIncomeDTO createIncomeFromCargo(CargoDTO cargo) {
 		CourierIncomeDTO income = new CourierIncomeDTO();
 		int creditCard = 0;
 		int cash = 0;
 		int voucher = 0;
 		int SZÉPCard = 0;
-		for(OrderDTO order: cargo.getOrders()){
+		for (OrderDTO order : cargo.getOrders()) {
 			PaymentMethod p = order.getPayment();
-			switch(p) {
-			case Cash: cash += order.getFullCost(); break;
-			case VOUCHER: voucher +=order.getFullCost(); break;
-			case SZÉPCard: SZÉPCard+=order.getFullCost(); break;
-			case CreditCard: creditCard+= order.getFullCost(); break;
+			switch (p) {
+			case Cash:
+				cash += totalCostOf(order);
+				break;
+			case VOUCHER:
+				voucher += totalCostOf(order);
+				break;
+			case SZÉPCard:
+				SZÉPCard += totalCostOf(order);
+				break;
+			case CreditCard:
+				creditCard += totalCostOf(order);
+				break;
 			}
 		}
 		income.setActualCash(0);
@@ -252,12 +258,13 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		income.setDate(new Date());
 		income.setSZÉPCard(SZÉPCard);
 		income.setVoucher(voucher);
-		
+
 		return income;
 	}
+
 	private Integer totalCostOf(OrderDTO order) {
 		Integer totalCost = 0;
-		for(ItemQuantityDTO i: order.getItems()) {
+		for (ItemQuantityDTO i : order.getItems()) {
 			totalCost = i.getItem().getPrice() * i.getQuantity();
 		}
 		return totalCost;
