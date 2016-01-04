@@ -115,7 +115,7 @@ public class CourierIncomeServiceImpl implements CourierIncomeService {
 				orders.add(new Order(Sort.Direction.ASC, sm.getColumnName()));
 		}
 		Sort sort = new Sort(orders);
-		if (orders.isEmpty())
+		if (!orders.isEmpty())
 			return new PageRequest(first, pageSize, sort);
 		else
 			return new PageRequest(first, pageSize);

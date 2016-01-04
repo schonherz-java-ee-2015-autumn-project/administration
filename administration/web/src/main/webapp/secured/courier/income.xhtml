@@ -9,26 +9,29 @@
 	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
 	<ui:define name="content">
 		<h:form id="courierIncomeForm">
+			<f:event type="preRenderView"
+				listener="#{courierIncomeLazyBean.buildSortOrder}" />
 			<p:growl id="msgs" showDetail="true" />
-			<p:dataTable var="courierIncome" sortMode="multiple" editable="true"
+			<p:dataTable var="courierIncome" sortMode="multiple"
+				sortBy="#{courierIncomeLazyBean.preSortOrder}" editable="true"
 				editMode="cell" value="#{courierIncomeLazyBean.lazyDataModel}"
 				paginator="true" rowKey="#{courierIncome.id}" rows="25"
-				rowsPerPageTemplate="5,25,50" id="incomeTable" lazy="true"
+				rowsPerPageTemplate="5,25,50" id="income_table" lazy="true"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
-				<p:ajax event="cellEdit" 
+				<p:ajax event="cellEdit"
 					listener="#{courierIncomeLazyBean.onCellEdit}"
 					update=":courierIncomeForm:msgs" />
 
 
-				<p:column headerText="#{out.courier_name}"
+				<p:column headerText="#{out.courier_name}" id="courier_name"
 					sortBy="#{courierIncome.courierName}"
 					filterBy="#{courierIncome.courierName}">
 					<h:outputText value="#{courierIncome.courierName}" />
 				</p:column>
 
 				<p:column headerText="#{out.date }" sortBy="#{courierIncome.date}"
-					filterBy="#{courierIncome.date}">
+					id="income_date" filterBy="#{courierIncome.date}">
 					<f:facet name="filter">
 						<p:calendar onchange="PF('incomeTable').filter()">
 						</p:calendar>
@@ -48,6 +51,11 @@
 
 				<p:column headerText="#{out.cash}" sortBy="#{courierIncome.cash}">
 					<h:outputText value="#{courierIncome.cash}" />
+				</p:column>
+
+				<p:column headerText="#{out.voucher}"
+					sortBy="#{courierIncome.voucher}">
+					<h:outputText value="#{courierIncome.voucher}" />
 				</p:column>
 
 				<p:column headerText="#{out.actual_cash}" id="actual_cash"
