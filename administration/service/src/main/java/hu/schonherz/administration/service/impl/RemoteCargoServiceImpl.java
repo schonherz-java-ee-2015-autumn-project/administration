@@ -1,5 +1,6 @@
 package hu.schonherz.administration.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
@@ -18,7 +21,9 @@ import hu.schonherz.administration.persistence.dao.CourierIncomeDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
+import hu.schonherz.administration.persistence.dao.helper.CourierIncomeSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
+import hu.schonherz.administration.persistence.entities.CourierIncome;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
@@ -227,7 +232,10 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	}
 
 	private CourierIncomeDTO createIncomeFromCargo(CargoDTO cargo) {
-		CourierIncomeDTO income = new CourierIncomeDTO();
+		UserDTO courier = UserConverter.toVo(userDao.findOne(cargo.getCourierId()));
+		List<CargoDTO> cargos = getCargosOfCourierAtDate(courier, new Date());
+		CourierIncomeDTO income = null;
+
 		int creditCard = 0;
 		int cash = 0;
 		int voucher = 0;
@@ -249,16 +257,27 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 				break;
 			}
 		}
-		income.setActualCash(0);
-		income.setActualVoucher(0);
-		income.setCash(cash);
-		income.setCourierId(cargo.getCourierId());
-		income.setCourierName(userDao.findOne(cargo.getCourierId()).getName());
-		income.setCrediCard(creditCard);
-		income.setDate(new Date());
-		income.setSZÉPCard(SZÉPCard);
-		income.setVoucher(voucher);
 
+		if (cargos.isEmpty()) {
+			income = new CourierIncomeDTO();
+			income.setCash(cash);
+			income.setCourierId(courier.getId());
+			income.setCourierName(courier.getName());
+			income.setCrediCard(creditCard);
+			income.setDate(new Date());
+			income.setSZÉPCard(SZÉPCard);
+			income.setVoucher(voucher);
+
+		} else {
+			income = getIncomeOfCourierAtDate(courier, new Date());
+			income.setCash(income.getCash() + cash);
+			income.setCourierId(courier.getId());
+			income.setCourierName(courier.getName());
+			income.setCrediCard(income.getCrediCard() + creditCard);
+			income.setDate(new Date());
+			income.setSZÉPCard(income.getSZÉPCard() + SZÉPCard);
+			income.setVoucher(income.getVoucher() + voucher);
+		}
 		return income;
 	}
 
@@ -268,5 +287,29 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			totalCost = i.getItem().getPrice() * i.getQuantity();
 		}
 		return totalCost;
+	}
+
+	private List<CargoDTO> getCargosOfCourierAtDate(UserDTO courier, Date date) {
+		List<CargoDTO> cargos = null;
+		Specification<Cargo> dateSpec = CargoSpecification.lastModifiedAt(date);
+		Specification<Cargo> userSpec = CargoSpecification.takenBy(UserConverter.toEntity(courier));
+		cargos = cv.toDTO(cargoDao.findAll(Specifications.where(dateSpec).and(userSpec)));
+		return cargos;
+	}
+
+	/*
+	 * This method returns the one CourierIncome by date. Note that though a
+	 * list is returned by dao the actual amount of income rows by day for a
+	 * specific courier should only be 0 or 1;
+	 */
+	private CourierIncomeDTO getIncomeOfCourierAtDate(UserDTO courier, Date date) {
+		List<CourierIncomeDTO> income = null;
+		Specification<CourierIncome> dateSpec = CourierIncomeSpecification.lastModifiedAt(date);
+		Specification<CourierIncome> userSpec = CourierIncomeSpecification.takenBy(UserConverter.toEntity(courier));
+		income = incomeConverter.toDTO(incomeDao.findAll(Specifications.where(dateSpec).and(userSpec)));
+		if (income != null && !income.isEmpty())
+			return income.get(0);
+		else
+			return null;
 	}
 }
