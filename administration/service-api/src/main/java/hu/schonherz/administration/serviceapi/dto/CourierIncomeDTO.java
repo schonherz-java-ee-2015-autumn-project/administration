@@ -41,8 +41,8 @@ public class CourierIncomeDTO implements Serializable {
 	public Integer getSZÉPCard() {
 		return SZÉPCard;
 	}
-	public void setSZÉPCard(Integer sZÉPCard) {
-		SZÉPCard = sZÉPCard;
+	public void setSZÉPCard(Integer SZÉPCard) {
+		this.SZÉPCard = SZÉPCard;
 	}
 	public Integer getCrediCard() {
 		return crediCard;

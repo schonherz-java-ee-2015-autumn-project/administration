@@ -219,7 +219,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		cargoDTO.setState(local);
 		cargoDao.save(cv.toEntity(cargoDTO));
-		if(cargoDTO.getState().equals(CargoStateConverter.toEntity(CargoState.Delivered))){
+		if(cargoDTO.getState().equals(CargoState.Delivered)){
 			incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
 		}
 

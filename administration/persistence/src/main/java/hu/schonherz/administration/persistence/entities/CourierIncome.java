@@ -3,7 +3,6 @@ package hu.schonherz.administration.persistence.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -20,7 +19,7 @@ public class CourierIncome extends BaseEntity implements Serializable {
 	private String courierName;
 	private Date date;
 	private Integer cash;
-	private Integer SZÉPCard;
+	private Integer sZÉPCard;
 	private Integer crediCard;
 	private Integer voucher;
 	private Integer actualCash;
@@ -59,11 +58,11 @@ public class CourierIncome extends BaseEntity implements Serializable {
 	}
 
 	public Integer getSZÉPCard() {
-		return SZÉPCard;
+		return sZÉPCard;
 	}
 
 	public void setSZÉPCard(Integer sZÉPCard) {
-		SZÉPCard = sZÉPCard;
+		this.sZÉPCard = sZÉPCard;
 	}
 
 	public Integer getCrediCard() {
