@@ -25,6 +25,7 @@ import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.CourierIncome;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
@@ -167,7 +168,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargoDTO.setCourierId(courierID);
 		cargoDTO.setState(CargoState.Taken);
 		cargoDao.save(cv.toEntity(cargoDTO));
-		incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
+	
 	}
 
 	@Override
@@ -218,6 +219,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		cargoDTO.setState(local);
 		cargoDao.save(cv.toEntity(cargoDTO));
+		if(cargoDTO.getState().equals(CargoStateConverter.toEntity(CargoState.Delivered))){
+			incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
+		}
 
 	}
 
