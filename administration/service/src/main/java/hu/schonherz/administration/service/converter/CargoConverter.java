@@ -24,6 +24,7 @@ public class CargoConverter {
 		CargoDTO result = new CargoDTO();
 		if(cargo.getCourier()!=null){
 		result.setCourierId(cargo.getCourier().getId());
+		result.setCourierName(cargo.getCourier().getName());
 		}
 		result.setId(cargo.getId());
 		result.setDate(cargo.getDate());
