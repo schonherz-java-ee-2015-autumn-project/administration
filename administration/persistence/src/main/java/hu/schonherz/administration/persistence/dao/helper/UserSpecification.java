@@ -1,6 +1,5 @@
 package hu.schonherz.administration.persistence.dao.helper;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +40,7 @@ public class UserSpecification {
 		};
 
 	}
+
 	public static Specification<User> isDelete() {
 		return new Specification<User>() {
 
@@ -66,32 +66,34 @@ public class UserSpecification {
 	}
 
 	public static Specification<User> nameEquals(String name) {
-	    return new Specification<User>() {
-	    
+		return new Specification<User>() {
+
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.like(root.get(User_.name), name );
+				return cb.like(root.get(User_.name), name);
 			}
 
-	  };
+		};
 	}
+
 	public static Specification<User> hasRole(Role role) {
 		return new Specification<User>() {
 
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				Expression<List<Role>> roles = root.get(User_.roles); 
+				Expression<List<Role>> roles = root.get(User_.roles);
 				return cb.isMember(role, roles);
 			}
 
 		};
 	}
+
 	public static Specification<User> lastModifiedAt(Date date) {
 		return new Specification<User>() {
 
 			@Override
 			public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.greaterThanOrEqualTo(root.<Date>get(User_.moddate),date );
+				return cb.greaterThanOrEqualTo(root.<Date> get(User_.moddate), date);
 			}
 
 		};

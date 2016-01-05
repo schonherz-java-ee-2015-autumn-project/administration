@@ -53,14 +53,19 @@
 		<ejb-ref-name>ejb.UserService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.UserService</local>
 	</ejb-local-ref>
-	
+
 	<ejb-local-ref>
 		<ejb-ref-name>ejb.RestaurantService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.RestaurantService</local>
 	</ejb-local-ref>
 
+	<ejb-local-ref>
+		<ejb-ref-name>ejb.CourierIncomeService</ejb-ref-name>
+		<local>hu.schonherz.administration.serviceapi.CourierIncomeService</local>
+	</ejb-local-ref>
+
 	<session-config>
-    	<session-timeout>10</session-timeout>
+		<session-timeout>10</session-timeout>
 	</session-config>
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>

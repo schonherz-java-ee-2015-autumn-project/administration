@@ -21,14 +21,11 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 import hu.schonherz.administration.persistence.dao.RoleDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.UserSpecification;
-import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
-import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.serviceapi.UserService;
 import hu.schonherz.administration.serviceapi.dto.CustomSortOrder;
-import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.dto.UserRole;
 
@@ -169,7 +166,7 @@ public class UserServiceImpl implements UserService {
 	private Pageable createPageRequest(int first, int pageSize, String sortField, CustomSortOrder order) {
 		if(order!=null && sortField !=null){
 			Sort sort = null;
-			if (order.equals(order.DESC)) {
+			if (order.equals(CustomSortOrder.DESC)) {
 				sort = new Sort(Sort.Direction.DESC, sortField);
 			} else {
 				sort = new Sort(Sort.Direction.ASC, sortField);

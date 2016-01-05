@@ -9,6 +9,7 @@
 		<non-jta-data-source>AdministrationJPADB</non-jta-data-source>
 		<class>hu.schonherz.administration.persistence.entities.BaseEntity</class>
 		<class>hu.schonherz.administration.persistence.entities.Cargo</class>
+		<class>hu.schonherz.administration.persistence.entities.CourierIncome</class>
 		<class>hu.schonherz.administration.persistence.entities.Item</class>
 		<class>hu.schonherz.administration.persistence.entities.ItemQuantity</class>
 		<class>hu.schonherz.administration.persistence.entities.Order</class>
