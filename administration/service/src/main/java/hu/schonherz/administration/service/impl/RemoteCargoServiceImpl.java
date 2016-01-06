@@ -11,7 +11,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
-import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -55,6 +54,7 @@ import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidModifyStateException;
 import hu.schonherz.administration.serviceapi.exeption.ModifyWithoutIdException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 import hu.schonherz.administration.serviceapi.exeption.OrderException;
@@ -432,14 +432,12 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Override
 	public CargoDTO modifyCargo(CargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException,
-			ModifyWithoutIdException, OrderNotFoundException {
+			ModifyWithoutIdException, OrderNotFoundException, InvalidModifyStateException {
 		Cargo cargoEntity = null;
 		if (cargo.getId() != null) {
 			cargoEntity = cargoDao.findOne(cargo.getId());
 			if(!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))){
-				InvalidFieldValuesException ex = new InvalidFieldValuesException();
-				ex.setMessage("You can only modify cargos with state: Free.");
-				throw new InvalidFieldValuesException();
+				throw new InvalidModifyStateException();
 			}
 		} else {
 			throw new ModifyWithoutIdException();

@@ -21,6 +21,7 @@ import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidModifyStateException;
 import hu.schonherz.administration.serviceapi.exeption.ModifyWithoutIdException;
 import hu.schonherz.administration.serviceapi.exeption.OrderNotFoundException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
@@ -78,7 +79,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-	public RemoteCargoDTO modifyCargo(RemoteCargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException, ModifyWithoutIdException, OrderNotFoundException {
+	public RemoteCargoDTO modifyCargo(RemoteCargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException, ModifyWithoutIdException, OrderNotFoundException, InvalidModifyStateException {
 		CargoDTO cargoToEdit = RemoteCargoConverter.toDTO(cargo);
 		return RemoteCargoConverter.toRemoteDTO(remoteCargoService.modifyCargo(cargoToEdit));
 	}

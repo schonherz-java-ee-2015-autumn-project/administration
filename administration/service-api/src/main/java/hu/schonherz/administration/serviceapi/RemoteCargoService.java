@@ -14,6 +14,7 @@ import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidModifyStateException;
 import hu.schonherz.administration.serviceapi.exeption.ModifyWithoutIdException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 import hu.schonherz.administration.serviceapi.exeption.OrderException;
@@ -24,7 +25,7 @@ public interface RemoteCargoService {
 
 	CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException;
 	
-	CargoDTO modifyCargo(CargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException, ModifyWithoutIdException, OrderNotFoundException;
+	CargoDTO modifyCargo(CargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException, ModifyWithoutIdException, OrderNotFoundException, InvalidModifyStateException;
 
 	List<CargoDTO> getCargos();
 
