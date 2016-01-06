@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.Cargo_;
 import hu.schonherz.administration.persistence.entities.User;
+import hu.schonherz.administration.persistence.entities.helper.State;
 
 public class CargoSpecification {
 
@@ -41,5 +42,15 @@ public class CargoSpecification {
 
 		};
 	}
+	
+	public static Specification<Cargo> isAtive() {
+		return new Specification<Cargo>() {
+			@Override
+			public Predicate toPredicate(Root<Cargo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<State> get(Cargo_.state), State.Delivering);
+			}
 
+		};
+	}
+	
 }

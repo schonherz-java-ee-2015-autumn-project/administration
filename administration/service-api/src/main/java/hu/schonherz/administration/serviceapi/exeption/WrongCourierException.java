@@ -3,12 +3,12 @@ package hu.schonherz.administration.serviceapi.exeption;
 import javax.ejb.ApplicationException;
 
 @ApplicationException(rollback=true)
-public class InvalidDateException extends Exception{
+public class WrongCourierException extends Exception{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4405312700143125890L;
+	private static final long serialVersionUID = 5482075226674041871L;
 	
 	private String ErrorMessage;
 	
@@ -21,5 +21,6 @@ public class InvalidDateException extends Exception{
 		ErrorMessage=message;
 		
 	}
-
+	
+	
 }

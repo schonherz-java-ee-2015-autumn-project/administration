@@ -1,5 +1,6 @@
 package hu.schonherz.administration.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.CourierIncomeDao;
+import hu.schonherz.administration.persistence.dao.ItemQuantityDao;
 import hu.schonherz.administration.persistence.dao.OrderDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
@@ -24,9 +26,13 @@ import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.dao.helper.CourierIncomeSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.CourierIncome;
+import hu.schonherz.administration.persistence.entities.Role;
+import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
+import hu.schonherz.administration.service.converter.ItemQuantityConverter;
 import hu.schonherz.administration.service.converter.OrderConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
@@ -48,14 +54,20 @@ import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.IllegalStateTransitionException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidModifyStateException;
+import hu.schonherz.administration.serviceapi.exeption.ModifyWithoutIdException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 import hu.schonherz.administration.serviceapi.exeption.OrderException;
+import hu.schonherz.administration.serviceapi.exeption.OrderNotFoundException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Interceptors(SpringBeanAutowiringInterceptor.class)
 @Local(RemoteCargoService.class)
 public class RemoteCargoServiceImpl implements RemoteCargoService {
+
+	@Autowired
+	private ItemQuantityDao itemQuantityDao;
 
 	@Autowired
 	private CargoDao cargoDao;
@@ -391,5 +403,78 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			throw new OrderException("This order is not belongs to this courier");
 		}
 
+	}
+
+	private boolean isCourier(User user) {
+		for (Role role : user.getRoles())
+			if (role.getName().equals("ROLE_COURIER"))
+				return true;
+		return false;
+	}
+
+	@Override
+	public CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException, AddressNotFoundException {
+		User courier = userDao.findById(courierId);
+		if (courier != null && isCourier(courier)) {
+			Specification<Cargo> today = CargoSpecification.lastModifiedAt(new Date());
+			Specification<Cargo> takenBy = CargoSpecification.takenBy(courier);
+			Specification<Cargo> isActive = CargoSpecification.isAtive();
+			List<Cargo> cargo = cargoDao.findAll(Specifications.where(today).and(takenBy).and(isActive));
+			if (cargo != null && !cargo.isEmpty()) {
+				return cv.toDTO(cargo.get(0));
+			} else {
+				throw new AddressNotFoundException("Courier " + courier.getName() + " has no active cargos.");
+			}
+		} else {
+			throw new CourierNotFoundException();
+		}
+	}
+
+	@Override
+	public CargoDTO modifyCargo(CargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException,
+			ModifyWithoutIdException, OrderNotFoundException, InvalidModifyStateException {
+		Cargo cargoEntity = null;
+		if (cargo.getId() != null) {
+			cargoEntity = cargoDao.findOne(cargo.getId());
+			if(!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))){
+				throw new InvalidModifyStateException();
+			}
+		} else {
+			throw new ModifyWithoutIdException();
+		}
+		
+		if (cargoEntity == null) {
+			throw new CargoNotFoundException();
+		} else {
+			if (CargoValidator.isValidNewCargo(cargo)) {
+				List<OrderDTO> orders = new ArrayList<>();
+				for (OrderDTO order : cargo.getOrders()) {
+					orders.add(modifyOrder(order));
+				}
+				cargo.setOrders(orders);
+				cargoDao.save(cv.toEntity(cargo));
+				return cargo;
+			}
+		}
+
+		return null;
+	}
+
+	private OrderDTO modifyOrder(OrderDTO order) throws ModifyWithoutIdException, OrderNotFoundException {
+		List<ItemQuantityDTO> iqDTO = new ArrayList<>();
+		for (ItemQuantityDTO items : order.getItems()) {
+			iqDTO.add(ItemQuantityConverter.toDTO(itemQuantityDao.save(ItemQuantityConverter.toEntity(items))));
+		}
+		order.setItems(iqDTO);
+		orderDao.save(OrderConverter.toEntity(order));
+		return order;
+	}
+
+	public ItemQuantityDao getItemQuantityDao() {
+		return itemQuantityDao;
+	}
+
+	public void setItemQuantityDao(ItemQuantityDao itemQuantityDao) {
+		this.itemQuantityDao = itemQuantityDao;
 	}
 }
