@@ -64,6 +64,8 @@ public class CourierServiceImpl implements CourierService {
 			}
 			order.setDeliveryState(RemoteDeliveryStateConverter.toLocal(newState));
 			orderService.saveOrder(order);
+		}else{
+			throw new AddressNotFoundException();
 		}
 	}
 
