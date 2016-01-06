@@ -24,7 +24,6 @@ import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.dao.helper.CourierIncomeSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.CourierIncome;
-import hu.schonherz.administration.persistence.entities.Order;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
@@ -53,8 +52,6 @@ import hu.schonherz.administration.serviceapi.exeption.InvalidDateException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
 import hu.schonherz.administration.serviceapi.exeption.NotAllOrderCompletedException;
 import hu.schonherz.administration.serviceapi.exeption.OrderException;
-import hu.schonherz.administration.serviceapi.exeption.OrderIsNotInProgressException;
-import hu.schonherz.administration.serviceapi.exeption.WrongCourierException;
 
 @Stateless(mappedName = "RemoteCargoService")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -406,45 +403,21 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	}
 
 	@Override
-	public CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException {
-		User courier;
-		courier = userDao.findById(courierId);
-
-		if (courier == null || !isCourier(courier))
+	public CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException, AddressNotFoundException {
+		User courier = userDao.findById(courierId);
+		if(courier!=null && isCourier(courier)){
+			Specification<Cargo> today = CargoSpecification.lastModifiedAt(new Date());
+			Specification<Cargo> takenBy = CargoSpecification.takenBy(courier);
+			Specification<Cargo> isActive  = CargoSpecification.isAtive();
+			List<Cargo> cargo = cargoDao.findAll(Specifications.where(today).and(takenBy).and(isActive));
+			if(cargo!=null && !cargo.isEmpty()){
+				return cv.toDTO(cargo.get(0));
+			}else{
+				throw new AddressNotFoundException("Courier " + courier.getName() + " has no active cargos.");
+			}
+		}else{
 			throw new CourierNotFoundException();
-		if (isCourier(courier)) {
-			List<Cargo> cargos = cargoDao.findByCourier(courier);
-			for (Cargo c : cargos)
-				if (c.getState().equals(State.Taken) || c.getState().equals(State.Delivering))
-					return cv.toDTO(c);
 		}
-		return null;
 	}
 
-	@Override
-	public void hasOrderId(long OrderId, long courierId)
-			throws OrderIsNotInProgressException, CourierNotFoundException {
-		User courier;
-		courier = userDao.findById(courierId);
-		if (courier == null || !isCourier(courier))
-			throw new CourierNotFoundException();
-		if (isCourier(courier)) {
-			List<Cargo> cargos = cargoDao.findByCourier(courier);
-			for (Cargo c : cargos)
-				for (Order o : c.getOrders())
-					if (o.getId() == OrderId)
-						throw new OrderIsNotInProgressException();
-		}
-
-	}
-
-	@Override
-	public void hasOrderId(long OrderId) throws WrongCourierException {
-		List<CargoDTO> cargos = getCargos();
-		for (CargoDTO c : cargos)
-			for (OrderDTO o : c.getOrders())
-				if (o.getId() == OrderId)
-					throw new WrongCourierException();
-
-	}
 }

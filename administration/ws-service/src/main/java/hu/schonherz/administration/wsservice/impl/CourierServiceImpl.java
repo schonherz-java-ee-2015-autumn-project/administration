@@ -70,9 +70,7 @@ public class CourierServiceImpl implements CourierService {
 				if (o.getId() == OrderId)
 					order = o;
 			if (order == null) {
-				cargoService.hasOrderId(OrderId, courierId);
-				cargoService.hasOrderId(OrderId);
-				throw new AddressNotFoundException("Address not found");
+				throw new AddressNotFoundException("Address not found in active cargos.");
 			}
 			if (order.getDeliveryState().equals(DeliveryStateWeb.In_progress)) {
 				order.setDeliveryState(newState);
