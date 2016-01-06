@@ -30,6 +30,7 @@ import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
+import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
 import hu.schonherz.administration.service.converter.ItemQuantityConverter;
 import hu.schonherz.administration.service.converter.OrderConverter;
@@ -434,9 +435,13 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		Cargo cargoEntity = null;
 		if (cargo.getId() != null) {
 			cargoEntity = cargoDao.findOne(cargo.getId());
+			if(!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))){
+				throw new InvalidFieldValuesException();
+			}
 		} else {
 			throw new ModifyWithoutIdException();
 		}
+		
 		if (cargoEntity == null) {
 			throw new CargoNotFoundException();
 		} else {
