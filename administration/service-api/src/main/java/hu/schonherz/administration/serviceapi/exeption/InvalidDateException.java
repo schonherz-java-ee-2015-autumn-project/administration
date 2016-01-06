@@ -1,5 +1,8 @@
 package hu.schonherz.administration.serviceapi.exeption;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException(rollback=true)
 public class InvalidDateException extends Exception{
 
 	/**
