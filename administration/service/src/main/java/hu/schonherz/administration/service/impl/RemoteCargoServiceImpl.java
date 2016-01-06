@@ -173,7 +173,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargoDTO.setCourierId(courierID);
 		cargoDTO.setState(CargoState.Taken);
 		cargoDao.save(cv.toEntity(cargoDTO));
-	
+
 	}
 
 	@Override
@@ -215,8 +215,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		if (local.equals(CargoState.Delivered))
 			for (OrderDTO order : cargoDTO.getOrders()) {
-				if (order.getDeliveryState().equals(DeliveryStateServ.Failed)
-						|| order.getDeliveryState().equals(DeliveryStateServ.In_progress)) {
+				if (order.getDeliveryState().equals(DeliveryStateServ.In_progress)) {
 					throw new NotAllOrderCompletedException();
 				}
 
@@ -224,7 +223,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		cargoDTO.setState(local);
 		cargoDao.save(cv.toEntity(cargoDTO));
-		if(cargoDTO.getState().equals(CargoState.Delivered)){
+		if (cargoDTO.getState().equals(CargoState.Delivered)) {
 			incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
 		}
 
@@ -314,9 +313,10 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	private Integer totalCostOf(OrderDTO order) {
 		Integer totalCost = 0;
-		for (ItemQuantityDTO i : order.getItems()) {
-			totalCost = i.getItem().getPrice() * i.getQuantity();
-		}
+		if (order.getDeliveryState().equals(DeliveryStateServ.Delivered))
+			for (ItemQuantityDTO i : order.getItems()) {
+				totalCost += i.getItem().getPrice() * i.getQuantity();
+			}
 		return totalCost;
 	}
 
@@ -343,6 +343,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		else
 			return null;
 	}
+
 	@Override
 	public void changePaymentState(Long courierId, Long orderId, PaymentMethod paymentMethod)
 			throws CourierNotFoundException, CargoNotFoundException, OrderException, AddressNotFoundException {
@@ -389,7 +390,6 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (!isOrderBelongsToCourier) {
 			throw new OrderException("This order is not belongs to this courier");
 		}
-
 
 	}
 }
