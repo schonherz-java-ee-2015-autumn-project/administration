@@ -27,7 +27,6 @@ import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
-import hu.schonherz.administration.serviceapi.dto.UserRole;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
 import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;

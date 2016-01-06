@@ -11,8 +11,6 @@ import javax.jws.WebService;
 
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
-import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
-import hu.schonherz.administration.service.converter.DeliveryStateConverter;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
 import hu.schonherz.administration.serviceapi.RemoteUserService;
@@ -25,7 +23,9 @@ import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.OrderIsNotInProgressException;
 import hu.schonherz.administration.serviceapi.exeption.WrongCourierException;
+import hu.schonherz.administration.wsservice.dto.DeliveryStateWeb;
 import hu.schonherz.administration.wsserviceapi.CourierService;
+import hu.schonherz.administration.wsserviceapi.converter.RemoteDeliveryStateConverter;
 
 @Stateless(mappedName = "CourierServiceImpl")
 @WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.CourierService", serviceName = "CourierServiceImpl")
@@ -48,7 +48,7 @@ public class CourierServiceImpl implements CourierService {
 	}
 
 	@Override
-	public void ChangeDeliveryState(long OrderId, long courierId, DeliveryState newState)
+	public void changeDeliveryState(long OrderId, long courierId, DeliveryStateWeb newState)
 	        throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException, WrongCourierException {
 		CargoDTO cargo = cargoService.GetCargoByCourier(courierId);
 		if (cargo != null) {
@@ -62,7 +62,7 @@ public class CourierServiceImpl implements CourierService {
 				cargoService.hasOrderId(OrderId);
 				throw new AddressNotFoundException();
 			}
-			order.setDeliveryState(DeliveryStateConverter.toDTO(newState));
+			order.setDeliveryState(RemoteDeliveryStateConverter.toLocal(newState));
 			orderService.saveOrder(order);
 		}
 	}

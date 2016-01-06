@@ -4,7 +4,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import hu.schonherz.administration.persistence.entities.helper.DeliveryState;
 import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.BusyCourierException;
 import hu.schonherz.administration.serviceapi.exeption.CargoAlreadyTakenException;
@@ -12,6 +11,7 @@ import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.CourierNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.OrderIsNotInProgressException;
 import hu.schonherz.administration.serviceapi.exeption.WrongCourierException;
+import hu.schonherz.administration.wsservice.dto.DeliveryStateWeb;
 
 @WebService
 public interface CourierService {
@@ -22,8 +22,8 @@ public interface CourierService {
 					CourierNotFoundException, BusyCourierException;
 
 	@WebMethod(operationName = "ChangeDeliveryState")
-	public void ChangeDeliveryState(@WebParam(name = "OrderID") long OrderId,@WebParam(name = "courierID") long courierId
-			,@WebParam(name = "NewDeliveryState")DeliveryState newState) throws CourierNotFoundException,AddressNotFoundException,
+	public void changeDeliveryState(@WebParam(name = "OrderID") long OrderId,@WebParam(name = "courierID") long courierId
+			,@WebParam(name = "NewDeliveryState")DeliveryStateWeb newState) throws CourierNotFoundException,AddressNotFoundException,
 	OrderIsNotInProgressException,WrongCourierException;
 
 
