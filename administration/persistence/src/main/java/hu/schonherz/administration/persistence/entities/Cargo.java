@@ -33,13 +33,10 @@ public class Cargo extends BaseEntity implements Serializable {
 	private List<Order> orders;
 	@Enumerated(EnumType.STRING)
 	private State state;
-	@Temporal(TemporalType.TIMESTAMP) @Column(name = "Date")
+	@Column(nullable=false, columnDefinition = "DATETIME DEFAULT NOW()", name="Date")
 	private Date date;
 
-	  @PrePersist
-	  void createdAt() {
-	    this.date =  new Date();
-	  }
+	
 	public List<Order> getOrders() {
 		return orders;
 	}

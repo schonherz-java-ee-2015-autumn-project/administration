@@ -28,6 +28,7 @@ public class RemoteCargoConverter {
 		RemoteCargoDTO result = new RemoteCargoDTO();
 		result.setCourierId(CargoDTO.getCourierId());
 		result.setId(CargoDTO.getId());
+		result.setCourierName(CargoDTO.getCourierName());
 		result.setOrders(RemoteOrderConverter.toRemoteDTO(CargoDTO.getOrders()));
 		result.setRestaurantId(CargoDTO.getRestaurantId());
 		result.setState(RemoteCargoStateConverter.toRemote(CargoDTO.getState()));

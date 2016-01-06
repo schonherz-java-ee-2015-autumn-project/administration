@@ -1,6 +1,7 @@
 package hu.schonherz.administration.service.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
@@ -23,9 +24,10 @@ public class CargoConverter {
 		CargoDTO result = new CargoDTO();
 		if(cargo.getCourier()!=null){
 		result.setCourierId(cargo.getCourier().getId());
+		result.setCourierName(cargo.getCourier().getName());
 		}
 		result.setId(cargo.getId());
-		
+		result.setDate(cargo.getDate());
 		result.setOrders(OrderConverter.toDTO(cargo.getOrders()));
 		
 		if(cargo.getRestaurant()!=null){
@@ -38,6 +40,7 @@ public class CargoConverter {
 	public Cargo toEntity(CargoDTO cargo) throws InvalidFieldValuesException{
 		Cargo result = new Cargo();
 		result.setId(cargo.getId());
+		result.setDate(new Date());
 		if(cargo.getCourierId()==null){
 			result.setCourier(null);
 		}else{

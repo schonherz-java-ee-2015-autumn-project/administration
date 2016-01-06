@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="courierIncomeForm">
+			<f:event type="preRenderView"
+				listener="#{courierIncomeLazyBean.buildSortOrder}" />
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable var="courierIncome" sortMode="multiple"
+				widgetVar="table" sortBy="#{courierIncomeLazyBean.preSortOrder}"
+				editable="true" editMode="cell"
+				value="#{courierIncomeLazyBean.lazyDataModel}" paginator="true"
+				rowKey="#{courierIncome.id}" rows="25" rowsPerPageTemplate="5,25,50"
+				id="income_table" lazy="true"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+				<p:ajax event="cellEdit"
+					listener="#{courierIncomeLazyBean.onCellEdit}"
+					update=":courierIncomeForm:msgs" />
+
+
+				<p:column headerText="#{out.courier_name}" id="courier_name"
+					sortBy="#{courierIncome.courierName}"
+					filterBy="#{courierIncome.courierName}">
+					<h:outputText value="#{courierIncome.courierName}" />
+				</p:column>
+
+				<p:column headerText="#{out.date }" sortBy="#{courierIncome.date}"
+					id="income_date" filterBy="#{courierIncome.date}">
+					<h:outputText value="#{courierIncome.date}" />
+					<f:facet name="filter">
+						<p:inputMask mask="9999-99-99" onkeyup="PF('table').filter()" />
+					</f:facet>
+				</p:column>
+
+				<p:column headerText="#{out.credit_card}"
+					sortBy="#{courierIncome.crediCard}">
+					<h:outputText value="#{courierIncome.crediCard}" />
+				</p:column>
+
+				<p:column headerText="#{out.SZÉPCard}"
+					sortBy="#{courierIncome.szepCard}">
+					<h:outputText value="#{courierIncome.szepCard}" />
+				</p:column>
+
+				<p:column headerText="#{out.cash}" sortBy="#{courierIncome.cash}">
+					<h:outputText value="#{courierIncome.cash}" />
+				</p:column>
+
+				<p:column headerText="#{out.voucher}"
+					sortBy="#{courierIncome.voucher}">
+					<h:outputText value="#{courierIncome.voucher}" />
+				</p:column>
+
+				<p:column headerText="#{out.actual_cash}" id="actual_cash"
+					sortBy="#{courierIncome.actualCash}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{courierIncome.actualCash}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="cashInput" value="#{courierIncome.actualCash}"
+								style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+
+				</p:column>
+
+				<p:column headerText="#{out.actual_voucher}" id="actual_voucher"
+					sortBy="#{courierIncome.actualVoucher}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{courierIncome.actualVoucher}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText id="voucherInput"
+								value="#{courierIncome.actualVoucher}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+	</ui:define>
+
+
+</ui:composition>
