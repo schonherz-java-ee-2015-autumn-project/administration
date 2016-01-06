@@ -11,6 +11,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 
+import org.omg.CORBA.DynAnyPackage.Invalid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -436,6 +437,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (cargo.getId() != null) {
 			cargoEntity = cargoDao.findOne(cargo.getId());
 			if(!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))){
+				InvalidFieldValuesException ex = new InvalidFieldValuesException();
+				ex.setMessage("You can only modify cargos with state: Free.");
 				throw new InvalidFieldValuesException();
 			}
 		} else {
