@@ -14,7 +14,7 @@ public class CourierIncomeDTO implements Serializable {
 	private String courierName;
 	private Date date;
 	private Integer cash;
-	private Integer SZÉPCard;
+	private Integer szepCard;
 	private Integer crediCard;
 	private Integer voucher;
 	private Integer actualCash;
@@ -38,11 +38,12 @@ public class CourierIncomeDTO implements Serializable {
 	public void setCash(Integer cash) {
 		this.cash = cash;
 	}
-	public Integer getSZÉPCard() {
-		return SZÉPCard;
+	
+	public Integer getSzepCard() {
+		return szepCard;
 	}
-	public void setSZÉPCard(Integer SZÉPCard) {
-		this.SZÉPCard = SZÉPCard;
+	public void setSzepCard(Integer szepCard) {
+		this.szepCard = szepCard;
 	}
 	public Integer getCrediCard() {
 		return crediCard;

@@ -275,7 +275,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			income.setCourierName(courier.getName());
 			income.setCrediCard(creditCard);
 			income.setDate(new Date());
-			income.setSZÉPCard(SZÉPCard);
+			income.setSzepCard(SZÉPCard);
 			income.setVoucher(voucher);
 
 		} else {
@@ -304,10 +304,10 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			else
 				income.setVoucher(voucher);
 
-			if (income.getSZÉPCard() != null)
-				income.setSZÉPCard(income.getSZÉPCard() + SZÉPCard);
+			if (income.getSzepCard() != null)
+				income.setSzepCard(income.getSzepCard() + SZÉPCard);
 			else
-				income.setSZÉPCard(SZÉPCard);
+				income.setSzepCard(SZÉPCard);
 		}
 		return income;
 	}
