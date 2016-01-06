@@ -19,7 +19,7 @@ public class CourierIncome extends BaseEntity implements Serializable {
 	private String courierName;
 	private Date date;
 	private Integer cash;
-	private Integer sZEPCard;
+	private Integer szepCard;
 	private Integer crediCard;
 	private Integer voucher;
 	private Integer actualCash;
@@ -57,12 +57,12 @@ public class CourierIncome extends BaseEntity implements Serializable {
 		this.cash = cash;
 	}
 
-	public Integer getSZÉPCard() {
-		return sZEPCard;
+	public Integer getSzepCard() {
+		return szepCard;
 	}
 
-	public void setSZÉPCard(Integer sZÉPCard) {
-		this.sZEPCard = sZÉPCard;
+	public void setSzepCard(Integer szepCard) {
+		this.szepCard = szepCard;
 	}
 
 	public Integer getCrediCard() {
