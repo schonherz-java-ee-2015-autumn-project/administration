@@ -14,6 +14,7 @@ public class CargoDTO implements Serializable{
 	private Long id;
 	private Long restaurantId;
 	private Long courierId;
+	private String courierName;
 	private List<OrderDTO> orders;
 	private CargoState state;
 	private Date date;
@@ -52,6 +53,12 @@ public class CargoDTO implements Serializable{
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public String getCourierName() {
+		return courierName;
+	}
+	public void setCourierName(String courierName) {
+		this.courierName = courierName;
 	}
 	
 	
