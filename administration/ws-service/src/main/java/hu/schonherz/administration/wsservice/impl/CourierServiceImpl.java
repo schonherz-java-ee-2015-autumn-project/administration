@@ -50,7 +50,7 @@ public class CourierServiceImpl implements CourierService {
 	@Override
 	public void changeDeliveryState(long OrderId, long courierId, DeliveryStateWeb newState)
 	        throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException, WrongCourierException {
-		CargoDTO cargo = cargoService.GetCargoByCourier(courierId);
+		CargoDTO cargo = cargoService.getActiveCargoByCourier(courierId);
 		if (cargo != null) {
 			List<OrderDTO> orders = cargo.getOrders();
 			OrderDTO order = null;

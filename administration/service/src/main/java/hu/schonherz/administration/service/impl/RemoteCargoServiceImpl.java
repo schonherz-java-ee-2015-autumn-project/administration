@@ -50,7 +50,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private RestaurantDao restaurantDao;
-	
+
 	private CargoConverter cv;
 
 	@Override
@@ -155,55 +155,54 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 		return cv.toDTO(cargo);
 	}
-	
-	private boolean isCourier(User user){
-		for (Role role : user.getRoles()) 
+
+	private boolean isCourier(User user) {
+		for (Role role : user.getRoles())
 			if (role.getName().equals("ROLE_COURIER"))
 				return true;
 		return false;
 	}
-	
+
 	@Override
-	public CargoDTO GetCargoByCourier(long courierId) throws CourierNotFoundException {
+	public CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException {
 		User courier;
-		courier=userDao.findById(courierId);
-		
-		if(courier==null||!isCourier(courier))
+		courier = userDao.findById(courierId);
+
+		if (courier == null || !isCourier(courier))
 			throw new CourierNotFoundException();
-		if(isCourier(courier)){
+		if (isCourier(courier)) {
 			List<Cargo> cargos = cargoDao.findByCourier(courier);
-			for(Cargo c:cargos)
-				if (c.getState().equals(State.Taken)||c.getState().equals(State.Delivering))
+			for (Cargo c : cargos)
+				if (c.getState().equals(State.Taken) || c.getState().equals(State.Delivering))
 					return cv.toDTO(c);
-			
-		
 		}
-		return null;	
+		return null;
 	}
 
 	@Override
-	public void hasOrderId(long OrderId, long courierId) throws OrderIsNotInProgressException, CourierNotFoundException {
+	public void hasOrderId(long OrderId, long courierId)
+			throws OrderIsNotInProgressException, CourierNotFoundException {
 		User courier;
-		courier=userDao.findById(courierId);
-		if(courier==null||!isCourier(courier))
+		courier = userDao.findById(courierId);
+		if (courier == null || !isCourier(courier))
 			throw new CourierNotFoundException();
-		if(isCourier(courier)){
+		if (isCourier(courier)) {
 			List<Cargo> cargos = cargoDao.findByCourier(courier);
-			for(Cargo c:cargos)
-				for(Order o:c.getOrders())
-					if (o.getId()==OrderId)
+			for (Cargo c : cargos)
+				for (Order o : c.getOrders())
+					if (o.getId() == OrderId)
 						throw new OrderIsNotInProgressException();
 		}
-				
+
 	}
 
 	@Override
 	public void hasOrderId(long OrderId) throws WrongCourierException {
-		List<CargoDTO> cargos=getCargos();
-		for(CargoDTO c:cargos)
-			for(OrderDTO o:c.getOrders())
-				if(o.getId()==OrderId)
+		List<CargoDTO> cargos = getCargos();
+		for (CargoDTO c : cargos)
+			for (OrderDTO o : c.getOrders())
+				if (o.getId() == OrderId)
 					throw new WrongCourierException();
-		
+
 	}
 }

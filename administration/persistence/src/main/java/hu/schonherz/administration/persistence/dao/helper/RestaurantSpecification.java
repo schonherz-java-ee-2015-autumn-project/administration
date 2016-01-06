@@ -12,9 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import hu.schonherz.administration.persistence.entities.Restaurant;
 import hu.schonherz.administration.persistence.entities.Restaurant_;
-import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
-import hu.schonherz.administration.persistence.entities.User_;
 
 public class RestaurantSpecification {
 

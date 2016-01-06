@@ -18,7 +18,7 @@ public interface RemoteCargoService {
 	CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException;
 	List<CargoDTO> getCargos();
 	List<CargoDTO> getCargosByDate(Date date) throws InvalidDateException;
-	CargoDTO GetCargoByCourier(long courierId) throws CourierNotFoundException;
+	CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException;
 	void hasOrderId(long OrderId, long courierId) throws OrderIsNotInProgressException, CourierNotFoundException;
 	void hasOrderId(long OrderId) throws WrongCourierException;
 	
