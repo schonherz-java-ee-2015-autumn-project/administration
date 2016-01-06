@@ -43,13 +43,15 @@ public class CourierServiceImpl implements CourierService {
 	private RemoteOrderService orderService;
 
 	@Override
-	public void assignCargoToCourier(long cargoId, long courierId) throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
+	public void assignCargoToCourier(long cargoId, long courierId)
+			throws CargoAlreadyTakenException, CargoNotFoundException, CourierNotFoundException, BusyCourierException {
 		cargoService.assignCargoToCourier(cargoId, courierId);
 	}
 
 	@Override
 	public void changeDeliveryState(long OrderId, long courierId, DeliveryStateWeb newState)
-	        throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException, WrongCourierException {
+			throws CourierNotFoundException, AddressNotFoundException, OrderIsNotInProgressException,
+			WrongCourierException {
 		CargoDTO cargo = cargoService.getActiveCargoByCourier(courierId);
 		if (cargo != null) {
 			List<OrderDTO> orders = cargo.getOrders();
@@ -62,9 +64,13 @@ public class CourierServiceImpl implements CourierService {
 				cargoService.hasOrderId(OrderId);
 				throw new AddressNotFoundException();
 			}
-			order.setDeliveryState(RemoteDeliveryStateConverter.toLocal(newState));
-			orderService.saveOrder(order);
-		}else{
+			if (order.getDeliveryState().equals(DeliveryStateWeb.In_progress)) {
+				order.setDeliveryState(RemoteDeliveryStateConverter.toLocal(newState));
+				orderService.saveOrder(order);
+			}else{
+				
+			}
+		} else {
 			throw new AddressNotFoundException();
 		}
 	}
