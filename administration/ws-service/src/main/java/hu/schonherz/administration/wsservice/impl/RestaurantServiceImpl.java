@@ -16,9 +16,14 @@ import hu.schonherz.administration.serviceapi.RemoteCargoService;
 import hu.schonherz.administration.serviceapi.RemoteItemQuantityService;
 import hu.schonherz.administration.serviceapi.RemoteItemService;
 import hu.schonherz.administration.serviceapi.RemoteOrderService;
+import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
+import hu.schonherz.administration.serviceapi.exeption.CargoNotFoundException;
 import hu.schonherz.administration.serviceapi.exeption.InvalidFieldValuesException;
+import hu.schonherz.administration.serviceapi.exeption.InvalidModifyStateException;
+import hu.schonherz.administration.serviceapi.exeption.ModifyWithoutIdException;
+import hu.schonherz.administration.serviceapi.exeption.OrderNotFoundException;
 import hu.schonherz.administration.wsservice.dto.RemoteCargoDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteItemDTO;
 import hu.schonherz.administration.wsservice.dto.RemoteItemQuantityDTO;
@@ -28,8 +33,6 @@ import hu.schonherz.administration.wsserviceapi.converter.RemoteCargoConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteItemConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteItemQuantityConverter;
 import hu.schonherz.administration.wsserviceapi.converter.RemoteOrderConverter;
-
-
 
 @Stateless(mappedName = "RestaurantServiceImpl")
 @WebService(endpointInterface = "hu.schonherz.administration.wsserviceapi.RestaurantService", serviceName = "RestaurantServiceImpl")
@@ -45,17 +48,18 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@EJB
 	private RemoteOrderService remoteOrderService;
-	
+
 	@EJB
 	private RemoteItemQuantityService remoteItemQuantityService;
 
 	@Override
-	public void saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException {
+	public RemoteCargoDTO saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException {
 		List<RemoteOrderDTO> orders = new ArrayList<>();
 		for (RemoteOrderDTO order : cargo.getOrders()) {
 			List<RemoteItemQuantityDTO> items = new ArrayList<>();
 			for (RemoteItemQuantityDTO item : order.getItems()) {
-				RemoteItemDTO i = RemoteItemConverter.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
+				RemoteItemDTO i = RemoteItemConverter
+						.toRemoteDTO(remoteItemService.saveItem(RemoteItemConverter.toDTO(item.getItemDTO())));
 				RemoteItemQuantityDTO itemQuantity = item;
 				itemQuantity.setItemDTO(i);
 				ItemQuantityDTO iqdto = RemoteItemQuantityConverter.toDTO(itemQuantity);
@@ -68,9 +72,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 			OrderDTO oDTO2 = remoteOrderService.saveOrder(oDTO);
 			RemoteOrderDTO roDTO = RemoteOrderConverter.toRemoteDTO(oDTO2);
 			orders.add(roDTO);
-					}
+		}
 		cargo.setOrders(orders);
-		remoteCargoService.saveCargo(RemoteCargoConverter.toDTO(cargo));
+		CargoDTO c = remoteCargoService.saveCargo(RemoteCargoConverter.toDTO(cargo));
+		return RemoteCargoConverter.toRemoteDTO(c);
+	}
+
+	@Override
+	public RemoteCargoDTO modifyCargo(RemoteCargoDTO cargo) throws CargoNotFoundException, InvalidFieldValuesException, ModifyWithoutIdException, OrderNotFoundException, InvalidModifyStateException {
+		CargoDTO cargoToEdit = RemoteCargoConverter.toDTO(cargo);
+		return RemoteCargoConverter.toRemoteDTO(remoteCargoService.modifyCargo(cargoToEdit));
 	}
 
 }

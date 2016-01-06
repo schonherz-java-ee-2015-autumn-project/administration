@@ -1,5 +1,8 @@
 package hu.schonherz.administration.serviceapi.exeption;
 
+import javax.ejb.ApplicationException;
+
+@ApplicationException(rollback=true)
 public class NotAllowedRoleException extends Exception {
 
 	private static final long serialVersionUID = -7247043701282868348L;
