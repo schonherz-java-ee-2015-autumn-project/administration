@@ -63,7 +63,10 @@
 		<ejb-ref-name>ejb.CourierIncomeService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.CourierIncomeService</local>
 	</ejb-local-ref>
-
+	<ejb-local-ref>
+		<ejb-ref-name>ejb.IncomeReportService</ejb-ref-name>
+		<local>hu.schonherz.administration.serviceapi.IncomeReportService</local>
+	</ejb-local-ref>
 	<session-config>
 		<session-timeout>10</session-timeout>
 	</session-config>
