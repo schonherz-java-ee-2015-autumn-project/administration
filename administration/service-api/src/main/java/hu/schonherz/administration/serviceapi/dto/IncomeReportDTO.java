@@ -17,8 +17,8 @@ public class IncomeReportDTO implements Serializable {
 	private Integer voucher;
 	private Integer cash;
 	private Integer totalAmount;
-	private Integer restaurantTransferAmount;
-	private Integer courierServiceAmount;
+	private float restaurantTransferAmount;
+	private float courierServiceAmount;
 
 	public Date getDate() {
 		return date;
@@ -76,20 +76,32 @@ public class IncomeReportDTO implements Serializable {
 		this.totalAmount = totalAmount;
 	}
 
-	public Integer getRestaurantTransferAmount() {
+	public float getRestaurantTransferAmount() {
 		return restaurantTransferAmount;
 	}
 
-	public void setRestaurantTransferAmount(Integer restaurantTransferAmount) {
+	public void setRestaurantTransferAmount(float restaurantTransferAmount) {
 		this.restaurantTransferAmount = restaurantTransferAmount;
 	}
 
-	public Integer getCourierServiceAmount() {
+	public float getCourierServiceAmount() {
 		return courierServiceAmount;
 	}
 
-	public void setCourierServiceAmount(Integer courierServiceAmount) {
+	public void setCourierServiceAmount(float courierServiceAmount) {
 		this.courierServiceAmount = courierServiceAmount;
+	}
+
+	public void setDefault() {
+		this.cash = 0;
+		this.courierServiceAmount = 0;
+		this.creditCard = 0;
+		this.date = new Date();
+		this.restaurantTransferAmount = 0;
+		this.szepCard = 0;
+		this.totalAmount  = 0;
+		this.voucher = 0;
+		
 	}
 
 }

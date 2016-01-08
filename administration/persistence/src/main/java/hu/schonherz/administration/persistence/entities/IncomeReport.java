@@ -19,8 +19,8 @@ public class IncomeReport extends BaseEntity implements Serializable {
 	private Integer voucher;
 	private Integer cash;
 	private Integer totalAmount;
-	private Integer restaurantTransferAmount;
-	private Integer courierServiceAmount;
+	private float restaurantTransferAmount;
+	private float courierServiceAmount;
 
 	public Date getDate() {
 		return date;
@@ -70,19 +70,19 @@ public class IncomeReport extends BaseEntity implements Serializable {
 		this.totalAmount = totalAmount;
 	}
 
-	public Integer getRestaurantTransferAmount() {
+	public float getRestaurantTransferAmount() {
 		return restaurantTransferAmount;
 	}
 
-	public void setRestaurantTransferAmount(Integer restaurantTransferAmount) {
+	public void setRestaurantTransferAmount(float restaurantTransferAmount) {
 		this.restaurantTransferAmount = restaurantTransferAmount;
 	}
 
-	public Integer getCourierServiceAmount() {
+	public float getCourierServiceAmount() {
 		return courierServiceAmount;
 	}
 
-	public void setCourierServiceAmount(Integer courierServiceAmount) {
+	public void setCourierServiceAmount(float courierServiceAmount) {
 		this.courierServiceAmount = courierServiceAmount;
 	}
 
