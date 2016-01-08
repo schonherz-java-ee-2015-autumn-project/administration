@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 
 import org.primefaces.model.LazyDataModel;
@@ -18,6 +19,7 @@ import hu.schonherz.administration.serviceapi.dto.SortMetaDTO;
 import hu.schonherz.administration.web.courier.converter.SortMetaConverter;
 
 @Named
+@ViewScoped
 @EJB(name = "ejb.CourierIncomeService", beanInterface = CourierIncomeService.class)
 public class LazyCourierIncome extends LazyDataModel<CourierIncomeDTO> {
 

@@ -16,12 +16,14 @@
 
 	<jee:local-slsb id="userService" jndi-name="ejb.UserService"
 		business-interface="hu.schonherz.administration.serviceapi.UserService" />
+		
+	<jee:local-slsb id="incomeReportService" jndi-name="ejb.IncomeReportService"
+ 		business-interface="hu.schonherz.administration.serviceapi.IncomeReportService" /> 
 
 	<jee:local-slsb id="restaurantService" jndi-name="ejb.RestaurantService"
 		business-interface="hu.schonherz.administration.serviceapi.RestaurantService" />
 
 	<jee:local-slsb id="courierIncomeService" jndi-name="ejb.CourierIncomeService"
 		business-interface="hu.schonherz.administration.serviceapi.CourierIncomeService" />
-
 
 </beans>

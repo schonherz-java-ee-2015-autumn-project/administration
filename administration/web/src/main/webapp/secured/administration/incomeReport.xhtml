@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+
+		<h:form id="incomeReportForm">
+
+			<f:event type="preRenderView"
+				listener="#{reportLazyBean.buildSortOrder}" />
+			<p:growl id="msgs" showDetail="true" />
+
+			<p:dataTable var="incomeReport" sortMode="multiple" widgetVar="table"
+				sortBy="#{reportLazyBean.preSortOrder}" editable="true"
+				editMode="cell" value="#{reportLazyBean.lazyDataModel}"
+				paginator="true" rowKey="#{incomeReport.id}" rows="10"
+				rowsPerPageTemplate="5,10,50" lazy="true" selectionMode="single"
+				id="income_table"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+				<p:column headerText="#{out.income_report_date}" sortBy="#{incomeReport.date}"
+					id="income_date" filterBy="#{incomeReport.date}">
+					<h:outputText value="#{incomeReport.date}" >
+							 <f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputText>
+					<f:facet name="filter">
+						<p:inputMask mask="9999-99-99" onkeyup="PF('table').filter()" />
+					</f:facet>
+				</p:column>
+				<p:column style="text-align:right" headerText="#{out.income_report_credit_card}"
+					sortBy="#{incomeReport.creditCard}">
+					<h:outputText  value="#{incomeReport.creditCard}" />
+				</p:column>
+				<p:column headerText="#{out.income_report_voucher}"
+					sortBy="#{incomeReport.voucher}">
+					<h:outputText value="#{incomeReport.voucher}" />
+				</p:column>
+				<p:column headerText="#{out.income_report_SZÉPCard}"
+					sortBy="#{incomeReport.szepCard}">
+					<h:outputText value="#{incomeReport.szepCard}" />
+				</p:column>
+				<p:column headerText="#{out.income_report_cash}" sortBy="#{incomeReport.cash}">
+					<h:outputText value="#{incomeReport.cash}" />
+				</p:column>
+				<p:column headerText="#{out.income_report_totalAmount}" sortBy="#{incomeReport.totalAmount}">
+					<h:outputText value="#{incomeReport.totalAmount}" />
+				</p:column>
+				<p:column headerText="#{out.income_report_sendToRestaurant}" sortBy="#{incomeReport.restaurantTransferAmount}">
+					<h:outputText value="#{incomeReport.restaurantTransferAmount}">
+						 <f:convertNumber currencyCode="HUF" type="currency" /> 
+					</h:outputText>
+					
+				</p:column>
+				<p:column headerText="#{out.income_report_sendToCourier}" sortBy="#{incomeReport.courierServiceAmount}">
+					<h:outputText value="#{incomeReport.courierServiceAmount}" >
+						 <f:convertNumber currencyCode="HUF" type="currency" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

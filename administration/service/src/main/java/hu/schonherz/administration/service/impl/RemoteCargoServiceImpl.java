@@ -18,22 +18,27 @@ import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.CargoDao;
 import hu.schonherz.administration.persistence.dao.CourierIncomeDao;
+import hu.schonherz.administration.persistence.dao.IncomeReportDao;
 import hu.schonherz.administration.persistence.dao.ItemQuantityDao;
 import hu.schonherz.administration.persistence.dao.OrderDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.dao.helper.CourierIncomeSpecification;
+import hu.schonherz.administration.persistence.dao.helper.IncomeReportSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.CourierIncome;
+import hu.schonherz.administration.persistence.entities.IncomeReport;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
 import hu.schonherz.administration.service.converter.CargoConverter;
 import hu.schonherz.administration.service.converter.CargoStateConverter;
 import hu.schonherz.administration.service.converter.CourierIncomeConverter;
+import hu.schonherz.administration.service.converter.IncomeReportConverter;
 import hu.schonherz.administration.service.converter.ItemQuantityConverter;
 import hu.schonherz.administration.service.converter.OrderConverter;
+import hu.schonherz.administration.service.converter.RestaurantConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
@@ -41,9 +46,11 @@ import hu.schonherz.administration.serviceapi.dto.CargoDTO;
 import hu.schonherz.administration.serviceapi.dto.CargoState;
 import hu.schonherz.administration.serviceapi.dto.CourierIncomeDTO;
 import hu.schonherz.administration.serviceapi.dto.DeliveryStateServ;
+import hu.schonherz.administration.serviceapi.dto.IncomeReportDTO;
 import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
+import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
 import hu.schonherz.administration.serviceapi.dto.RoleDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
@@ -85,6 +92,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private CourierIncomeDao incomeDao;
+
+	@Autowired
+	private IncomeReportDao incomeReportDao;
 
 	private CourierIncomeConverter incomeConverter;
 
@@ -237,6 +247,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		cargoDao.save(cv.toEntity(cargoDTO));
 		if (cargoDTO.getState().equals(CargoState.Delivered)) {
 			incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
+			incomeReportDao.save(IncomeReportConverter.toEntity(updateReportTable(cargoDTO)));
 		}
 
 	}
@@ -250,6 +261,52 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		return false;
 	}
 
+	private IncomeReportDTO updateReportTable(CargoDTO cargo) {
+
+		Specification<IncomeReport> dateSpec = IncomeReportSpecification.lastModifiedAt(new Date());
+		RestaurantDTO restaurant = RestaurantConverter.toDTO(restaurantDao.findOne(cargo.getRestaurantId()));
+		IncomeReportDTO income = null;
+		PaymentMethod p = null;
+		int totalAmount = 0, cash = 0 ,voucher = 0,szepCard = 0,creditCard = 0;
+		float CourierServiceAmount = 0;
+		
+		try {
+			income = IncomeReportConverter.toDTO(incomeReportDao.findOne(Specifications.where(dateSpec)));
+		} catch (NullPointerException e) {
+			income = new IncomeReportDTO();
+			income.setDefault();
+		}
+		for (OrderDTO order : cargo.getOrders()) {
+			p = order.getPayment();
+			switch (p) {
+			case Cash:
+				cash += totalCostOf(order);
+				break;
+			case VOUCHER:
+				voucher += totalCostOf(order);
+				break;
+			case SZEPCard:
+				szepCard += totalCostOf(order);
+				break;
+			case CreditCard:
+				creditCard += totalCostOf(order);
+				break;
+			}
+			totalAmount += totalCostOf(order);
+		}
+		float e = (float)restaurant.getPrice() / 100;
+		CourierServiceAmount = totalAmount * e;
+		income.setTotalAmount(income.getTotalAmount() + totalAmount);
+		income.setCreditCard(income.getCreditCard() + creditCard);
+		income.setSzepCard(income.getSzepCard() + szepCard);
+		income.setVoucher(income.getVoucher() + voucher);
+		income.setCash(income.getCash() + cash);
+		income.setCourierServiceAmount(income.getCourierServiceAmount() +CourierServiceAmount);
+		income.setRestaurantTransferAmount(income.getRestaurantTransferAmount() + (totalAmount - CourierServiceAmount));
+		
+		return income;
+	}
+
 	private CourierIncomeDTO createIncomeFromCargo(CargoDTO cargo) {
 		UserDTO courier = UserConverter.toVo(userDao.findOne(cargo.getCourierId()));
 		List<CargoDTO> cargos = getCargosOfCourierAtDate(courier, new Date());
@@ -258,7 +315,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		int creditCard = 0;
 		int cash = 0;
 		int voucher = 0;
-		int SZÉPCard = 0;
+		int SZEPCard = 0;
 		for (OrderDTO order : cargo.getOrders()) {
 			PaymentMethod p = order.getPayment();
 			switch (p) {
@@ -268,8 +325,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			case VOUCHER:
 				voucher += totalCostOf(order);
 				break;
-			case SZÉPCard:
-				SZÉPCard += totalCostOf(order);
+			case SZEPCard:
+				SZEPCard += totalCostOf(order);
 				break;
 			case CreditCard:
 				creditCard += totalCostOf(order);
@@ -286,7 +343,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			income.setCourierName(courier.getName());
 			income.setCrediCard(creditCard);
 			income.setDate(new Date());
-			income.setSzepCard(SZÉPCard);
+			income.setSzepCard(SZEPCard);
 			income.setVoucher(voucher);
 
 		} else {
@@ -316,9 +373,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 				income.setVoucher(voucher);
 
 			if (income.getSzepCard() != null)
-				income.setSzepCard(income.getSzepCard() + SZÉPCard);
+				income.setSzepCard(income.getSzepCard() + SZEPCard);
 			else
-				income.setSzepCard(SZÉPCard);
+				income.setSzepCard(SZEPCard);
 		}
 		return income;
 	}
@@ -436,13 +493,13 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		Cargo cargoEntity = null;
 		if (cargo.getId() != null) {
 			cargoEntity = cargoDao.findOne(cargo.getId());
-			if(!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))){
+			if (!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))) {
 				throw new InvalidModifyStateException();
 			}
 		} else {
 			throw new ModifyWithoutIdException();
 		}
-		
+
 		if (cargoEntity == null) {
 			throw new CargoNotFoundException();
 		} else {
