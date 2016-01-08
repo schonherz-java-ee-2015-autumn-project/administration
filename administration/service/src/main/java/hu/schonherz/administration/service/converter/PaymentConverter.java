@@ -17,8 +17,8 @@ public class PaymentConverter {
 		case Cash:
 			return PaymentMethod.Cash;
 
-		case SZÉPCard:
-			return PaymentMethod.SZÉPCard;
+		case SZEPCard:
+			return PaymentMethod.SZEPCard;
 
 		case CreditCard:
 			return PaymentMethod.CreditCard;
@@ -38,8 +38,8 @@ public class PaymentConverter {
 		case Cash:
 			return Payment.Cash;
 
-		case SZÉPCard:
-			return Payment.SZÉPCard;
+		case SZEPCard:
+			return Payment.SZEPCard;
 
 		case CreditCard:
 			return Payment.CreditCard;

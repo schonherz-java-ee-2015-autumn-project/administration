@@ -13,8 +13,8 @@ public class RemotePaymentConverter {
 		case Cash:
 			return RemotePaymentMethod.Cash;
 
-		case SZÉPCard:
-			return RemotePaymentMethod.SZÉPCard;
+		case SZEPCard:
+			return RemotePaymentMethod.SZEPCard;
 
 		case CreditCard:
 			return RemotePaymentMethod.CreditCard;
@@ -34,8 +34,8 @@ public class RemotePaymentConverter {
 		case Cash:
 			return PaymentMethod.Cash;
 
-		case SZÉPCard:
-			return PaymentMethod.SZÉPCard;
+		case SZEPCard:
+			return PaymentMethod.SZEPCard;
 
 		case CreditCard:
 			return PaymentMethod.CreditCard;

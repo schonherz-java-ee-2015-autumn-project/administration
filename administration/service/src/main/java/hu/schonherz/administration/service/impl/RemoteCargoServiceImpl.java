@@ -285,7 +285,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			case VOUCHER:
 				voucher += totalCostOf(order);
 				break;
-			case SZÉPCard:
+			case SZEPCard:
 				szepCard += totalCostOf(order);
 				break;
 			case CreditCard:
@@ -315,7 +315,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		int creditCard = 0;
 		int cash = 0;
 		int voucher = 0;
-		int SZÉPCard = 0;
+		int SZEPCard = 0;
 		for (OrderDTO order : cargo.getOrders()) {
 			PaymentMethod p = order.getPayment();
 			switch (p) {
@@ -325,8 +325,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			case VOUCHER:
 				voucher += totalCostOf(order);
 				break;
-			case SZÉPCard:
-				SZÉPCard += totalCostOf(order);
+			case SZEPCard:
+				SZEPCard += totalCostOf(order);
 				break;
 			case CreditCard:
 				creditCard += totalCostOf(order);
@@ -343,7 +343,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			income.setCourierName(courier.getName());
 			income.setCrediCard(creditCard);
 			income.setDate(new Date());
-			income.setSzepCard(SZÉPCard);
+			income.setSzepCard(SZEPCard);
 			income.setVoucher(voucher);
 
 		} else {
@@ -373,9 +373,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 				income.setVoucher(voucher);
 
 			if (income.getSzepCard() != null)
-				income.setSzepCard(income.getSzepCard() + SZÉPCard);
+				income.setSzepCard(income.getSzepCard() + SZEPCard);
 			else
-				income.setSzepCard(SZÉPCard);
+				income.setSzepCard(SZEPCard);
 		}
 		return income;
 	}
