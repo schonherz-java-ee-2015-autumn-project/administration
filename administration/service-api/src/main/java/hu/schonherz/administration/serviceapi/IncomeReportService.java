@@ -18,4 +18,6 @@ public interface IncomeReportService {
 	IncomeReportDTO getIncomeReportById(long id);
 
 	IncomeReportDTO findById(long parseLong);
+	
+	void saveReport(IncomeReportDTO editReport);
 }

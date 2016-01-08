@@ -1,6 +1,7 @@
 package hu.schonherz.administration.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,9 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.ejb.interceptor.SpringBeanAutowiringInterceptor;
 
 import hu.schonherz.administration.persistence.dao.IncomeReportDao;
+import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.dao.helper.IncomeReportSpecification;
+import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.IncomeReport;
 import hu.schonherz.administration.service.converter.IncomeReportConverter;
 import hu.schonherz.administration.serviceapi.IncomeReportService;
@@ -47,8 +50,8 @@ public class IncomeReportServiceImpl implements IncomeReportService {
 	public List<IncomeReportDTO> getIncomeReports(int page, int pageSize, List<SortMetaDTO> sortMeta,
 			Map<String, Object> filters) {
 		Pageable p = createPageRequest(page, pageSize, sortMeta);
-
 		return IncomeReportConverter.toDTO(incomeReportDao.findAll(buildSpecification(filters), p).getContent());
+		
 	}
 
 	@Override
@@ -105,5 +108,10 @@ public class IncomeReportServiceImpl implements IncomeReportService {
 	@Override
 	public IncomeReportDTO findById(long parseLong) {
 		return IncomeReportConverter.toDTO(incomeReportDao.findOne(parseLong));
+	}
+
+	@Override
+	public void saveReport(IncomeReportDTO editReport) {
+		incomeReportDao.save(IncomeReportConverter.toEntity(editReport));
 	}
 }
