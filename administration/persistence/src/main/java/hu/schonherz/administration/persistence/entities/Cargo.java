@@ -32,8 +32,8 @@ public class Cargo extends BaseEntity implements Serializable {
 	private State state;
 	@Column(nullable=false, columnDefinition = "DATETIME DEFAULT NOW()", name="Date")
 	private Date date;
-	
-	private Boolean isDeleted;
+	@Column(nullable=false)
+	private Boolean isDeleted = false;
 
 	
 	public List<Order> getOrders() {
