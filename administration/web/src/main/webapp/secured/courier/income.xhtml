@@ -12,6 +12,8 @@
 			<f:event type="preRenderView"
 				listener="#{courierIncomeLazyBean.buildSortOrder}" />
 			<p:growl id="msgs" showDetail="true" />
+			<p:remoteCommand name="onCellEdit"
+				 update="income_table" />
 			<p:dataTable var="courierIncome" sortMode="multiple"
 				widgetVar="table" sortBy="#{courierIncomeLazyBean.preSortOrder}"
 				editable="true" editMode="cell"
@@ -19,11 +21,8 @@
 				rowKey="#{courierIncome.id}" rows="25" rowsPerPageTemplate="5,25,50"
 				id="income_table" lazy="true"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-
-				<p:ajax event="cellEdit"
-					listener="#{courierIncomeLazyBean.onCellEdit}"
+				<p:ajax event="cellEdit" listener="#{courierIncomeLazyBean.onCellEdit}" oncomplete="onCellEdit()" 
 					update=":courierIncomeForm:msgs" />
-
 
 				<p:column headerText="#{out.courier_name}" id="courier_name"
 					sortBy="#{courierIncome.courierName}"
@@ -86,6 +85,16 @@
 				</p:column>
 
 			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				widgetVar="confirmation" message="#{out.confirmation_wrong_income}">
+				<p:commandButton value="#{out.yes }" styleClass="ui-confirmdialog-yes"
+					icon="ui-icon-check"
+					actionListener="#{courierIncomeLazyBean.saveEdited}"
+					oncomplete="PF('confirmation').hide()" update="income_table" />
+				<p:commandButton value="#{out.no }" styleClass="ui-confirmdialog-no"
+					icon="ui-icon-close" />
+			</p:confirmDialog>
 
 		</h:form>
 	</ui:define>
