@@ -64,8 +64,8 @@
 							<h:outputText value="#{courierIncome.actualCash}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText id="cashInput" value="#{courierIncome.actualCash}"
-								style="width:100%" />
+							<p:inputMask mask="9?9999999999" id="cashInput" placeHolder=" "
+								value="#{courierIncome.actualCash}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
 
@@ -78,7 +78,7 @@
 							<h:outputText value="#{courierIncome.actualVoucher}" />
 						</f:facet>
 						<f:facet name="input">
-							<p:inputText id="voucherInput"
+						<p:inputMask mask="9?9999999999" id="voucherInput" placeHolder=" "
 								value="#{courierIncome.actualVoucher}" style="width:100%" />
 						</f:facet>
 					</p:cellEditor>
