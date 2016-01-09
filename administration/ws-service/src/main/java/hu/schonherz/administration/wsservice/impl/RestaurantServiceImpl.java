@@ -54,6 +54,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Override
 	public RemoteCargoDTO saveCargo(RemoteCargoDTO cargo) throws InvalidFieldValuesException {
+		if(cargo.getIsDeleted()){
+			InvalidFieldValuesException ex = new InvalidFieldValuesException();
+			ex.setMessage("New cargo should not be deleted");
+			throw ex;
+		}else{
+			 
 		List<RemoteOrderDTO> orders = new ArrayList<>();
 		for (RemoteOrderDTO order : cargo.getOrders()) {
 			List<RemoteItemQuantityDTO> items = new ArrayList<>();
@@ -76,6 +82,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 		cargo.setOrders(orders);
 		CargoDTO c = remoteCargoService.saveCargo(RemoteCargoConverter.toDTO(cargo));
 		return RemoteCargoConverter.toRemoteDTO(c);
+
+		}
 	}
 
 	@Override
