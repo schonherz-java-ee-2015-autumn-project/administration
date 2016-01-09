@@ -34,6 +34,7 @@ public class CargoConverter {
 		result.setRestaurantId(cargo.getRestaurant().getId());
 		}
 		result.setState(CargoStateConverter.toDTO( cargo.getState()));
+		result.setIsDeleted(cargo.getIsDeleted());
 		return result;
 	}
 	
@@ -80,6 +81,7 @@ public class CargoConverter {
 			}
 			result.setRestaurant(rest);
 		}
+		result.setIsDeleted(cargo.getIsDeleted());
 		result.setOrders(OrderConverter.toEntity(cargo.getOrders()));
 		result.setState(CargoStateConverter.toEntity(cargo.getState()));
 		return result;

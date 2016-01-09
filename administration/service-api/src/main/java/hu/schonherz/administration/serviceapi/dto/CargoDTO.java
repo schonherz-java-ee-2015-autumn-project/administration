@@ -18,6 +18,7 @@ public class CargoDTO implements Serializable{
 	private List<OrderDTO> orders;
 	private CargoState state;
 	private Date date;
+	private Boolean isDeleted;
 	public Long getId() {
 		return id;
 	}
@@ -59,6 +60,12 @@ public class CargoDTO implements Serializable{
 	}
 	public void setCourierName(String courierName) {
 		this.courierName = courierName;
+	}
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	

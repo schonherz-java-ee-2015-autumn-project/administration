@@ -16,6 +16,7 @@ public class RemoteCargoDTO implements Serializable{
 	private Long restaurantId;
 	private List<RemoteOrderDTO> orders;
 	private RemoteCargoState state;
+	private Boolean isDeleted;
 	public Long getId() {
 		return id;
 	}
@@ -51,6 +52,12 @@ public class RemoteCargoDTO implements Serializable{
 	}
 	public void setCourierName(String courierName) {
 		this.courierName = courierName;
+	}
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	
