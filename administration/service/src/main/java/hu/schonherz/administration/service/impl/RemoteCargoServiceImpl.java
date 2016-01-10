@@ -475,7 +475,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (courier != null && isCourier(courier)) {
 			Specification<Cargo> today = CargoSpecification.lastModifiedAt(new Date());
 			Specification<Cargo> takenBy = CargoSpecification.takenBy(courier);
-			Specification<Cargo> isActive = CargoSpecification.isAtive();
+			Specification<Cargo> isActive = CargoSpecification.isActive();
 			List<Cargo> cargo = cargoDao.findAll(Specifications.where(today).and(takenBy).and(isActive));
 			if (cargo != null && !cargo.isEmpty()) {
 				return cv.toDTO(cargo.get(0));

@@ -11,9 +11,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import hu.schonherz.administration.persistence.entities.helper.State;
 
@@ -35,6 +32,8 @@ public class Cargo extends BaseEntity implements Serializable {
 	private State state;
 	@Column(nullable=false, columnDefinition = "DATETIME DEFAULT NOW()", name="Date")
 	private Date date;
+	@Column(nullable=false)
+	private Boolean isDeleted = false;
 
 	
 	public List<Order> getOrders() {
@@ -66,6 +65,12 @@ public class Cargo extends BaseEntity implements Serializable {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 	
 	

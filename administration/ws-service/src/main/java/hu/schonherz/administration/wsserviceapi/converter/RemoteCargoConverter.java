@@ -18,20 +18,22 @@ public class RemoteCargoConverter {
 		result.setOrders(RemoteOrderConverter.toDTO(cargo.getOrders()));
 		result.setRestaurantId(cargo.getRestaurantId());
 		result.setState(RemoteCargoStateConverter.toLocal(cargo.getState()));
+		result.setIsDeleted(cargo.getIsDeleted());
 		return result;
 	}
 
-	public static RemoteCargoDTO toRemoteDTO(CargoDTO CargoDTO) {
-		if (CargoDTO == null) {
+	public static RemoteCargoDTO toRemoteDTO(CargoDTO cargoDTO) {
+		if (cargoDTO == null) {
 			return null;
 		}
 		RemoteCargoDTO result = new RemoteCargoDTO();
-		result.setCourierId(CargoDTO.getCourierId());
-		result.setId(CargoDTO.getId());
-		result.setCourierName(CargoDTO.getCourierName());
-		result.setOrders(RemoteOrderConverter.toRemoteDTO(CargoDTO.getOrders()));
-		result.setRestaurantId(CargoDTO.getRestaurantId());
-		result.setState(RemoteCargoStateConverter.toRemote(CargoDTO.getState()));
+		result.setCourierId(cargoDTO.getCourierId());
+		result.setId(cargoDTO.getId());
+		result.setCourierName(cargoDTO.getCourierName());
+		result.setOrders(RemoteOrderConverter.toRemoteDTO(cargoDTO.getOrders()));
+		result.setRestaurantId(cargoDTO.getRestaurantId());
+		result.setState(RemoteCargoStateConverter.toRemote(cargoDTO.getState()));
+		result.setIsDeleted(cargoDTO.getIsDeleted());
 		return result;
 
 	}

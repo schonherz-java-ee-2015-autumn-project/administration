@@ -43,7 +43,7 @@ public class CargoSpecification {
 		};
 	}
 	
-	public static Specification<Cargo> isAtive() {
+	public static Specification<Cargo> isActive() {
 		return new Specification<Cargo>() {
 			@Override
 			public Predicate toPredicate(Root<Cargo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -53,4 +53,14 @@ public class CargoSpecification {
 		};
 	}
 	
+	public static Specification<Cargo> notDeleted() {
+		return new Specification<Cargo>() {
+			@Override
+			public Predicate toPredicate(Root<Cargo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+				return cb.equal(root.<Boolean> get(Cargo_.isDeleted), false);
+			}
+
+		};
+	}
+		
 }

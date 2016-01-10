@@ -23,7 +23,6 @@ public class CargoValidator {
 		if (cargo.getCourierId() != null) {
 			err += "Courier id should not be set. " + cargo.getCourierId();
 		}
-
 		if (cargo.getState() == null) {
 			err += "Cargo state should be 'Free'. ";
 		} else {
@@ -48,7 +47,6 @@ public class CargoValidator {
 				}
 			}
 		}
-		
 
 		if (err == null) {
 			return true;
@@ -58,7 +56,5 @@ public class CargoValidator {
 			throw exception;
 		}
 	}
-	
-	
 
 }
