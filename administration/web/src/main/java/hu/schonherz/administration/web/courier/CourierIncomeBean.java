@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
@@ -26,6 +27,11 @@ import hu.schonherz.administration.web.localization.MessageProvider;
 @EJB(name = "ejb.CourierIncomeService", beanInterface = CourierIncomeService.class)
 public class CourierIncomeBean {
 
+	private static String ACTUAL_CASH = "actual_cash";
+	private static String ACTUAL_VOUCHER = "actual_voucher";
+	private Integer confirmedValue;
+	private String confirmedColumn;
+	private CourierIncomeDTO confirmedIncome;
 	@EJB
 	private CourierIncomeService incomeService;
 
@@ -76,33 +82,53 @@ public class CourierIncomeBean {
 
 		Integer newValue = (Integer) event.getNewValue();
 		Integer oldValue = (Integer) event.getOldValue();
-		if (newValue != null && oldValue != null && edited != null) {
+		if (newValue != null && oldValue != null && edited != null && newValue>=0) {
 			String columnName = event.getColumn().getClientId();
-			if (columnName.contains("actual_cash")) {
-
-				if (edited.getCash() >= newValue) {
-					edited.setActualCash(newValue);
-					incomeService.save(edited);
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succed", "ok");
-				} else
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "failed",
-							MessageProvider.getValue("out.invalid_income_value"));
+			if (columnName.contains(ACTUAL_CASH)) {
+				msg = editActualValues(msg, edited, newValue, ACTUAL_CASH);
 			} else {
-				if (edited.getVoucher() >= newValue) {
-					incomeService.save(edited);
-					edited.setActualVoucher(newValue);
-					msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succed", "ok");
-				} else
-					msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "failed",
-							MessageProvider.getValue("out.invalid_income_value"));
-
+				msg = editActualValues(msg, edited, newValue, ACTUAL_VOUCHER);
 			}
 		} else {
-			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "failed",
-					MessageProvider.getValue("out.invalid_income_value"));
-
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,MessageProvider.getValue("save_failed") ,
+					MessageProvider.getValue("invalid_income_value"));
 		}
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		if (msg != null)
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
+	private FacesMessage editActualValues(FacesMessage msg, CourierIncomeDTO edited, Integer newValue, String column) {
+
+		Integer required = 0;
+		Integer old = 0;
+		if (column.equals(ACTUAL_CASH)) {
+			required = edited.getCash();
+			old = edited.getActualCash();
+		} else {
+			required = edited.getVoucher();
+			old = edited.getActualVoucher();
+		}
+		if (newValue > required) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,MessageProvider.getValue("save_failed") ,
+					MessageProvider.getValue("invalid_income_value"));
+		} else {
+			if (newValue < required || newValue < old) {
+				confirmedValue = newValue;
+				confirmedColumn = column;
+				confirmedIncome = edited;
+				showConfirmationDialogue();
+			} else {
+				if (column.equals(ACTUAL_CASH)) {
+					edited.setActualCash(newValue);
+				} else {
+					edited.setActualVoucher(newValue);
+				}
+				incomeService.save(edited);
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,MessageProvider.getValue("successful_save") ,
+						null);
+			}
+		}
+		return msg;
 	}
 
 	public void buildSortOrder() {
@@ -124,6 +150,51 @@ public class CourierIncomeBean {
 
 		preSortOrder.add(sm1);
 		preSortOrder.add(sm2);
+	}
+
+	public void saveEdited() {
+		if (confirmedColumn != null && confirmedValue != null && confirmedIncome != null) {
+			if (confirmedColumn.equals(ACTUAL_CASH)) {
+				confirmedIncome.setActualCash(confirmedValue);
+			} else {
+				confirmedIncome.setActualVoucher(confirmedValue);
+			}
+			incomeService.save(confirmedIncome);
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, MessageProvider.getValue("successful_save"), ""));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, MessageProvider.getValue("save_failed"), ""));
+		}
+	}
+
+	private void showConfirmationDialogue() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('confirmation').show();");
+	}
+
+	public Integer getConfirmedValue() {
+		return confirmedValue;
+	}
+
+	public void setConfirmedValue(Integer confirmedValue) {
+		this.confirmedValue = confirmedValue;
+	}
+
+	public String getConfirmedColumn() {
+		return confirmedColumn;
+	}
+
+	public void setConfirmedColumn(String confirmedColumn) {
+		this.confirmedColumn = confirmedColumn;
+	}
+
+	public CourierIncomeDTO getConfirmedIncome() {
+		return confirmedIncome;
+	}
+
+	public void setConfirmedIncome(CourierIncomeDTO confirmedIncome) {
+		this.confirmedIncome = confirmedIncome;
 	}
 
 }

@@ -19,6 +19,10 @@ import hu.schonherz.administration.serviceapi.dto.UserRole;
 @EJB(name = "ejb.UserService", beanInterface = UserService.class)
 public class LazyCourier extends LazyDataModel<UserDTO> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1071791713943700494L;
 	@EJB
 	UserService userService;
 
