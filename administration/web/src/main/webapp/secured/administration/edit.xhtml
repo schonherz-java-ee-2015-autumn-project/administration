@@ -46,11 +46,11 @@
 						<h:outputLabel for="passw" value="#{out.adminPassword}" />
 					</h:form>
 					<h:form rendered="#{adminEditBean.selected.id eq userSessionBean.userDTO.id}" > 
-						<p:inputText id="passw" value="#{adminEditBean.password}"
+						<p:password id="passw" value="#{adminEditBean.password}"
 							required="false" label="#{out.username}">
 								<f:validator validatorId="PasswordValidator"/>
 								<p:ajax update="passMsg" event="keyup" />
-						</p:inputText>
+						</p:password>
 						<p:message for="passw" id="passMsg" />	
 					</h:form>
 						<h:inputHidden  id="selectId" 
