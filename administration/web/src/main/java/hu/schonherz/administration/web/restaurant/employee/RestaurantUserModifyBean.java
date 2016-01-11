@@ -38,13 +38,11 @@ public class RestaurantUserModifyBean {
 				if (oldRestaurant == null && selectedRestaurant!=null) {
 					selectedRestaurant.getEmployees().add(selected);
 					restaurantService.save(selectedRestaurant);
-				} else {
-					if (!selected.equals(oldRestaurant)) {
+				} else if (!selectedRestaurant.equals(oldRestaurant)) {
 						oldRestaurant.getEmployees().remove(selected);
-						restaurantService.save(oldRestaurant);
 						selectedRestaurant.getEmployees().add(selected);
+						restaurantService.save(oldRestaurant);
 						restaurantService.save(selectedRestaurant);
-					}
 				}
 				context.addMessage("adminForm:edit_status",
 						new FacesMessage(MessageProvider.getValue("successful_edit")));
