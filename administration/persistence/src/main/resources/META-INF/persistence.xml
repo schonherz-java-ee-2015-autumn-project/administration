@@ -17,6 +17,7 @@
 		<class>hu.schonherz.administration.persistence.entities.Role</class>
 		<class>hu.schonherz.administration.persistence.entities.User</class>
 		<class>hu.schonherz.administration.persistence.entities.IncomeReport</class>
+		<class>hu.schonherz.administration.persistence.entities.RestaurantReport</class>
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="hibernate.show_sql" value="false" />
