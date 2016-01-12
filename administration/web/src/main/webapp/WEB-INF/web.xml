@@ -67,6 +67,10 @@
 		<ejb-ref-name>ejb.IncomeReportService</ejb-ref-name>
 		<local>hu.schonherz.administration.serviceapi.IncomeReportService</local>
 	</ejb-local-ref>
+	<ejb-local-ref>
+		<ejb-ref-name>ejb.RestaurantReportService</ejb-ref-name>
+		<local>hu.schonherz.administration.serviceapi.RestaurantReportService</local>
+	</ejb-local-ref>
 	<session-config>
 		<session-timeout>10</session-timeout>
 	</session-config>
