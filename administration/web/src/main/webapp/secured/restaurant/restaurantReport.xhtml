@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/masterLayout.xhtml"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="pageTitle">#{out.pageTitle}</ui:define>
+	<ui:define name="content">
+		<h:form id="restaurantReportForm">
+			<f:event type="preRenderView"
+				listener="#{restaurantReportLazyBean.buildSortOrder}" />
+			<p:growl id="msgs" showDetail="true" />
+
+			<p:dataTable var="restaurantReport" sortMode="multiple"
+				widgetVar="table" sortBy="#{restaurantReportLazyBean.preSortOrder}"
+				value="#{restaurantReportLazyBean.lazyDataModel}" paginator="true"
+				rowKey="#{restaurantReport.id}" rows="5"
+				rowsPerPageTemplate="5,10,25" lazy="true"
+				id="restaurant_report_table"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+				<p:column headerText="#{out.restaurant_report_date}"
+					sortBy="#{restaurantReport.date}" id="restaurant_report_date"
+					filterBy="#{restaurantReport.date}">
+					<h:outputText value="#{restaurantReport.date}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputText>
+					<f:facet name="filter">
+						<p:inputMask mask="9999-99-99" onkeyup="PF('table').filter()" />
+					</f:facet>
+					
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_header}" id="restaurant_report_name"
+					sortBy="#{restaurantReport.restaurant}"
+					filterBy="#{restaurantReport.restaurant}">
+					<h:outputText value="#{restaurantReport.restaurant}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_credit_card}"
+					sortBy="#{restaurantReport.creditCard}">
+					<h:outputText value="#{restaurantReport.creditCard}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_voucher}"
+					sortBy="#{restaurantReport.voucher}">
+					<h:outputText value="#{restaurantReport.voucher}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_SZÉPCard}"
+					sortBy="#{restaurantReport.szepCard}">
+					<h:outputText value="#{restaurantReport.szepCard}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_cash}"
+					sortBy="#{restaurantReport.cash}">
+					<h:outputText value="#{restaurantReport.cash}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_totalAmount}"
+					sortBy="#{restaurantReport.totalAmount}">
+					<h:outputText value="#{restaurantReport.totalAmount}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_restaurantPrice}"
+					sortBy="#{restaurantReport.restaurantPrice}">
+					<h:outputText value="#{restaurantReport.restaurantPrice}" />
+				</p:column>
+				<p:column headerText="#{out.restaurant_report_sendToRestaurant}"
+					sortBy="#{restaurantReport.restaurantTransferAmount}">
+					<h:outputText value="#{restaurantReport.restaurantTransferAmount}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
