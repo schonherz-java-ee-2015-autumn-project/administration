@@ -32,12 +32,12 @@ public class RestaurantReportSpecification {
 
 		};
 	}
-	public static Specification<RestaurantReport> courierNameLike(String name) {
+	public static Specification<RestaurantReport> restaurantName(String name) {
 		return new Specification<RestaurantReport>() {
 
 			@Override
 			public Predicate toPredicate(Root<RestaurantReport> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				return cb.like(root.get(RestaurantReport_.restaurant), "%" + name + "%");
+				return cb.equal(root.get(RestaurantReport_.restaurant), name);
 			}
 
 		};
