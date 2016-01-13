@@ -90,7 +90,7 @@ public class RestaurantReportDTO implements Serializable {
 		this.cash = 0;
 		this.creditCard = 0;
 		this.date = new Date();
-		this.restaurant = "asd";
+		this.restaurant = "";
 		this.restaurantTransferAmount = 0;
 		this.szepCard = 0;
 		this.totalAmount  = 0;

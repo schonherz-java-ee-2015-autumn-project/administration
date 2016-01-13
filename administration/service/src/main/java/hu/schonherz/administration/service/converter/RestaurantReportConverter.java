@@ -13,11 +13,33 @@ public class RestaurantReportConverter {
 	static Mapper mapper = new DozerBeanMapper();
 	
 	public static RestaurantReport toEntity(RestaurantReportDTO restaurantReportDTO){
-		return mapper.map(restaurantReportDTO, RestaurantReport.class);
+		RestaurantReport restaurantReport = new RestaurantReport();
+		restaurantReport.setCash(restaurantReportDTO.getCash());
+		restaurantReport.setCreditCard(restaurantReportDTO.getCreditCard());
+		restaurantReport.setDate(restaurantReportDTO.getDate());
+		restaurantReport.setId(restaurantReportDTO.getId());
+		restaurantReport.setRestaurant(restaurantReportDTO.getRestaurant());
+		restaurantReport.setRestaurantPrice(restaurantReportDTO.getRestaurantPrice());
+		restaurantReport.setRestaurantTransferAmount(restaurantReportDTO.getRestaurantTransferAmount());
+		restaurantReport.setSzepCard(restaurantReportDTO.getSzepCard());
+		restaurantReport.setTotalAmount(restaurantReportDTO.getTotalAmount());
+		restaurantReport.setVoucher(restaurantReportDTO.getVoucher());
+		return restaurantReport;
 	}
 	
 	public static RestaurantReportDTO toDTO(RestaurantReport restaurantReport){
-		return mapper.map(restaurantReport, RestaurantReportDTO.class);
+		RestaurantReportDTO restaurantReportDTO = new RestaurantReportDTO();
+		restaurantReportDTO.setCash(restaurantReport.getCash());
+		restaurantReportDTO.setCreditCard(restaurantReport.getCreditCard());
+		restaurantReportDTO.setDate(restaurantReport.getDate());
+		restaurantReportDTO.setId(restaurantReport.getId());
+		restaurantReportDTO.setRestaurant(restaurantReport.getRestaurant());
+		restaurantReportDTO.setRestaurantPrice(restaurantReport.getRestaurantPrice());
+		restaurantReportDTO.setRestaurantTransferAmount(restaurantReport.getRestaurantTransferAmount());
+		restaurantReportDTO.setSzepCard(restaurantReport.getSzepCard());
+		restaurantReportDTO.setTotalAmount(restaurantReport.getTotalAmount());
+		restaurantReportDTO.setVoucher(restaurantReport.getVoucher());
+		return restaurantReportDTO;
 	}
 	public static List<RestaurantReport> toEntityList(List<RestaurantReportDTO> restaurantReportsDTO){
 		List<RestaurantReport> reports = new LinkedList<>();
