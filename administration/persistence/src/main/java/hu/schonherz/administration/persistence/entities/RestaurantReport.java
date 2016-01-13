@@ -22,6 +22,7 @@ public class RestaurantReport extends BaseEntity implements Serializable {
 	private Integer totalAmount;
 	private Integer restaurantPrice;
 	private float restaurantTransferAmount;
+	private float servicesPrize;
 
 	public Date getDate() {
 		return date;
@@ -106,6 +107,14 @@ public class RestaurantReport extends BaseEntity implements Serializable {
 
 	public void setRestaurantPrice(Integer restaurantPrice) {
 		this.restaurantPrice = restaurantPrice;
+	}
+
+	public float getServicesPrize() {
+		return servicesPrize;
+	}
+
+	public void setServicesPrize(float servicesPrize) {
+		this.servicesPrize = servicesPrize;
 	}
 
 }

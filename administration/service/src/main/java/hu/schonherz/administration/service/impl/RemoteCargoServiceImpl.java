@@ -293,7 +293,8 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 			totalAmount += totalCostOf(order);
 		}
 		float priceInProcent = (float)restaurant.getPrice() / 100;
-		restaurantTransferAmount = totalAmount - (totalAmount * priceInProcent);
+		float servicesPrize  =  totalAmount * priceInProcent;
+		restaurantTransferAmount = totalAmount - servicesPrize;
 		restaurantReport.setCash(restaurantReport.getCash() + cash);
 		restaurantReport.setCreditCard(restaurantReport.getCreditCard() + creditCard);
 		restaurantReport.setRestaurant(restaurant.getName());
@@ -302,6 +303,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		restaurantReport.setSzepCard(restaurantReport.getSzepCard() + szepCard);
 		restaurantReport.setTotalAmount(restaurantReport.getTotalAmount() + totalAmount);
 		restaurantReport.setVoucher(restaurantReport.getVoucher() + voucher);
+		restaurantReport.setServicesPrize(restaurantReport.getServicesPrize() + servicesPrize);
 		
 		return restaurantReport;
 	}

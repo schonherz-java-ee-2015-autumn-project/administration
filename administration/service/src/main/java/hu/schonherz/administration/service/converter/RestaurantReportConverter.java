@@ -24,6 +24,7 @@ public class RestaurantReportConverter {
 		restaurantReport.setSzepCard(restaurantReportDTO.getSzepCard());
 		restaurantReport.setTotalAmount(restaurantReportDTO.getTotalAmount());
 		restaurantReport.setVoucher(restaurantReportDTO.getVoucher());
+		restaurantReport.setServicesPrize(restaurantReportDTO.getServicesPrize());
 		return restaurantReport;
 	}
 	
@@ -39,6 +40,7 @@ public class RestaurantReportConverter {
 		restaurantReportDTO.setSzepCard(restaurantReport.getSzepCard());
 		restaurantReportDTO.setTotalAmount(restaurantReport.getTotalAmount());
 		restaurantReportDTO.setVoucher(restaurantReport.getVoucher());
+		restaurantReportDTO.setServicesPrize(restaurantReport.getServicesPrize());
 		return restaurantReportDTO;
 	}
 	public static List<RestaurantReport> toEntityList(List<RestaurantReportDTO> restaurantReportsDTO){

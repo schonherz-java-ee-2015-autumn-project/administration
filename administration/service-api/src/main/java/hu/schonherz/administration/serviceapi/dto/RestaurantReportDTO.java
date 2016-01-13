@@ -20,7 +20,8 @@ public class RestaurantReportDTO implements Serializable {
 	private Integer totalAmount;
 	private Integer restaurantPrice;
 	private float restaurantTransferAmount;
-
+	private float servicesPrize;
+	
 	public Date getDate() {
 		return date;
 	}
@@ -96,6 +97,7 @@ public class RestaurantReportDTO implements Serializable {
 		this.totalAmount  = 0;
 		this.voucher = 0;
 		this.restaurantPrice = 0;
+		this.servicesPrize = 0;
 		
 	}
 
@@ -113,6 +115,14 @@ public class RestaurantReportDTO implements Serializable {
 
 	public void setRestaurantPrice(Integer restaurantPrice) {
 		this.restaurantPrice = restaurantPrice;
+	}
+
+	public float getServicesPrize() {
+		return servicesPrize;
+	}
+
+	public void setServicesPrize(float servicesPrize) {
+		this.servicesPrize = servicesPrize;
 	}
 
 }
