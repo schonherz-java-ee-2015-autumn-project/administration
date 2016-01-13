@@ -22,13 +22,16 @@ import hu.schonherz.administration.persistence.dao.IncomeReportDao;
 import hu.schonherz.administration.persistence.dao.ItemQuantityDao;
 import hu.schonherz.administration.persistence.dao.OrderDao;
 import hu.schonherz.administration.persistence.dao.RestaurantDao;
+import hu.schonherz.administration.persistence.dao.RestaurantReportDao;
 import hu.schonherz.administration.persistence.dao.UserDao;
 import hu.schonherz.administration.persistence.dao.helper.CargoSpecification;
 import hu.schonherz.administration.persistence.dao.helper.CourierIncomeSpecification;
 import hu.schonherz.administration.persistence.dao.helper.IncomeReportSpecification;
+import hu.schonherz.administration.persistence.dao.helper.RestaurantReportSpecification;
 import hu.schonherz.administration.persistence.entities.Cargo;
 import hu.schonherz.administration.persistence.entities.CourierIncome;
 import hu.schonherz.administration.persistence.entities.IncomeReport;
+import hu.schonherz.administration.persistence.entities.RestaurantReport;
 import hu.schonherz.administration.persistence.entities.Role;
 import hu.schonherz.administration.persistence.entities.User;
 import hu.schonherz.administration.persistence.entities.helper.State;
@@ -39,6 +42,7 @@ import hu.schonherz.administration.service.converter.IncomeReportConverter;
 import hu.schonherz.administration.service.converter.ItemQuantityConverter;
 import hu.schonherz.administration.service.converter.OrderConverter;
 import hu.schonherz.administration.service.converter.RestaurantConverter;
+import hu.schonherz.administration.service.converter.RestaurantReportConverter;
 import hu.schonherz.administration.service.converter.UserConverter;
 import hu.schonherz.administration.service.validator.CargoValidator;
 import hu.schonherz.administration.serviceapi.RemoteCargoService;
@@ -51,6 +55,7 @@ import hu.schonherz.administration.serviceapi.dto.ItemQuantityDTO;
 import hu.schonherz.administration.serviceapi.dto.OrderDTO;
 import hu.schonherz.administration.serviceapi.dto.PaymentMethod;
 import hu.schonherz.administration.serviceapi.dto.RestaurantDTO;
+import hu.schonherz.administration.serviceapi.dto.RestaurantReportDTO;
 import hu.schonherz.administration.serviceapi.dto.RoleDTO;
 import hu.schonherz.administration.serviceapi.dto.UserDTO;
 import hu.schonherz.administration.serviceapi.exeption.AddressNotFoundException;
@@ -87,6 +92,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	@Autowired
 	private RestaurantDao restaurantDao;
+	
+	@Autowired
+	private RestaurantReportDao restaurantReportDao;
 
 	private CargoConverter cv;
 
@@ -248,10 +256,56 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (cargoDTO.getState().equals(CargoState.Delivered)) {
 			incomeDao.save(incomeConverter.toEntity(createIncomeFromCargo(cargoDTO)));
 			incomeReportDao.save(IncomeReportConverter.toEntity(updateReportTable(cargoDTO)));
+			restaurantReportDao.save(RestaurantReportConverter.toEntity(updateRestaurantReport(cargoDTO)));
 		}
 
 	}
-
+	private RestaurantReportDTO updateRestaurantReport(CargoDTO cargo){
+		RestaurantReportDTO restaurantReport = null;
+		int totalAmount = 0, cash = 0 ,voucher = 0,szepCard = 0,creditCard = 0;
+		float restaurantTransferAmount = 0;
+		PaymentMethod p = null;
+		RestaurantDTO restaurant = RestaurantConverter.toDTO(restaurantDao.findOne(cargo.getRestaurantId()));
+		Specification<RestaurantReport> dateSpec = RestaurantReportSpecification.lastModifiedAt(new Date());
+		Specification<RestaurantReport> restaurantSpec = RestaurantReportSpecification.restaurantName(restaurant.getName());
+		try{
+			restaurantReport = RestaurantReportConverter.toDTO(restaurantReportDao.findOne(Specifications.where(dateSpec).and(restaurantSpec)));
+		}catch(NullPointerException e){
+			restaurantReport = new RestaurantReportDTO();
+			restaurantReport.setDefault();
+		}
+		for (OrderDTO order : cargo.getOrders()) {
+			p = order.getPayment();
+			switch (p) {
+			case Cash:
+				cash += totalCostOf(order);
+				break;
+			case VOUCHER:
+				voucher += totalCostOf(order);
+				break;
+			case SZEPCard:
+				szepCard += totalCostOf(order);
+				break;
+			case CreditCard:
+				creditCard += totalCostOf(order);
+				break;
+			}
+			totalAmount += totalCostOf(order);
+		}
+		float priceInProcent = (float)restaurant.getPrice() / 100;
+		restaurantTransferAmount = totalAmount - (totalAmount * priceInProcent);
+		restaurantReport.setCash(restaurantReport.getCash() + cash);
+		restaurantReport.setCreditCard(restaurantReport.getCreditCard() + creditCard);
+		restaurantReport.setRestaurant(restaurant.getName());
+		restaurantReport.setRestaurantPrice(restaurant.getPrice());
+		restaurantReport.setRestaurantTransferAmount(restaurantReport.getRestaurantTransferAmount() + restaurantTransferAmount);
+		restaurantReport.setSzepCard(restaurantReport.getSzepCard() + szepCard);
+		restaurantReport.setTotalAmount(restaurantReport.getTotalAmount() + totalAmount);
+		restaurantReport.setVoucher(restaurantReport.getVoucher() + voucher);
+		
+		return restaurantReport;
+	}
+	
 	private boolean isCourier(UserDTO user) {
 		for (RoleDTO role : user.getRoles()) {
 			if (role.getName().equals("ROLE_COURIER")) {

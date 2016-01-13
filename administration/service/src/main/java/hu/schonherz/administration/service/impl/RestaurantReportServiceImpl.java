@@ -84,7 +84,7 @@ public class RestaurantReportServiceImpl implements RestaurantReportService {
 		String name;
 		if (filters.containsKey("restaurant")) {
 			name = (String) filters.get("restaurant");
-			spec = Specifications.where(spec).and(RestaurantReportSpecification.courierNameLike(name));
+			spec = Specifications.where(spec).and(RestaurantReportSpecification.restaurantName(name));
 		}
 		if (filters.containsKey("date")) {
 			String date = (String) filters.get("date");
