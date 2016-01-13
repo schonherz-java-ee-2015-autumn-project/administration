@@ -42,8 +42,8 @@ public class RestaurantReportBean {
 		sm.setSortField("date");
 		sm.setSortOrder(SortOrder.DESCENDING);
 
-		preSortOrder.add(sm1);
 		preSortOrder.add(sm);
+		preSortOrder.add(sm1);
 	}
 
 	public List<SortMeta> getPreSortOrder() {
