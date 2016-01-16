@@ -25,5 +25,8 @@
 
 	<jee:local-slsb id="courierIncomeService" jndi-name="ejb.CourierIncomeService"
 		business-interface="hu.schonherz.administration.serviceapi.CourierIncomeService" />
+		
+	<jee:local-slsb id="RestaurantReportService" jndi-name="ejb.RestaurantReportService"
+		business-interface="hu.schonherz.administration.serviceapi.RestaurantReportService" />
 
 </beans>
