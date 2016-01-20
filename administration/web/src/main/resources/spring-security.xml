@@ -11,7 +11,7 @@
 	 		<security:intercept-url pattern="/secured/**" 	
 	 			access="hasRole('ADMIN')" /> 	
 		<security:form-login login-page="/public/login.xhtml" 
-			login-processing-url="/login" default-target-url="/index.xhtml"
+			login-processing-url="/login" default-target-url="/secured/administration/list.xhtml"
 			authentication-failure-url="/public/login.xhtml?error=1"
 			username-parameter="j_username" password-parameter="j_password" />
 		<security:logout logout-url="/logout"
