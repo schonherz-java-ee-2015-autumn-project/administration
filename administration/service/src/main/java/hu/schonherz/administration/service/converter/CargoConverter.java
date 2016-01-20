@@ -20,6 +20,8 @@ public class CargoConverter {
 	
 	private UserDao userDao;
 	
+	private CargoStateConverter cargoStateConverter = new CargoStateConverter();
+	
 	public CargoDTO toDTO(Cargo cargo){
 		CargoDTO result = new CargoDTO();
 		if(cargo.getCourier()!=null){
@@ -33,7 +35,7 @@ public class CargoConverter {
 		if(cargo.getRestaurant()!=null){
 		result.setRestaurantId(cargo.getRestaurant().getId());
 		}
-		result.setState(CargoStateConverter.toDTO( cargo.getState()));
+		result.setState(this.cargoStateConverter.toDTO( cargo.getState()));
 		result.setIsDeleted(cargo.getIsDeleted());
 		return result;
 	}
@@ -83,7 +85,7 @@ public class CargoConverter {
 		}
 		result.setIsDeleted(cargo.getIsDeleted());
 		result.setOrders(OrderConverter.toEntity(cargo.getOrders()));
-		result.setState(CargoStateConverter.toEntity(cargo.getState()));
+		result.setState(this.cargoStateConverter.toEntity(cargo.getState()));
 		return result;
 	}
 	

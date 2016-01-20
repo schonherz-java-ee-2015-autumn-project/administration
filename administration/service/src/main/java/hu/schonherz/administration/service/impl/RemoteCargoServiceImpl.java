@@ -105,7 +105,9 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 	private IncomeReportDao incomeReportDao;
 
 	private CourierIncomeConverter incomeConverter;
-
+	
+	private CargoStateConverter cargoStateConverter ;
+	
 	@Override
 	public CargoDTO saveCargo(CargoDTO cargo) throws InvalidFieldValuesException {
 		if (CargoValidator.isValidNewCargo(cargo)) {
@@ -549,7 +551,7 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		Cargo cargoEntity = null;
 		if (cargo.getId() != null) {
 			cargoEntity = cargoDao.findOne(cargo.getId());
-			if (!cargoEntity.getState().equals(CargoStateConverter.toEntity(CargoState.Free))) {
+			if (!cargoEntity.getState().equals(cargoStateConverter.toEntity(CargoState.Free))) {
 				throw new InvalidModifyStateException();
 			}
 		} else {
