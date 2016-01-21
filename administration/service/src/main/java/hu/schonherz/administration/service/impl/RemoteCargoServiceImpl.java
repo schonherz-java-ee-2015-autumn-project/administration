@@ -479,14 +479,10 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 		if (courierDTO == null)
 			throw new CourierNotFoundException();
 
-		boolean isCourier = false;
+		
 		boolean isOrderBelongsToCourier = false;
-		for (RoleDTO role : courierDTO.getRoles()) {
-			if (role.getName().equals("ROLE_COURIER")) {
-				isCourier = true;
-			}
-		}
-		if (!isCourier)
+		
+		if (!isCourier(courierDTO))
 			throw new CourierNotFoundException();
 
 		List<CargoDTO> cargoesDTO = cv.toDTO(cargoDao.findByCourier(UserConverter.toEntity(courierDTO)));
@@ -520,17 +516,10 @@ public class RemoteCargoServiceImpl implements RemoteCargoService {
 
 	}
 
-	private boolean isCourier(User user) {
-		for (Role role : user.getRoles())
-			if (role.getName().equals("ROLE_COURIER"))
-				return true;
-		return false;
-	}
-
 	@Override
 	public CargoDTO getActiveCargoByCourier(long courierId) throws CourierNotFoundException, AddressNotFoundException {
 		User courier = userDao.findById(courierId);
-		if (courier != null && isCourier(courier)) {
+		if (courier != null && isCourier(UserConverter.toVo(courier))) {
 			Specification<Cargo> today = CargoSpecification.lastModifiedAt(new Date());
 			Specification<Cargo> takenBy = CargoSpecification.takenBy(courier);
 			Specification<Cargo> isActive = CargoSpecification.isActive();
