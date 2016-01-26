@@ -10,45 +10,11 @@ public class PaymentConverter {
 	static Mapper mapper = new DozerBeanMapper();
 
 	public static PaymentMethod toDTO(Payment payment) {
-		if (payment == null) {
-			return null;
-		}
-		switch (payment) {
-		case Cash:
-			return PaymentMethod.Cash;
-
-		case SZEPCard:
-			return PaymentMethod.SZEPCard;
-
-		case CreditCard:
-			return PaymentMethod.CreditCard;
-
-		case VOUCHER:
-			return PaymentMethod.VOUCHER;
-
-		}
-		return null;
+		return PaymentMethod.valueOf(payment.name());
 	}
 
 	public static Payment toEntity(PaymentMethod paymentMethod) {
-		if (paymentMethod == null) {
-			return null;
-		}
-		switch (paymentMethod) {
-		case Cash:
-			return Payment.Cash;
-
-		case SZEPCard:
-			return Payment.SZEPCard;
-
-		case CreditCard:
-			return Payment.CreditCard;
-
-		case VOUCHER:
-			return Payment.VOUCHER;
-
-		}
-		return null;
+		return Payment.valueOf(paymentMethod.name());
 	}
 
 }
