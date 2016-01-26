@@ -16,9 +16,9 @@
 			<p:panel id="panel" header="#{out.edit_users}">
 				<h:panelGrid columns="3" cellpadding="10" cellspacing="10">
 
-					<h:outputLabel for="name" value="#{out.username}" />
+					<h:outputLabel for="name" value="#{out.name}" />
 					<p:inputText id="name" value="#{adminEditBean.selected.name}"
-						required="false" label="#{out.username}">
+						required="false" label="#{out.name}">
 						<f:validator validatorId="NameValidator"/>
 						<p:ajax update="nameMsg" event="keyup" />
 					</p:inputText>

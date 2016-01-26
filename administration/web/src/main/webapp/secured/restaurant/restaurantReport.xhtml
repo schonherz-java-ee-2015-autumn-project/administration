@@ -30,10 +30,10 @@
 					<f:facet name="filter">
 						<p:inputMask mask="9999-99-99" onkeyup="PF('table').filter()" />
 					</f:facet>
-					
+
 				</p:column>
-				<p:column headerText="#{out.restaurant_report_header}" id="restaurant_report_name"
-					sortBy="#{restaurantReport.restaurant}"
+				<p:column headerText="#{out.restaurant_report_header}"
+					id="restaurant_report_name" sortBy="#{restaurantReport.restaurant}"
 					filterBy="#{restaurantReport.restaurant}">
 					<h:outputText value="#{restaurantReport.restaurant}" />
 				</p:column>
@@ -63,11 +63,15 @@
 				</p:column>
 				<p:column headerText="#{out.restaurant_report_servicesPrize}"
 					sortBy="#{restaurantReport.servicesPrize}">
-					<h:outputText value="#{restaurantReport.servicesPrize}" />
+					<h:outputText value="#{restaurantReport.servicesPrize}">
+						<f:convertNumber currencyCode="HUF" type="currency" />
+					</h:outputText>
 				</p:column>
 				<p:column headerText="#{out.restaurant_report_sendToRestaurant}"
 					sortBy="#{restaurantReport.restaurantTransferAmount}">
-					<h:outputText value="#{restaurantReport.restaurantTransferAmount}" />
+					<h:outputText value="#{restaurantReport.restaurantTransferAmount}">
+						<f:convertNumber currencyCode="HUF" type="currency" />
+					</h:outputText>
 				</p:column>
 			</p:dataTable>
 		</h:form>

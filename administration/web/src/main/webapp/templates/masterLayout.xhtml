@@ -54,7 +54,7 @@
 			<nav class="navbar navbar-default navbar-cls-top " role="navigation"
 				style="margin-bottom: 0">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#{request.contextPath}/index.xhtml">#{out.index}</a>
+				<a class="navbar-brand" href="#{request.contextPath}/secured/administration/list.xhtml">#{out.index}</a>
 			</div>
 
 			<div class="header-right">
@@ -84,12 +84,12 @@
 						<li><p:outputPanel style="display:block"
 								styleClass="user-img-div"
 								>
-								<div class="inner-text">
-									<p:outputLabel value="#{out.profile} "></p:outputLabel>
-									<br />
-									<p:outputLabel value="#{userSessionBean.userDTO.username}"></p:outputLabel>
+								<div class="inner-text" style="text-align: left">
+									<p:outputLabel value="#{out.adminName}: "/><br />
+									<p:outputLabel value="#{userSessionBean.userDTO.name}" /><br />
+									<p:outputLabel value="#{out.tel}: "/><br />
 									<p:outputLabel value="#{userSessionBean.userDTO.phoneNumber}"></p:outputLabel>
-									<br />
+							
 								</div>
 							</p:outputPanel></li>
 
